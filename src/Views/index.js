@@ -1,9 +1,9 @@
-import SeachView from './SeachView';
+import SearchView from './SearchView';
 import OverviewView from './OverviewView';
 import DiscoveryView from './DiscoveryView';
 
-export default {
-    SeachView,
+export {
+    SearchView,
     OverviewView,
     DiscoveryView
 }

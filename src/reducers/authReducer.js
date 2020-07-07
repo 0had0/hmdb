@@ -4,7 +4,7 @@ const initState = {
     sessionId: null
 }
 
-export default (action, state = initState) => {
+export default (state = initState, action) => {
     switch(action.type) {
         default: {
             return state
