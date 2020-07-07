@@ -1,13 +1,13 @@
-import actions from '../actions/authActions'
+import actions from "../actions/authActions";
 const initState = {
-    requestToken: null,
-    sessionId: null
-}
+	requestToken: null,
+	sessionId: null,
+};
 
-export default (action, state = initState) => {
-    switch(action.type) {
-        default: {
-            return state
-        }
-    }
-}
+export default (state = initState, action) => {
+	switch (action.type) {
+		default: {
+			return state;
+		}
+	}
+};

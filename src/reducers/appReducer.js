@@ -1,10 +1,10 @@
-import actions from '../actions/appActions'
-const initState = {}
+import actions from "../actions/appActions";
+const initState = {};
 
-export default (action, state = initState) => {
-    switch(action.type) {
-        default: {
-            return state
-        }
-    }
-} 
+export default (state = initState, action) => {
+	switch (action.type) {
+		default: {
+			return state;
+		}
+	}
+};
