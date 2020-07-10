@@ -1,3 +1,45 @@
+@import "./variables";
 @import "~react-md/dist/react-md";
 
-@include react-md-utils; 
+#root {
+	width: 100%;
+	min-height: 100vh;
+}
+
+.search-box {
+	position: relative;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	padding: 0 1em;
+	border-radius: 3;
+	height: 90%;
+	transition: all 0.4s ease;
+}
+.search-box-open {
+	width: 300px;
+	background-color: rgba(255, 255, 255, 0.1);
+}
+.search-box-close {
+	width: 24px;
+}
+
+.suggestions-menu {
+	@include rmd-elevation(4);
+	position: absolute;
+	top: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 1em;
+	transition: all 0.3s ease;
+}
+.suggestions-menu-open {
+	width: 150%;
+}
+.suggestions-menu-close {
+	display: none;
+	width: 0;
+}
+
+@include react-md-utils;
