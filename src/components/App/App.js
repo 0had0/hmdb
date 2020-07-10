@@ -15,6 +15,8 @@ function App() {
 				<Route path="/seach/:query" component={SearchView} />
 				<Route path="/movies/:id" component={OverviewView} />
 				<Route path="/tv/:id" component={OverviewView} />
+				<Route exact path="/movies" component={SearchView} />
+				<Route exact path="/tv" component={SearchView} />
 				<Route exact path="/" component={DiscoveryView} />
 			</Switch>
 		</React.Fragment>

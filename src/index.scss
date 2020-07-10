@@ -5,6 +5,30 @@
 	width: 100%;
 	min-height: 100vh;
 }
+.flex {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.flex-container {
+	width: 100%;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.bkg {
+	width: 100%;
+	background: radial-gradient(circle, transparent 40%, #212121 75%),
+		linear-gradient(to right, #212121, #212121),
+		url(./images/breackingBad2.jpg);
+	background-position: center center;
+	background-size: cover;
+	background-blend-mode: normal, saturation, normal;
+}
 
 .search-box {
 	position: relative;
@@ -27,12 +51,14 @@
 
 .suggestions-menu {
 	@include rmd-elevation(4);
+	background-color: #424242;
 	position: absolute;
 	top: 100%;
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: 1em;
 	transition: all 0.3s ease;
+	z-index: 999;
 }
 .suggestions-menu-open {
 	width: 150%;
