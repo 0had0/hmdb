@@ -11,6 +11,8 @@ import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
 
+import { SkeletonTheme } from "react-loading-skeleton";
+
 import reducers from "./reducers";
 import App from "./components/App";
 
@@ -32,7 +34,9 @@ ReactDOM.render(
     <Provider store={store}>
       <Router>
         <Configuration>
-          <App />
+          <SkeletonTheme color="#616161" highlightColor="#424242">
+            <App />
+          </SkeletonTheme>
         </Configuration>
       </Router>
     </Provider>

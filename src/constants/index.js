@@ -10,3 +10,6 @@ export const LOGOUT_FAILD = "LOGOUT_FAILD";
 
 // app constants
 export const TOGGLE_MODAL = "TOGGLE_MODAL";
+export const SET_IS_LOADING = "SET_IS_LOADING";
+export const SET_DATA = "SET_DATA";
+export const HAS_ERROR = "HAS_ERROR";

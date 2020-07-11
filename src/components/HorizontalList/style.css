@@ -1,0 +1,63 @@
+.horizontal-list-root {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	padding: 10;
+}
+
+.horizontal-list-title {
+	padding: 20px;
+	font-weight: 500;
+	margin: 0;
+}
+
+.horizontal-list-list {
+	display: flex;
+	flex-direction: row;
+	overflow-x: auto;
+	overflow-y: hidden;
+	padding: 20px;
+}
+.horizontal-list-list::-webkit-scrollbar {
+	width: 0.2em;
+	height: 0.5em;
+}
+.horizontal-list-list::-webkit-scrollbar-track {
+	border-radius: 5px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.horizontal-list-list::-webkit-scrollbar-thumb {
+	border-radius: 5px;
+	background-color: #424242;
+	outline: 2px solid slategrey;
+}
+
+.horizontal-list-list::-webkit-scrollbar:vertical {
+	display: none;
+}
+
+.horizontal-list-item {
+	margin-left: 1em;
+	width: 40vmin;
+	transition: all 0.2s ease;
+}
+
+.horizontal-list-item-content {
+	width: 40vmin;
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+}
+
+.stars {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #ffea00;
+}
+
+.horizontal-list-item:hover {
+	transform: scale(1.05);
+	cursor: pointer;
+}
