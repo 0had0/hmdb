@@ -3,6 +3,8 @@ import { useHistory } from "react-router-dom";
 
 import axios from "axios";
 
+import "./Search.css";
+
 import {
 	TextField,
 	List,

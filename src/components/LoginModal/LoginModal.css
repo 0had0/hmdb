@@ -1,0 +1,9 @@
+.dialog-root {
+	width: 50%;
+	overflow-y: hidden;
+}
+@media only screen and (max-width: 500px) {
+	.dialog-root {
+		width: 100%;
+	}
+}

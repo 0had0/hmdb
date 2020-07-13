@@ -19,6 +19,9 @@ import {
 import { toggle_modal } from "../../actions/appActions";
 import { toggle_error } from "../../actions/authActions";
 import { login } from "../../actions/authActions";
+
+import "./LoginModal.css";
+
 const LoginForm = ({
 	email,
 	setEmail,
@@ -77,9 +80,7 @@ const LoginDialog = ({ visible, errorMessage, loading, close, login }) => {
 			visible={visible}
 			onRequestClose={_close}
 			aria-labelledby="login"
-			style={{
-				width: "80%",
-			}}
+			className="dialog-root"
 		>
 			<DialogHeader>
 				<DialogTitle id="login-title">Login Dialog</DialogTitle>

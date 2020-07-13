@@ -5,7 +5,7 @@ import src from "../images/breackingBad3.jpg";
 import HorizontalList from "../components/HorizontalList";
 import Footer from "../components/Footer";
 
-import "./styles.css";
+import "./DiscoveryView.css";
 
 export default () => {
 	return (
