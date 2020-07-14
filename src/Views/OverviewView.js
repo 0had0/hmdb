@@ -7,6 +7,8 @@ import Skeleton from "react-loading-skeleton";
 
 import { fetchData, clearData } from "../actions/appActions";
 import ActionBar from "../components/ActionBar";
+import HorizontalList from "../components/HorizontalList";
+import VideoItem from "../components/VideoItem";
 import Footer from "../components/Footer";
 
 import "./OverviewView.css";
@@ -14,6 +16,7 @@ import "./OverviewView.css";
 const OverviewView = ({ loading, data, hasError, fetch, clear }) => {
 	const { id } = useParams();
 	const key = `${document.location.pathname.split("/")[1]}_page_details`;
+	const video_key = `${document.location.pathname.split("/")[1]}_page_videos`;
 	useEffect(() => {
 		let isMounted = true;
 		if (isMounted) {
@@ -50,15 +53,15 @@ const OverviewView = ({ loading, data, hasError, fetch, clear }) => {
 	}, [data, key]);
 	return (
 		<React.Fragment>
+			<div className="overview-view-outer-img">
+				<img
+					src={`https://image.tmdb.org/t/p/w780${
+						data(key)?.poster_path
+					}`}
+					alt="background"
+				/>
+			</div>
 			<header className="overview-view-header">
-				<div className="overview-view-outer-img">
-					<img
-						src={`https://image.tmdb.org/t/p/w780${
-							data(key)?.poster_path
-						}`}
-						alt="background"
-					/>
-				</div>
 				<header>
 					<Card className="overview-view-header-img-container">
 						<img
@@ -104,7 +107,14 @@ const OverviewView = ({ loading, data, hasError, fetch, clear }) => {
 					</Text>
 				</div>
 			</header>
-			<main className="overview-view-main"></main>
+			<HorizontalList
+				label={"trailers"}
+				StateKey={video_key}
+				id={id}
+				component={VideoItem}
+				loadingItemsNumber={2}
+				clearAfter
+			/>
 			<Footer />
 		</React.Fragment>
 	);
