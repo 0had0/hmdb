@@ -1,0 +1,12 @@
+.action-bar-root {
+	width: 100%;
+	max-width: 300px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.overview-view-rating {
+	display: flex;
+	align-items: center;
+	color: #ffea00;
+}

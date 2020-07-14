@@ -9,8 +9,8 @@ import "./DiscoveryView.css";
 
 export default () => {
 	return (
-		<div className="discovery-view-root">
-			<header>
+		<React.Fragment>
+			<header className="discovery-view-header">
 				<Text type="headline-2" className="discovery-view-cover-title">
 					The Second Best Resource for Movies and Series !
 				</Text>
@@ -29,6 +29,6 @@ export default () => {
 			<HorizontalList label="Top Movies" StateKey="top_movies" />
 			<HorizontalList label="Top Series" StateKey="top_series" />
 			<Footer />
-		</div>
+		</React.Fragment>
 	);
 };

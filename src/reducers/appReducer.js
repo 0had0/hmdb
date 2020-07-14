@@ -11,29 +11,58 @@ const initState = {
 		trending: false,
 		top_movies: false,
 		top_series: false,
+		movies_page_details: false,
+		movies_page_videos: false,
+		movies_page_recommendations: false,
+		movies_page_similar: false,
+		movies_page_reviews: false,
+		tv_page_details: false,
+		tv_page_videos: false,
 	},
 	data: {
 		popular: [],
 		trending: [],
 		top_movies: [],
 		top_series: [],
+		movies_page_details: null,
+		movies_page_videos: [],
+		movies_page_recommendations: [],
+		movies_page_similar: null,
+		movies_page_reviews: null,
+		tv_page_details: null,
+		tv_page_videos: [],
 	},
 	hasError: {
 		popular: null,
 		trending: null,
 		top_movies: null,
 		top_series: null,
+		movies_page_details: null,
+		movies_page_videos: null,
+		movies_page_recommendations: null,
+		movies_page_similar: null,
+		movies_page_reviews: null,
+		tv_page_details: null,
+		tv_page_videos: null,
 	},
 };
 
 const applyIsLoading = (state, action) => {
 	const { key, value } = action.payload;
-	return { ...state, isLoading: { ...state.isLoading, [key]: value } };
+	return {
+		...state,
+		isLoading: { ...state.isLoading, [key]: value },
+		hasError: { ...state.hasError, [key]: false },
+	};
 };
 
 const applyData = (state, action) => {
 	const { key, value } = action.payload;
-	return { ...state, data: { ...state.data, [key]: value } };
+	return {
+		...state,
+		data: { ...state.data, [key]: value },
+		hasError: { ...state.hasError, [key]: false },
+	};
 };
 
 const applyError = (state, action) => {
