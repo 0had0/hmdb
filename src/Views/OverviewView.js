@@ -12,11 +12,15 @@ import VideoItem from "../components/VideoItem";
 import Footer from "../components/Footer";
 
 import "./OverviewView.css";
+import "./_filter.scss";
 
 const OverviewView = ({ loading, data, hasError, fetch, clear }) => {
 	const { id } = useParams();
 	const key = `${document.location.pathname.split("/")[1]}_page_details`;
 	const video_key = `${document.location.pathname.split("/")[1]}_page_videos`;
+	const similar_key = `${
+		document.location.pathname.split("/")[1]
+	}_page_similar`;
 	useEffect(() => {
 		let isMounted = true;
 		if (isMounted) {
@@ -82,7 +86,11 @@ const OverviewView = ({ loading, data, hasError, fetch, clear }) => {
 							type="subtitle-1"
 							className="overview-view-header-row"
 						>
-							{data(key)?.tagline || <Skeleton width={150} />}
+							{loading(key) ? (
+								<Skeleton width={150} />
+							) : (
+								data(key)?.tagline
+							)}
 						</Text>
 						<div className="overview-view-header-row overview-view-more">
 							{renderMore()}
@@ -108,11 +116,20 @@ const OverviewView = ({ loading, data, hasError, fetch, clear }) => {
 				</div>
 			</header>
 			<HorizontalList
-				label={"trailers"}
+				label={"Trailers"}
 				StateKey={video_key}
 				id={id}
 				component={VideoItem}
 				loadingItemsNumber={2}
+				withoutCheck
+				clearAfter
+			/>
+			<HorizontalList
+				label={"Similar"}
+				StateKey={similar_key}
+				id={id}
+				loadingItemsNumber={4}
+				withoutCheck
 				clearAfter
 			/>
 			<Footer />

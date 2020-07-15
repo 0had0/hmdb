@@ -9,21 +9,16 @@ function VideoItem({ item, loading, error, handleClick }) {
 			<MediaContainer fullWidth>
 				<img
 					src={
-						item?.site === "YouTube" &&
-						item?.key &&
-						`http://i.ytimg.com/vi/${item?.key}/mqdefault.jpg`
+						item?.site === "YouTube" && item?.key
+							? `http://i.ytimg.com/vi/${item?.key}/mqdefault.jpg`
+							: ""
 					}
 					width={100}
 					alt={item?.name}
 				/>
 			</MediaContainer>
 			<div className="video-item-action">
-				<Button
-					id="play"
-					buttonType="icon"
-					theme="default"
-					aria-label="play trailer"
-				>
+				<Button id="play" buttonType="icon" aria-label="play trailer">
 					<PlayArrowFontIcon
 						style={{ fontSize: "10vmin", color: "#fff" }}
 					/>

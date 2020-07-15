@@ -15,6 +15,7 @@ function HorizontalList({
 	component: Component = Item,
 	loadingItemsNumber,
 	loading = false,
+	withoutCheck = false,
 	clearAfter = false,
 	data,
 	hasError,
@@ -27,7 +28,7 @@ function HorizontalList({
 	);
 	useLayoutEffect(() => {
 		let isMounted = true;
-		if (isMounted && data(key).length === 0) {
+		if ((isMounted && data(key).length === 0) || withoutCheck) {
 			console.log(data(key).length === 0, data(key));
 			fetch(key, id);
 		}
@@ -36,7 +37,7 @@ function HorizontalList({
 			clearAfter && clear(key);
 		};
 		// eslint-disable-next-line
-	}, [key, fetch]);
+	}, [key, fetch, id]);
 	return (
 		<div className="horizontal-list-root">
 			<Text type="headline-4" className="horizontal-list-title">

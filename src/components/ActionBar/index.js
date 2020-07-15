@@ -17,7 +17,6 @@ function ActionBar({ vote_average }) {
 			<Button
 				id="favorite"
 				buttonType="icon"
-				theme="default"
 				aria-label="add to favorite"
 			>
 				<FavoriteSVGIcon />
@@ -25,7 +24,6 @@ function ActionBar({ vote_average }) {
 			<Button
 				id="bookmark"
 				buttonType="icon"
-				theme="default"
 				aria-label="add to watch list"
 			>
 				<BookmarkSVGIcon />
