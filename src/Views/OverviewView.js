@@ -58,18 +58,26 @@ const OverviewView = ({ loading, data, hasError, fetch, clear }) => {
 		const duration = d?.runtime;
 		const h = Math.floor(duration / 60);
 		const m = duration % 60;
-		return duration
-			? `${time} - ${genres} - ${h}h ${m}m`
-			: `${time} - ${genres}`;
-	}, [data, key]);
+		return loading(key) ? (
+			<Skeleton width={200} />
+		) : duration ? (
+			`${time} - ${genres} - ${h}h ${m}m`
+		) : genres ? (
+			`${time} - ${genres}`
+		) : null;
+	}, [data, key, loading]);
 	return (
 		<React.Fragment>
 			<div className="overview-view-outer-img">
 				<img
-					src={`https://image.tmdb.org/t/p/w780${
-						data(key)?.poster_path
-					}`}
-					alt="background"
+					src={
+						!loading(key)
+							? `https://image.tmdb.org/t/p/w780${
+									data(key)?.poster_path
+							  }`
+							: null
+					}
+					alt={data(key)?.title}
 				/>
 			</div>
 			<header className="overview-view-header">
@@ -96,7 +104,7 @@ const OverviewView = ({ loading, data, hasError, fetch, clear }) => {
 							{loading(key) ? (
 								<Skeleton width={150} />
 							) : (
-								data(key)?.tagline
+								data(key)?.tagline || null
 							)}
 						</Text>
 						<div className="overview-view-header-row overview-view-more">
@@ -116,7 +124,7 @@ const OverviewView = ({ loading, data, hasError, fetch, clear }) => {
 						Overview:
 					</Text>
 					<Text type="body-2">
-						{data(key)?.overview || <Skeleton count={5} />}
+						{!loading(key) && data(key)?.overview}
 					</Text>
 				</div>
 			</header>
@@ -129,7 +137,7 @@ const OverviewView = ({ loading, data, hasError, fetch, clear }) => {
 				withoutCheck
 				clearAfter
 			/>
-			<div className="flex-center ">
+			<div className="flex-center">
 				<Text type="headline-6" className="overview-view-header-row">
 					Featured Review:
 				</Text>

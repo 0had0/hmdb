@@ -30,7 +30,8 @@ function Reviews({ id, StateKey: key, loading, data, hasError, fetch, clear }) {
 			isMounted = false;
 			clear(key);
 		};
-	}, [fetch, id]);
+		// eslint-disable-next-line
+	}, [fetch, id, clear]);
 
 	if (data(key).length === 0 || !data(key)) {
 		return loading(key) ? null : <Text type="body-2">No reviews</Text>;

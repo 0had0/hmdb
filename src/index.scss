@@ -1,6 +1,10 @@
 @import "./variables";
 @import "~react-md/dist/react-md";
 
+html {
+	scroll-behavior: smooth;
+}
+
 #root {
 	width: 100%;
 	min-height: 100vh;
