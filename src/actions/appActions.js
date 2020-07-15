@@ -38,6 +38,7 @@ const getURLof = (key, api, id) => {
 		tv_page_details: `${api.URL}/tv/${id}?api_key=${api.KEY}&language=en-US`,
 		tv_page_videos: `${api.URL}/tv/${id}/videos?api_key=${api.KEY}&language=en-US`,
 		tv_page_similar: `${api.URL}/tv/${id}/similar?api_key=${api.KEY}&language=en-US`,
+		tv_page_reviews: `${api.URL}/tv/${id}/reviews?api_key=${api.KEY}&language=en-US`,
 	};
 	return URLS[key];
 };

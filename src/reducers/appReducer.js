@@ -19,6 +19,7 @@ const initState = {
 		tv_page_details: false,
 		tv_page_videos: false,
 		tv_page_similar: false,
+		tv_page_reviews: false,
 	},
 	data: {
 		popular: [],
@@ -29,10 +30,11 @@ const initState = {
 		movies_page_videos: [],
 		movies_page_recommendations: [],
 		movies_page_similar: [],
-		movies_page_reviews: null,
+		movies_page_reviews: [],
 		tv_page_details: null,
 		tv_page_videos: [],
 		tv_page_similar: [],
+		tv_page_reviews: [],
 	},
 	hasError: {
 		popular: null,
@@ -47,6 +49,7 @@ const initState = {
 		tv_page_details: null,
 		tv_page_videos: null,
 		tv_page_similar: null,
+		tv_page_reviews: null,
 	},
 };
 

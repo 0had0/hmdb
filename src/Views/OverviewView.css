@@ -12,15 +12,6 @@
 	height: auto;
 	opacity: 0.3;
 }
-@media only screen and (max-width: 500px) {
-	.overview-view-outer-img::after {
-		background: linear-gradient(
-			0deg,
-			rgba(33, 33, 33, 1) 70%,
-			rgba(255, 255, 255, 0) 100%
-		);
-	}
-}
 .overview-view-header {
 	width: 100%;
 	max-width: 900px;
@@ -74,11 +65,14 @@
 	align-items: center;
 	justify-content: center;
 }
-.overview-view-header-overview {
+.flex-center {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
 	justify-content: center;
+	width: 100%;
+	max-width: 900px;
+	padding: 20px;
 }
 .overview-view-main {
 }

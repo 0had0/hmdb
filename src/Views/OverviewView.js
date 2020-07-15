@@ -9,6 +9,7 @@ import { fetchData, clearData } from "../actions/appActions";
 import ActionBar from "../components/ActionBar";
 import HorizontalList from "../components/HorizontalList";
 import VideoItem from "../components/VideoItem";
+import Reviews from "../components/Reviews";
 import Footer from "../components/Footer";
 
 import "./OverviewView.css";
@@ -16,11 +17,17 @@ import "./_filter.scss";
 
 const OverviewView = ({ loading, data, hasError, fetch, clear }) => {
 	const { id } = useParams();
+
 	const key = `${document.location.pathname.split("/")[1]}_page_details`;
 	const video_key = `${document.location.pathname.split("/")[1]}_page_videos`;
+	const reviews_key = `${
+		document.location.pathname.split("/")[1]
+	}_page_reviews`;
+
 	const similar_key = `${
 		document.location.pathname.split("/")[1]
 	}_page_similar`;
+
 	useEffect(() => {
 		let isMounted = true;
 		if (isMounted) {
@@ -104,14 +111,12 @@ const OverviewView = ({ loading, data, hasError, fetch, clear }) => {
 						/>
 					</div>
 				</header>
-				<div className="overview-view-header-overview">
+				<div className="flex-center">
 					<Text type="headline-6" style={{ margin: 0 }}>
 						Overview:
 					</Text>
 					<Text type="body-2">
-						{data(key)?.overview || (
-							<Skeleton width={300} count={5} />
-						)}
+						{data(key)?.overview || <Skeleton count={5} />}
 					</Text>
 				</div>
 			</header>
@@ -124,6 +129,12 @@ const OverviewView = ({ loading, data, hasError, fetch, clear }) => {
 				withoutCheck
 				clearAfter
 			/>
+			<div className="flex-center ">
+				<Text type="headline-6" className="overview-view-header-row">
+					Featured Review:
+				</Text>
+				<Reviews id={id} StateKey={reviews_key} />
+			</div>
 			<HorizontalList
 				label={"Similar"}
 				StateKey={similar_key}

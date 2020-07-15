@@ -14,3 +14,12 @@
 		rgba(255, 255, 255, 0) 100%
 	);
 }
+@media only screen and (max-width: 500px) {
+	.overview-view-outer-img::after {
+		background: linear-gradient(
+			0deg,
+			$rmd-theme-dark-background 80%,
+			rgba(255, 255, 255, 0) 100%
+		);
+	}
+}
