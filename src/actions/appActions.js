@@ -35,33 +35,29 @@ const getURLof = (key, api, id) => {
 		movies_page_recommendations: `${api.URL}/movie/${id}/recommendations?api_key=${api.KEY}&language=en-US`,
 		movies_page_similar: `${api.URL}/movie/${id}/similar?api_key=${api.KEY}&language=en-US`,
 		movies_page_reviews: `${api.URL}/movie/${id}/reviews?api_key=${api.KEY}&language=en-US`,
+		movies_page_credits: `${api.URL}/movie/${id}/credits?api_key=${api.KEY}&language=en-US`,
 		tv_page_details: `${api.URL}/tv/${id}?api_key=${api.KEY}&language=en-US`,
 		tv_page_videos: `${api.URL}/tv/${id}/videos?api_key=${api.KEY}&language=en-US`,
 		tv_page_similar: `${api.URL}/tv/${id}/similar?api_key=${api.KEY}&language=en-US`,
 		tv_page_reviews: `${api.URL}/tv/${id}/reviews?api_key=${api.KEY}&language=en-US`,
+		tv_page_credits: `${api.URL}/tv/${id}/credits?api_key=${api.KEY}&language=en-US`,
 	};
 	return URLS[key];
 };
 
 export function fetchData(key, id = 0) {
 	return async (dispatch, getState, api) => {
-		console.log(`[fetch ${key.split("_").join(" ")}]: start`);
 		dispatch(setIsLoading(key, true));
 		await axios
 			.get(getURLof(key, api, id))
 			.then(({ data }) => {
-				const { results } = data;
-				dispatch(setData(key, results ?? data));
-				console.log(
-					`[fetch ${key.split("_").join(" ")}]: done\nresult: `,
-					results ?? data
-				);
+				const { results, cast } = data;
+				dispatch(setData(key, results ?? cast ?? data));
 				dispatch(setIsLoading(key, false));
 			})
 			.catch((err) => {
 				dispatch(setIsLoading(key, false));
 				dispatch(setHasError(key, true));
-				console.log(`[fetch ${key.split("_").join(" ")}]: faild`);
 			});
 	};
 }

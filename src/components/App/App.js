@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, withRouter } from "react-router-dom";
 
 import { SearchView, OverviewView, DiscoveryView } from "../../Views";
 
@@ -8,8 +8,23 @@ import LoginModal from "../LoginModal";
 
 import "./App.css";
 
+class ScrollToTopClass extends React.Component {
+	componentDidUpdate(prevProps) {
+		if (this.props.location !== prevProps.location) {
+			window.scrollTo(0, 0);
+		}
+	}
+
+	render() {
+		return <React.Fragment />;
+	}
+}
+
+const ScrollToTop = withRouter(ScrollToTopClass);
+
 const WithFullPage = (Component) => () => (
 	<div className="page-root">
+		<ScrollToTop />
 		<Component />
 	</div>
 );

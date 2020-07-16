@@ -9,6 +9,7 @@ import { fetchData, clearData } from "../actions/appActions";
 import ActionBar from "../components/ActionBar";
 import HorizontalList from "../components/HorizontalList";
 import VideoItem from "../components/VideoItem";
+import CastItem from "../components/CastItem";
 import Reviews from "../components/Reviews";
 import Footer from "../components/Footer";
 
@@ -23,15 +24,18 @@ const OverviewView = ({ loading, data, hasError, fetch, clear }) => {
 	const reviews_key = `${
 		document.location.pathname.split("/")[1]
 	}_page_reviews`;
-
 	const similar_key = `${
 		document.location.pathname.split("/")[1]
 	}_page_similar`;
+	const credits_key = `${
+		document.location.pathname.split("/")[1]
+	}_page_credits`;
 
 	useEffect(() => {
 		let isMounted = true;
 		if (isMounted) {
 			fetch(key, id);
+			window.scrollTo(0, 0);
 		}
 		return () => {
 			isMounted = false;
@@ -119,6 +123,14 @@ const OverviewView = ({ loading, data, hasError, fetch, clear }) => {
 						/>
 					</div>
 				</header>
+				<HorizontalList
+					label={"Cast"}
+					StateKey={credits_key}
+					id={id}
+					component={CastItem}
+					withoutCheck
+					clearAfter
+				/>
 				<div className="flex-center">
 					<Text type="headline-6" style={{ margin: 0 }}>
 						Overview:
