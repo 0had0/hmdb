@@ -110,6 +110,25 @@ function logout() {
 	};
 }
 
+function favorite(id, type) {
+	return async (dispatch, getState, api) => {
+		const { sessionId } = getState().auth;
+		const f = JSON.parse(localStorage.getItem(`favorite-${id}`));
+		const result = await axios({
+			method: "post",
+			url: `${api.URL}/account/${id}/favorite?api_key=${api.KEY}&session_id=${sessionId}`,
+			headers: {},
+			data: {
+				media_type: type,
+				media_id: id,
+				favorite: !f,
+			},
+		}).then(() => {
+			localStorage.setItem(`favorite-${id}`, !f);
+		});
+	};
+}
+
 export {
 	login,
 	login_success,
@@ -120,4 +139,5 @@ export {
 	logout_success,
 	logout_faild,
 	logout,
+	favorite,
 };

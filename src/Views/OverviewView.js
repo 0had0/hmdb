@@ -115,6 +115,7 @@ const OverviewView = ({ loading, data, hasError, fetch, clear }) => {
 							{renderMore()}
 						</div>
 						<ActionBar
+							id={id}
 							vote_average={
 								data(key)?.vote_average || (
 									<Skeleton width={30} />

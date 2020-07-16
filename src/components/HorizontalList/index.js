@@ -37,6 +37,11 @@ function HorizontalList({
 		};
 		// eslint-disable-next-line
 	}, [key, fetch, id]);
+
+	if (data(key).length === 0 && !loading(key)) {
+		return null;
+	}
+
 	return (
 		<div className="horizontal-list-root">
 			<Text type="headline-4" className="horizontal-list-title">

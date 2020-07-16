@@ -1,32 +1,41 @@
-import React from "react";
+import React, { useCallback } from "react";
+import { connect } from "react-redux";
 
 import {
 	Button,
-	FavoriteSVGIcon,
-	BookmarkSVGIcon,
+	FavoriteFontIcon,
+	BookmarkFontIcon,
 	StarFontIcon,
 	TextIconSpacing,
 	PlayArrowFontIcon,
 } from "react-md";
 
+import { favorite } from "../../actions/authActions";
+
 import "./ActionBar.css";
 
-function ActionBar({ vote_average }) {
+function ActionBar({ id, vote_average, isLogin, setFavorite }) {
+	const isFavorite = localStorage.getItem(`favorite-${id}`);
+
+	const _handleFavorite = useCallback(() => {
+		isLogin && setFavorite(id);
+	}, [setFavorite, isLogin]);
 	return (
 		<div className="action-bar-root">
 			<Button
 				id="favorite"
 				buttonType="icon"
 				aria-label="add to favorite"
+				onClick={_handleFavorite}
 			>
-				<FavoriteSVGIcon />
+				<FavoriteFontIcon style={{ color: isFavorite && "#D50000" }} />
 			</Button>
 			<Button
 				id="bookmark"
 				buttonType="icon"
 				aria-label="add to watch list"
 			>
-				<BookmarkSVGIcon />
+				<BookmarkFontIcon />
 			</Button>
 			<div className="overview-view-rating">
 				<StarFontIcon style={{ color: "#FFEA00" }} />
@@ -41,4 +50,19 @@ function ActionBar({ vote_average }) {
 	);
 }
 
-export default ActionBar;
+export default connect(
+	({ auth }) => ({
+		isLogin: auth.isLogin,
+	}),
+	(dispatch) => ({
+		setFavorite: (id) =>
+			dispatch(
+				favorite(
+					id,
+					document.location.pathname.split("/")[1] === "tv"
+						? "tv"
+						: "movie"
+				)
+			),
+	})
+)(ActionBar);
