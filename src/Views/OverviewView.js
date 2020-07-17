@@ -6,6 +6,8 @@ import { Text, Card } from "react-md";
 import Skeleton from "react-loading-skeleton";
 
 import { fetchData, clearData } from "../actions/appActions";
+import { update_favorite } from "../actions/authActions";
+
 import ActionBar from "../components/ActionBar";
 import HorizontalList from "../components/HorizontalList";
 import VideoItem from "../components/VideoItem";
@@ -16,7 +18,14 @@ import Footer from "../components/Footer";
 import "./OverviewView.css";
 import "./_filter.scss";
 
-const OverviewView = ({ loading, data, hasError, fetch, clear }) => {
+const OverviewView = ({
+	loading,
+	data,
+	hasError,
+	fetch,
+	clear,
+	updateFavorite,
+}) => {
 	const { id } = useParams();
 
 	const key = `${document.location.pathname.split("/")[1]}_page_details`;
@@ -35,6 +44,7 @@ const OverviewView = ({ loading, data, hasError, fetch, clear }) => {
 		let isMounted = true;
 		if (isMounted) {
 			fetch(key, id);
+			updateFavorite(document.location.pathname.split("/")[1]);
 			window.scrollTo(0, 0);
 		}
 		return () => {
@@ -178,5 +188,6 @@ export default connect(
 	(dispatch) => ({
 		fetch: (key, id) => dispatch(fetchData(key, id)),
 		clear: (key) => dispatch(clearData(key)),
+		updateFavorite: (media_type) => dispatch(update_favorite(media_type)),
 	})
-)(OverviewView);
+)(React.memo(OverviewView));

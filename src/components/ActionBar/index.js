@@ -14,9 +14,10 @@ import { favorite } from "../../actions/authActions";
 
 import "./ActionBar.css";
 
-function ActionBar({ id, vote_average, isLogin, setFavorite }) {
-	const isFavorite = localStorage.getItem(`favorite-${id}`);
-
+function ActionBar({ id, vote_average, isLogin, isFavorite, setFavorite }) {
+	const _is_favorite = useCallback(() => {
+		isFavorite(id);
+	}, [isFavorite, id]);
 	const _handleFavorite = useCallback(() => {
 		isLogin && setFavorite(id);
 	}, [setFavorite, isLogin]);
@@ -28,7 +29,9 @@ function ActionBar({ id, vote_average, isLogin, setFavorite }) {
 				aria-label="add to favorite"
 				onClick={_handleFavorite}
 			>
-				<FavoriteFontIcon style={{ color: isFavorite && "#D50000" }} />
+				<FavoriteFontIcon
+					style={_is_favorite() && { color: "#D50000" }}
+				/>
 			</Button>
 			<Button
 				id="bookmark"
@@ -53,16 +56,19 @@ function ActionBar({ id, vote_average, isLogin, setFavorite }) {
 export default connect(
 	({ auth }) => ({
 		isLogin: auth.isLogin,
+		isFavorite: (id) => {
+			console.log(
+				auth.favorite[
+					document.location.pathname.split("/")[1]
+				].includes(id)
+			);
+			return auth.favorite[
+				document.location.pathname.split("/")[1]
+			].includes(id);
+		},
 	}),
 	(dispatch) => ({
 		setFavorite: (id) =>
-			dispatch(
-				favorite(
-					id,
-					document.location.pathname.split("/")[1] === "tv"
-						? "tv"
-						: "movie"
-				)
-			),
+			dispatch(favorite(id, document.location.pathname.split("/")[1])),
 	})
-)(ActionBar);
+)(React.memo(ActionBar));

@@ -6,9 +6,14 @@ import {
 	LOGOUT_START,
 	LOGOUT_SUCCESS,
 	LOGOUT_FAILD,
+	SET_ACCOUNT_INFO,
+	SET_FAVORITE,
 } from "../constants";
 const initState = {
 	sessionId: localStorage.getItem("session_id") || null,
+	id: localStorage.getItem("id") || null,
+	name: null,
+	favorite: { movie: [], tv: [] },
 	loading: false,
 	logout_loading: false,
 	isLogin: localStorage.getItem("session_id") ?? false,
@@ -37,6 +42,9 @@ export default (state = initState, action) => {
 				errorMessage: action.payload,
 			};
 		}
+		case SET_ACCOUNT_INFO: {
+			return { ...state, id: action.id, name: action.name };
+		}
 		case TOGGLE_ERROR: {
 			return { ...state, errorMessage: null };
 		}
@@ -48,6 +56,18 @@ export default (state = initState, action) => {
 		}
 		case LOGOUT_FAILD: {
 			return { ...state, logout_loading: false };
+		}
+		case SET_FAVORITE: {
+			return {
+				...state,
+				favorite: {
+					...state.favorite,
+					[action.payload.media_type]: [
+						...state.favorite[action.payload.media_type],
+						...action.payload.ids,
+					],
+				},
+			};
 		}
 		default: {
 			return state;

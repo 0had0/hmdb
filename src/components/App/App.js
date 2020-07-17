@@ -40,7 +40,7 @@ function App() {
 					component={WithFullPage(SearchView)}
 				/>
 				<Route
-					path="/movies/:id"
+					path="/movie/:id"
 					component={WithFullPage(OverviewView)}
 				/>
 				<Route path="/tv/:id" component={WithFullPage(OverviewView)} />

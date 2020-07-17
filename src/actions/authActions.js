@@ -7,6 +7,8 @@ import {
 	LOGOUT_START,
 	LOGOUT_SUCCESS,
 	LOGOUT_FAILD,
+	SET_ACCOUNT_INFO,
+	SET_FAVORITE,
 } from "../constants";
 
 import { toggle_modal } from "./appActions";
@@ -26,6 +28,12 @@ const login_faild = (payload) => ({
 });
 const toggle_error = () => ({
 	type: TOGGLE_ERROR,
+});
+
+const set_account_info = ({ id, name }) => ({
+	type: SET_ACCOUNT_INFO,
+	id,
+	name,
 });
 
 function login(email, password) {
@@ -56,7 +64,7 @@ function login(email, password) {
 								url: `${api.URL}/authentication/session/new?api_key=${api.KEY}`,
 								headers: {},
 								data: { request_token },
-							}).then(({ data }) => {
+							}).then(async ({ data }) => {
 								const { success, session_id } = data;
 
 								if (success) {
@@ -67,6 +75,16 @@ function login(email, password) {
 									);
 									dispatch(login_success(session_id));
 									dispatch(toggle_modal());
+									await axios
+										.get(
+											`${api.URL}/account?api_key=${api.KEY}&session_id=${session_id}`
+										)
+										.then(({ data }) => {
+											dispatch(set_account_info(data));
+											localStorage.setItem("id", data.id);
+											dispatch(update_favorite("movie"));
+											dispatch(update_favorite("tv"));
+										});
 								}
 							});
 						}
@@ -104,28 +122,55 @@ function logout() {
 		})
 			.then(() => {
 				localStorage.removeItem("session_id");
+				localStorage.removeItem("id");
 				dispatch(logout_success());
 			})
 			.catch(() => dispatch(logout_faild()));
 	};
 }
 
-function favorite(id, type) {
+//favorite
+
+const set_favorite = ({ media_type, ids }) => ({
+	type: SET_FAVORITE,
+	payload: { media_type, ids },
+});
+
+function update_favorite(media_type, page = 1) {
 	return async (dispatch, getState, api) => {
-		const { sessionId } = getState().auth;
-		const f = JSON.parse(localStorage.getItem(`favorite-${id}`));
-		const result = await axios({
+		return await axios
+			.get(
+				`${api.URL}/account/${getState().auth.id}/favorite/${
+					media_type === "movie" ? "movies" : "tv"
+				}?api_key=${api.KEY}&session_id=${
+					getState().auth.sessionId
+				}&page=${page}`
+			)
+			.then(({ data }) => {
+				const { results, total_pages, page } = data;
+				const ids = results.map(({ id }) => id);
+				dispatch(set_favorite({ media_type, ids }));
+			})
+			.catch((err) => console.log(err));
+	};
+}
+function favorite(id, media_type) {
+	return async (dispatch, getState, api) => {
+		const { sessionId, favorite, ...rest } = getState().auth;
+		await axios({
 			method: "post",
-			url: `${api.URL}/account/${id}/favorite?api_key=${api.KEY}&session_id=${sessionId}`,
+			url: `${api.URL}/account/${rest.id}/favorite?api_key=${api.KEY}&session_id=${sessionId}`,
 			headers: {},
 			data: {
-				media_type: type,
+				media_type,
 				media_id: id,
-				favorite: !f,
+				favorite: !favorite[media_type].includes(id),
 			},
-		}).then(() => {
-			localStorage.setItem(`favorite-${id}`, !f);
-		});
+		})
+			.then(() => {
+				update_favorite(media_type);
+			})
+			.catch((err) => console.log(err));
 	};
 }
 
@@ -139,5 +184,6 @@ export {
 	logout_success,
 	logout_faild,
 	logout,
+	update_favorite,
 	favorite,
 };

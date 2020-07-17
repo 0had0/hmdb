@@ -18,7 +18,7 @@ function Item({ item, loading, error, handleClick }) {
 	const history = useHistory();
 	const _GoToTheOverViewPage = () =>
 		item
-			? history.push(`/${item.name ? "tv" : "movies"}/${item.id}`)
+			? history.push(`/${item.name ? "tv" : "movie"}/${item.id}`)
 			: !loading && error && handleClick();
 	return (
 		<Card

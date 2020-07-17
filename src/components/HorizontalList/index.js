@@ -57,7 +57,10 @@ function HorizontalList({
 					<Component error handleClick={() => fetch(key)} />
 				) : (
 					data(key)?.map((item, i) => (
-						<Component key={item.id} item={item} />
+						<Component
+							key={`${item?.name}-${item?.id}`}
+							item={item}
+						/>
 					))
 				)}
 			</div>
