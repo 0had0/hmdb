@@ -9,9 +9,9 @@ import {
 
 export const toggle_modal = () => ({ type: TOGGLE_MODAL });
 
-const setIsLoading = (key, value) => ({
+const setIsLoading = (payload) => ({
 	type: SET_IS_LOADING,
-	payload: { key, value },
+	payload,
 });
 
 const setData = (key, value) => ({
@@ -19,9 +19,9 @@ const setData = (key, value) => ({
 	payload: { key, value },
 });
 
-const setHasError = (key, value) => ({
+const setHasError = (payload) => ({
 	type: HAS_ERROR,
-	payload: { key, value },
+	payload,
 });
 
 const getURLof = (key, api, id) => {
@@ -64,4 +64,52 @@ export function fetchData(key, id = 0) {
 
 export function clearData(key) {
 	return setData(key, []);
+}
+
+export function fetchOverview(id, media_type) {
+	return async (dispatch, getState, api) => {
+		dispatch(setIsLoading(true));
+		await axios
+			.all([
+				axios.get(getURLof(`${media_type}_page_details`, api, id)),
+				axios.get(getURLof(`${media_type}_page_videos`, api, id)),
+				axios.get(
+					getURLof(`${media_type}_page_recommendations`, api, id)
+				),
+				axios.get(getURLof(`${media_type}_page_similar`, api, id)),
+				axios.get(getURLof(`${media_type}_page_reviews`, api, id)),
+				axios.get(getURLof(`${media_type}_page_credits`, api, id)),
+			])
+			.then(
+				axios
+					.spread((...responses) => {
+						const [
+							details_res,
+							videos_res,
+							recommendations_res,
+							similar_res,
+							reviews_res,
+							credits_res,
+						] = responses;
+						dispatch(
+							setData("overview", {
+								details: details_res.data,
+								videos: videos_res.data.results,
+								recommendations:
+									recommendations_res.data.results,
+								similar: similar_res.data.results,
+								reviews: reviews_res.data.results,
+								credits:
+									credits_res.data.cast.length === 0
+										? credits_res.data.crew
+										: credits_res.data.cast,
+							})
+						);
+					})
+					.catch((errors) => {
+						dispatch(setIsLoading(true));
+						dispatch(setHasError(true));
+					})
+			);
+	};
 }

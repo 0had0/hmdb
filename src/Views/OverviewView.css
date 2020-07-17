@@ -74,5 +74,11 @@
 	max-width: 900px;
 	padding: 20px;
 }
-.overview-view-main {
+.loading-div {
+	width: 100%;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 }
