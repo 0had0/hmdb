@@ -6,7 +6,7 @@ import "./HorizontalList.css";
 
 function HorizontalList({ label, children }) {
 	return (
-		<div className="horizontal-list-root">
+		<div id={label} className="horizontal-list-root">
 			<Text type="headline-4" className="horizontal-list-title">
 				{label}
 			</Text>
