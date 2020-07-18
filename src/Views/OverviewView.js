@@ -1,17 +1,18 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { connect } from "react-redux";
 import { Text, Card, CircularProgress } from "react-md";
 
-import Skeleton from "react-loading-skeleton";
-
-import { fetchOverview, clearData } from "../actions/appActions";
-import { update_favorite } from "../actions/authActions";
+import { fetchOverview } from "../actions/appActions";
+import { update_favorite, update_watchlist } from "../actions/authActions";
 
 import ActionBar from "../components/ActionBar";
-import HorizontalList from "../components/HorizontalList";
-import VideoItem from "../components/VideoItem";
-import CastItem from "../components/CastItem";
+import HorizontalNoFetchList from "../components/HorizontalNoFetchList";
+
+import VideoItem from "../components/Items/VideoItem";
+import CastItem from "../components/Items/CastItem";
+import MediaItem from "../components/Items/MediaItem";
+
 import Reviews from "../components/Reviews";
 import Footer from "../components/Footer";
 
@@ -22,32 +23,31 @@ const OverviewView = ({
 	loading,
 	details,
 	videos,
-	recommendations,
 	similar,
 	reviews,
 	credits,
 	hasError,
 	fetch,
-	clear,
 	updateFavorite,
+	updateWatchlist,
 }) => {
 	const { id } = useParams();
 
 	useEffect(() => {
-		const media_type = `${document.location.pathname.split("/")[1]}`;
+		const media_type = document.location.pathname.split("/")[1];
 		let isMounted = true;
 		if (isMounted) {
 			fetch(id, media_type);
 			updateFavorite(media_type);
-			window.scrollTo(0, 0);
+			updateWatchlist(media_type);
+			setTimeout(() => window.scrollTo(0, 0), 200);
 		}
 		return () => {
 			isMounted = false;
-			clear();
 		};
-	}, [id, fetch, clear]);
+	}, [id, fetch, updateWatchlist, updateFavorite]);
 
-	const renderTitle = useCallback(() => {
+	const renderTitle = () => {
 		const title = details?.title || details?.name;
 		return (
 			title &&
@@ -57,9 +57,9 @@ const OverviewView = ({
 				)[0]
 			})`
 		);
-	}, [details]);
+	};
 
-	const renderMore = useCallback(() => {
+	const renderMore = () => {
 		const time = details?.release_date || details?.first_air_date;
 		const genres = details?.genres?.map((i) => i.name)?.join(", ");
 		const duration = details?.runtime;
@@ -68,15 +68,13 @@ const OverviewView = ({
 		return duration
 			? `${time} - ${genres} - ${h}h ${m}m`
 			: genres && `${time} - ${genres}`;
-	}, [details, loading]);
+	};
 
-	if (loading || hasError) {
-		return (
-			<div className="loading-div">{loading && <CircularProgress />}</div>
-		);
-	}
-
-	return (
+	return loading || details.length === 0 ? (
+		<div className="loading-div">
+			<CircularProgress id="overview-loading-aim" />
+		</div>
+	) : (
 		<React.Fragment>
 			<div className="overview-view-outer-img">
 				<img
@@ -117,45 +115,33 @@ const OverviewView = ({
 						/>
 					</div>
 				</header>
-				<HorizontalList
+				<HorizontalNoFetchList
 					label={"Cast"}
-					StateKey={credits_key}
-					id={id}
 					component={CastItem}
-					withoutCheck
-					clearAfter
+					list={credits}
 				/>
 				<div className="flex-center">
 					<Text type="headline-6" style={{ margin: 0 }}>
 						Overview:
 					</Text>
-					<Text type="body-2">
-						{!loading(key) && details?.overview}
-					</Text>
+					<Text type="body-2">{details?.overview}</Text>
 				</div>
 			</header>
-			<HorizontalList
+			<HorizontalNoFetchList
 				label={"Trailers"}
-				StateKey={video_key}
-				id={id}
 				component={VideoItem}
-				loadingItemsNumber={2}
-				withoutCheck
-				clearAfter
+				list={videos}
 			/>
 			<div className="flex-center">
 				<Text type="headline-6" className="overview-view-header-row">
 					Featured Review:
 				</Text>
-				<Reviews id={id} StateKey={reviews_key} />
+				<Reviews id={id} list={reviews} />
 			</div>
-			<HorizontalList
+			<HorizontalNoFetchList
 				label={"Similar"}
-				StateKey={similar_key}
-				id={id}
-				loadingItemsNumber={4}
-				withoutCheck
-				clearAfter
+				component={MediaItem}
+				list={similar}
 			/>
 			<Footer />
 		</React.Fragment>
@@ -167,7 +153,6 @@ export default connect(
 		loading: app.isLoading.overview.loading,
 		details: app.data.overview.details,
 		videos: app.data.overview.videos,
-		recommendations: app.data.overview.recommendations,
 		similar: app.data.overview.similar,
 		reviews: app.data.overview.reviews,
 		credits: app.data.overview.credits,
@@ -175,7 +160,7 @@ export default connect(
 	}),
 	(dispatch) => ({
 		fetch: (id, media_type) => dispatch(fetchOverview(id, media_type)),
-		clear: () => dispatch(clearData("overview")),
 		updateFavorite: (media_type) => dispatch(update_favorite(media_type)),
+		updateWatchlist: (media_type) => dispatch(update_watchlist(media_type)),
 	})
 )(React.memo(OverviewView));

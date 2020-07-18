@@ -8,12 +8,14 @@ import {
 	LOGOUT_FAILD,
 	SET_ACCOUNT_INFO,
 	SET_FAVORITE,
+	SET_WATCHLIST,
 } from "../constants";
 const initState = {
 	sessionId: localStorage.getItem("session_id") || null,
 	id: localStorage.getItem("id") || null,
 	name: null,
 	favorite: { movie: [], tv: [] },
+	watchlist: { movie: [], tv: [] },
 	loading: false,
 	logout_loading: false,
 	isLogin: localStorage.getItem("session_id") ?? false,
@@ -58,14 +60,22 @@ export default (state = initState, action) => {
 			return { ...state, logout_loading: false };
 		}
 		case SET_FAVORITE: {
+			const { media_type, ids } = action.payload;
 			return {
 				...state,
 				favorite: {
 					...state.favorite,
-					[action.payload.media_type]: [
-						...state.favorite[action.payload.media_type],
-						...action.payload.ids,
-					],
+					[media_type]: [...state.favorite[media_type], ...ids],
+				},
+			};
+		}
+		case SET_WATCHLIST: {
+			const { media_type, ids } = action.payload;
+			return {
+				...state,
+				watchlist: {
+					...state.watchlist,
+					[media_type]: [...state.watchlist[media_type], ...ids],
 				},
 			};
 		}

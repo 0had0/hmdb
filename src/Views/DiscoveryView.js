@@ -2,7 +2,7 @@ import React from "react";
 import { Text } from "react-md";
 import src from "../images/breackingBad3.jpg";
 
-import HorizontalList from "../components/HorizontalList";
+import HorizontalFetchList from "../components/HorizontalFetchList";
 import Footer from "../components/Footer";
 
 import "./DiscoveryView.css";
@@ -24,10 +24,10 @@ export default () => {
 					style={{ opacity: 0.6 }}
 				/>
 			</div>
-			<HorizontalList label="What's Popular" StateKey="popular" />
-			<HorizontalList label="Trending" StateKey="trending" />
-			<HorizontalList label="Top Movies" StateKey="top_movies" />
-			<HorizontalList label="Top Series" StateKey="top_series" />
+			<HorizontalFetchList label="What's Popular" StateKey="popular" />
+			<HorizontalFetchList label="Trending" StateKey="trending" />
+			<HorizontalFetchList label="Top Movies" StateKey="top_movies" />
+			<HorizontalFetchList label="Top Series" StateKey="top_series" />
 			<Footer />
 		</React.Fragment>
 	);

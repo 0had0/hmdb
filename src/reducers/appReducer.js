@@ -11,7 +11,7 @@ const initState = {
 		trending: false,
 		top_movies: false,
 		top_series: false,
-		overview: false,
+		overview: true,
 	},
 	data: {
 		popular: [],

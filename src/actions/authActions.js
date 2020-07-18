@@ -9,6 +9,7 @@ import {
 	LOGOUT_FAILD,
 	SET_ACCOUNT_INFO,
 	SET_FAVORITE,
+	SET_WATCHLIST,
 } from "../constants";
 
 import { toggle_modal } from "./appActions";
@@ -136,9 +137,14 @@ const set_favorite = ({ media_type, ids }) => ({
 	payload: { media_type, ids },
 });
 
+const set_watchlist = ({ media_type, ids }) => ({
+	type: SET_WATCHLIST,
+	payload: { media_type, ids },
+});
+
 function update_favorite(media_type, page = 1) {
 	return async (dispatch, getState, api) => {
-		return await axios
+		await axios
 			.get(
 				`${api.URL}/account/${getState().auth.id}/favorite/${
 					media_type === "movie" ? "movies" : "tv"
@@ -147,16 +153,34 @@ function update_favorite(media_type, page = 1) {
 				}&page=${page}`
 			)
 			.then(({ data }) => {
-				const { results, total_pages, page } = data;
+				const { results } = data;
 				const ids = results.map(({ id }) => id);
 				dispatch(set_favorite({ media_type, ids }));
 			})
 			.catch((err) => console.log(err));
 	};
 }
-function favorite(id, media_type) {
+function update_watchlist(media_type, page = 1) {
 	return async (dispatch, getState, api) => {
-		const { sessionId, favorite, ...rest } = getState().auth;
+		await axios
+			.get(
+				`${api.URL}/account/${getState().auth.id}/watchlist/${
+					media_type === "movie" ? "movies" : "tv"
+				}?api_key=${api.KEY}&session_id=${
+					getState().auth.sessionId
+				}&page=${page}`
+			)
+			.then(({ data }) => {
+				const { results } = data;
+				const ids = results.map(({ id }) => id);
+				dispatch(set_watchlist({ media_type, ids }));
+			})
+			.catch((err) => console.log(err));
+	};
+}
+function favorite(id, media_type, value) {
+	return async (dispatch, getState, api) => {
+		const { sessionId, ...rest } = getState().auth;
 		await axios({
 			method: "post",
 			url: `${api.URL}/account/${rest.id}/favorite?api_key=${api.KEY}&session_id=${sessionId}`,
@@ -164,11 +188,31 @@ function favorite(id, media_type) {
 			data: {
 				media_type,
 				media_id: id,
-				favorite: !favorite[media_type].includes(id),
+				favorite: value,
 			},
 		})
 			.then(() => {
-				update_favorite(media_type);
+				dispatch(update_favorite(media_type));
+			})
+			.catch((err) => console.log(err));
+	};
+}
+
+function watchlist(id, media_type, value) {
+	return async (dispatch, getState, api) => {
+		const { sessionId, ...rest } = getState().auth;
+		await axios({
+			method: "post",
+			url: `${api.URL}/account/${rest.id}/watchlist?api_key=${api.KEY}&session_id=${sessionId}`,
+			headers: {},
+			data: {
+				media_type,
+				media_id: id,
+				watchlist: value,
+			},
+		})
+			.then(() => {
+				dispatch(update_watchlist(media_type));
 			})
 			.catch((err) => console.log(err));
 	};
@@ -185,5 +229,7 @@ export {
 	logout_faild,
 	logout,
 	update_favorite,
+	update_watchlist,
 	favorite,
+	watchlist,
 };

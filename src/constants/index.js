@@ -11,6 +11,7 @@ export const LOGOUT_FAILD = "LOGOUT_FAILD";
 export const SET_ACCOUNT_INFO = "SET_ACCOUNT_INFO";
 
 export const SET_FAVORITE = "SET_FAVORITE";
+export const SET_WATCHLIST = "SET_WATCHLIST";
 
 // app constants
 export const TOGGLE_MODAL = "TOGGLE_MODAL";

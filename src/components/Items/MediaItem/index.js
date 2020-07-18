@@ -14,6 +14,8 @@ import SekeletonBackground from "./skeleton.jpg";
 
 import { useHistory } from "react-router-dom";
 
+import "./MediaItem.css";
+
 function Item({ item, loading, error, handleClick }) {
 	const history = useHistory();
 	const _GoToTheOverViewPage = () =>

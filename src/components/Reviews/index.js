@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
 	Text,
 	Avatar,
@@ -9,32 +9,17 @@ import {
 	CardSubtitle,
 	Button,
 } from "react-md";
-import { connect } from "react-redux";
-
-import { fetchData, clearData } from "../../actions/appActions";
 
 import "./Reviews.css";
 
-function Reviews({ id, StateKey: key, loading, data, hasError, fetch, clear }) {
-	const [first, ...rest] = data(key);
+function Reviews({ id, list }) {
+	const [first, ...rest] = list;
 	const [all, setShowAll] = useState(false);
 
 	const _toggle_reviews = () => setShowAll(!all);
 
-	useEffect(() => {
-		let isMounted = true;
-		if (isMounted) {
-			fetch(key, id);
-		}
-		return () => {
-			isMounted = false;
-			clear(key);
-		};
-		// eslint-disable-next-line
-	}, [fetch, id, clear]);
-
-	if (data(key).length === 0 || !data(key)) {
-		return loading(key) ? null : <Text type="body-2">No reviews</Text>;
+	if (list.length === 0 || !list) {
+		return <Text type="body-2">No reviews</Text>;
 	}
 
 	const renderAll = () =>
@@ -79,14 +64,4 @@ function Reviews({ id, StateKey: key, loading, data, hasError, fetch, clear }) {
 	);
 }
 
-export default connect(
-	({ app }) => ({
-		loading: (key) => app.isLoading[key],
-		data: (key) => app.data[key],
-		hasError: (key) => app.hasError[key],
-	}),
-	(dispatch) => ({
-		fetch: (key, id) => dispatch(fetchData(key, id)),
-		clear: (key) => dispatch(clearData(key)),
-	})
-)(Reviews);
+export default React.memo(Reviews);
