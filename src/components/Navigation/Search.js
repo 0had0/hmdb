@@ -68,6 +68,8 @@ async function fetchSearchResult(query, dispatch, cancelToken) {
 }
 
 function Search({ style }) {
+	const isDiscoveryPage = document.location.href.split("/").length <= 4;
+
 	const [query, setQuery] = useState("");
 	const [showInput, setShowInput] = useState(window.innerWidth > 500);
 
@@ -104,7 +106,7 @@ function Search({ style }) {
 		history.push(`/${item.title ? "movie" : "tv"}/${item.id}`);
 
 	useEffect(() => {
-		if (showInput) {
+		if (showInput && isDiscoveryPage) {
 			inputRef.current.focus();
 		}
 	}, [showInput]);
