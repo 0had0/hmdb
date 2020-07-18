@@ -101,7 +101,7 @@ function Search({ style }) {
 	};
 
 	const _GoToMovieOrTVPage = (item) =>
-		history.push(`/${item.title ? "movies" : "tv"}/${item.id}`);
+		history.push(`/${item.title ? "movie" : "tv"}/${item.id}`);
 
 	useEffect(() => {
 		if (showInput) {
