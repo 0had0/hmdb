@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer, useRef } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 import axios from "axios";
 
@@ -24,10 +24,10 @@ const reducer = (state, action) => {
 			return { ...state, loading: false, data: action.payload };
 		}
 		case "FETCH_FAILD": {
-			return { ...state, hasError: true, data: [] };
+			return { ...state, loading: false, hasError: true, data: [] };
 		}
 		case "FETCH_CLEAR": {
-			return { ...state, data: [], hasError: false };
+			return { ...state, data: [], loading: false, hasError: false };
 		}
 		default: {
 			return state;
@@ -68,10 +68,17 @@ async function fetchSearchResult(query, dispatch, cancelToken) {
 }
 
 function Search({ style }) {
-	const isDiscoveryPage = document.location.href.split("/").length <= 4;
+	const location = useLocation();
+	const isSearchPage = React.useRef(location.pathname.includes("/search"));
+
+	let isDiscoveryPage = React.useRef(location.pathname === "/").current;
 
 	const [query, setQuery] = useState("");
-	const [showInput, setShowInput] = useState(window.innerWidth > 500);
+	const [showInput, setShowInput] = useState(
+		isSearchPage.current
+			? false
+			: window.innerWidth > 500 || !isDiscoveryPage
+	);
 
 	const inputRef = useRef(null);
 
@@ -83,7 +90,8 @@ function Search({ style }) {
 
 	const history = useHistory();
 
-	const _toggleInput = () => setShowInput(!showInput);
+	const _toggleInput = () =>
+		setShowInput(isSearchPage.current ? false : !showInput);
 
 	const _toggleWithTimeout = () => setTimeout(_toggleInput, 500);
 
@@ -97,13 +105,17 @@ function Search({ style }) {
 			if (query) {
 				setQuery("");
 				_toggleInput();
-				history.push(`/search/${query}`);
+				history.push(`/search/?${query}`);
 			}
 		}
 	};
 
 	const _GoToMovieOrTVPage = (item) =>
 		history.push(`/${item.title ? "movie" : "tv"}/${item.id}`);
+
+	useEffect(() => {
+		isSearchPage.current = location.pathname.includes("/search");
+	}, [location]);
 
 	useEffect(() => {
 		if (showInput && isDiscoveryPage) {

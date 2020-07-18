@@ -16,7 +16,6 @@ import { toggle_modal } from "../../actions/appActions";
 
 import "./ActionBar.css";
 
-console.log(Tooltipped);
 function ActionBar({
 	id,
 	vote_average,

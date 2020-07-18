@@ -1,0 +1,28 @@
+.search-nav-outer {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #424242;
+}
+.search-nav-inner {
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	width: 100%;
+	max-width: 500px;
+	background-color: #424242;
+	padding: 0 2em;
+}
+.search-nav-input-box {
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	width: 90%;
+	max-width: 300px;
+	color: #000;
+	background-color: rgba(21, 21, 21, 0.1);
+}
+.search-nav-input {
+	color: #fff;
+	border-radius: 2px;
+}

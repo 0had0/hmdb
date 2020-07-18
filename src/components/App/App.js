@@ -37,10 +37,7 @@ function App() {
 			<LoginModal />
 			<VideoDialog />
 			<Switch>
-				<Route
-					path="/seach/:query"
-					component={WithFullPage(SearchView)}
-				/>
+				<Route path="/search" component={WithFullPage(SearchView)} />
 				<Route
 					path="/movie/:id"
 					component={WithFullPage(OverviewView)}

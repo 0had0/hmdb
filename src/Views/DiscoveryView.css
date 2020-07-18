@@ -10,7 +10,7 @@
 .discovery-view-cover-title {
 	color: #ff9800;
 	line-height: 1em;
-	font-size: 13vmin;
+	font-size: 12vmin;
 	font-family: "Bangers", cursive;
 }
 @media only screen and (max-width: 500px) {
@@ -18,7 +18,7 @@
 		padding: 7vmin;
 	}
 	.discovery-view-cover-title {
-		font-size: 11vmin;
+		font-size: 10vmin;
 	}
 }
 .discovery-view-outer-img {
