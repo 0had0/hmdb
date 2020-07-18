@@ -1,11 +1,14 @@
 import {
 	TOGGLE_MODAL,
+	TOGGLE_VIDEO_MODAL,
 	SET_IS_LOADING,
 	SET_DATA,
 	HAS_ERROR,
 } from "../constants";
 const initState = {
 	toggleModal: false,
+	toggleVideoModal: false,
+	videoModalKey: null,
 	isLoading: {
 		popular: false,
 		trending: false,
@@ -62,7 +65,17 @@ const applyError = (state, action) => {
 export default (state = initState, action) => {
 	switch (action.type) {
 		case TOGGLE_MODAL: {
-			return { ...state, toggleModal: !state.toggleModal };
+			return {
+				...state,
+				toggleModal: !state.toggleModal,
+			};
+		}
+		case TOGGLE_VIDEO_MODAL: {
+			return {
+				...state,
+				toggleVideoModal: !state.toggleVideoModal,
+				videoModalKey: !state.toggleModal ? action.payload : null,
+			};
 		}
 		case SET_IS_LOADING: {
 			return applyIsLoading(state, action);

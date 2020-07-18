@@ -27,6 +27,7 @@ const OverviewView = ({
 	reviews,
 	credits,
 	hasError,
+	isLogin,
 	fetch,
 	updateFavorite,
 	updateWatchlist,
@@ -38,8 +39,8 @@ const OverviewView = ({
 		let isMounted = true;
 		if (isMounted) {
 			fetch(id, media_type);
-			updateFavorite(media_type);
-			updateWatchlist(media_type);
+			isLogin && updateFavorite(media_type);
+			isLogin && updateWatchlist(media_type);
 			setTimeout(() => window.scrollTo(0, 0), 200);
 		}
 		return () => {
@@ -149,7 +150,7 @@ const OverviewView = ({
 };
 
 export default connect(
-	({ app }) => ({
+	({ app, auth }) => ({
 		loading: app.isLoading.overview.loading,
 		details: app.data.overview.details,
 		videos: app.data.overview.videos,
@@ -157,6 +158,7 @@ export default connect(
 		reviews: app.data.overview.reviews,
 		credits: app.data.overview.credits,
 		hasError: app.hasError.overview,
+		isLogin: auth.isLogin,
 	}),
 	(dispatch) => ({
 		fetch: (id, media_type) => dispatch(fetchOverview(id, media_type)),

@@ -5,6 +5,7 @@ import { SearchView, OverviewView, DiscoveryView } from "../../Views";
 
 import Navigation from "../Navigation";
 import LoginModal from "../LoginModal";
+import VideoDialog from "../VideoModal";
 
 import "./App.css";
 
@@ -34,6 +35,7 @@ function App() {
 		<React.Fragment>
 			<Navigation />
 			<LoginModal />
+			<VideoDialog />
 			<Switch>
 				<Route
 					path="/seach/:query"

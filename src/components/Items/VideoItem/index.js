@@ -1,11 +1,14 @@
 import React from "react";
+import { connect } from "react-redux";
 import { Card, MediaContainer, PlayArrowFontIcon, Button } from "react-md";
+
+import { toggle_video_modal } from "../../../actions/appActions";
 
 import "./VideoItem.css";
 
-function VideoItem({ item, loading, error, handleClick }) {
+function VideoItem({ item, open }) {
 	return (
-		<Card className="video-item-root">
+		<Card className="video-item-root" onClick={() => open(item?.key)}>
 			<MediaContainer fullWidth>
 				<img
 					src={
@@ -18,7 +21,7 @@ function VideoItem({ item, loading, error, handleClick }) {
 				/>
 			</MediaContainer>
 			<div className="video-item-action">
-				<Button id="play" buttonType="icon" aria-label="play trailer">
+				<Button id="play" buttonType="icon">
 					<PlayArrowFontIcon
 						style={{ fontSize: "10vmin", color: "#fff" }}
 					/>
@@ -28,4 +31,6 @@ function VideoItem({ item, loading, error, handleClick }) {
 	);
 }
 
-export default VideoItem;
+export default connect(null, (dispatch) => ({
+	open: (vkey) => dispatch(toggle_video_modal(vkey)),
+}))(VideoItem);

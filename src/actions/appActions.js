@@ -2,12 +2,18 @@ import axios from "axios";
 
 import {
 	TOGGLE_MODAL,
+	TOGGLE_VIDEO_MODAL,
 	SET_IS_LOADING,
 	SET_DATA,
 	HAS_ERROR,
 } from "../constants";
 
 export const toggle_modal = () => ({ type: TOGGLE_MODAL });
+
+export const toggle_video_modal = (payload) => ({
+	type: TOGGLE_VIDEO_MODAL,
+	payload,
+});
 
 const setIsLoading = (key, value) => ({
 	type: SET_IS_LOADING,

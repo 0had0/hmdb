@@ -5,7 +5,7 @@ import ReactDOM from "react-dom";
 
 import { BrowserRouter as Router } from "react-router-dom";
 
-import { Configuration } from "react-md";
+import { Configuration, NestedDialogContextProvider } from "react-md";
 
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
@@ -34,9 +34,11 @@ ReactDOM.render(
     <Provider store={store}>
       <Router>
         <Configuration>
-          <SkeletonTheme color="#616161" highlightColor="#424242">
-            <App />
-          </SkeletonTheme>
+          <NestedDialogContextProvider>
+            <SkeletonTheme color="#616161" highlightColor="#424242">
+              <App />
+            </SkeletonTheme>
+          </NestedDialogContextProvider>
         </Configuration>
       </Router>
     </Provider>
