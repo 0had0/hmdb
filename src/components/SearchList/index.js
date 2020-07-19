@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { List, ListItem, CircularProgress, Text } from "react-md";
 
 import { fetch_search_result } from "../../actions/appActions";
@@ -11,11 +11,14 @@ function SearchList({
 	media_type = "movie",
 	genres,
 	query,
+	page,
 	response,
 	loading,
 	hasError,
 	fetch,
 }) {
+	const history = useHistory();
+
 	let data = response[media_type];
 
 	if (genres.length !== 0) {
@@ -25,8 +28,8 @@ function SearchList({
 	}
 
 	useEffect(() => {
-		fetch(query);
-	}, [query]);
+		fetch(query, page);
+	}, [query, page]);
 
 	return response[media_type].length === 0 || loading ? (
 		<div className="search-results-loading">
@@ -43,6 +46,9 @@ function SearchList({
 					return (
 						<ListItem
 							key={`${i}-${item?.name || item.title}`}
+							onClick={() =>
+								history.push(`/${item?.media_type}/${item?.id}`)
+							}
 							className="search-results-item"
 							leftAddon={
 								<img
@@ -77,7 +83,7 @@ export default connect(
 		hasError: app.hasError.searchResult,
 	}),
 	(dispatch) => ({
-		fetch: (query, page = 1, adult = false) =>
+		fetch: (query, page, adult = false) =>
 			dispatch(fetch_search_result(query, page, adult)),
 	})
 )(SearchList);

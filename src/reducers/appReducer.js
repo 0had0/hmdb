@@ -33,6 +33,7 @@ const initState = {
 		searchResult: {
 			movie: [],
 			tv: [],
+			total_page: 2,
 		},
 	},
 	hasError: {

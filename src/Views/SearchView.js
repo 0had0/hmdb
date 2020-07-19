@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import {
-	Text,
 	Card,
 	AppBar,
 	AppBarAction,
@@ -20,7 +19,8 @@ import {
 	useToggle,
 	Collapse,
 } from "react-md";
-import { Route, Switch, useHistory, useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
+
 import SearchList from "../components/SearchList";
 import Filter from "../components/Filter";
 
@@ -120,6 +120,7 @@ const Filters = ({ actions, states }) => {
 				label="Genres"
 				action={setGenres}
 				state={genres}
+				open
 				render={(action, state) => {
 					return GENRES.map(({ id, name }) => {
 						const selected = state.includes(id);
@@ -130,7 +131,6 @@ const Filters = ({ actions, states }) => {
 										(am) => am !== id
 									);
 								}
-
 								return [...prevSelected, id];
 							});
 
@@ -138,10 +138,9 @@ const Filters = ({ actions, states }) => {
 							<Chip
 								key={`${id}-${name}`}
 								selected={selected}
-								aria-pressed={selected}
+								selectedThemed
 								style={{
 									margin: "0.25rem",
-									backgroundColor: "#616161",
 								}}
 								onClick={_handleClick}
 							>
@@ -161,6 +160,8 @@ const SearchView = ({ fetch }) => {
 	const [query, setQuery] = useState(useQuery().get("q"));
 	const [mediaType, setMediaType] = useState("movie");
 	const [genres, setGenres] = useState([]);
+	const [page, setPage] = useState(1);
+	const [prevY, setPrevY] = useState(0);
 
 	const _handleSearch = (e) => setQuery(e.target.value);
 	const _handleKeyUp = (evt) => {
@@ -177,6 +178,23 @@ const SearchView = ({ fetch }) => {
 		);
 		return () => clearTimeout(timeOutId);
 	}, [query]);
+
+	let bottomBoundaryRef = React.useRef(null);
+	const scrollObserver = React.useCallback((node) => {
+		new IntersectionObserver((entries) => {
+			entries.forEach((en) => {
+				if (en.intersectionRatio > 0) {
+					console.log("hey ", en.intersectionRatio);
+					setPage((page) => page + 1);
+				}
+			});
+		}).observe(node);
+	});
+	useEffect(() => {
+		if (bottomBoundaryRef.current) {
+			scrollObserver(bottomBoundaryRef.current);
+		}
+	}, [scrollObserver, bottomBoundaryRef]);
 
 	return (
 		<React.Fragment>
@@ -211,7 +229,9 @@ const SearchView = ({ fetch }) => {
 					media_type={mediaType}
 					genres={genres}
 					query={query}
+					page={page}
 				/>
+				<div id="page-bottom-boundary" ref={bottomBoundaryRef}></div>
 			</div>
 		</React.Fragment>
 	);

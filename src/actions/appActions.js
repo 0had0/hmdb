@@ -128,24 +128,51 @@ export function fetchOverview(id, media_type) {
 	};
 }
 
-export function fetch_search_result(query, page = 1, adult = false) {
+export function fetch_search_result(query, page, adult = false) {
 	return async (dispatch, getState, api) => {
-		dispatch(setIsLoading("searchResult", true));
+		if (page === 1) {
+			dispatch(setIsLoading("searchResult", true));
+		}
+		const { searchResult } = getState().app.data;
 		await axios
 			.get(
 				`${api.URL}/search/multi?api_key=${api.KEY}&language=en-US&query=${query}&page=${page}&include_adult=${adult}`
 			)
 			.then(({ data }) => {
-				dispatch(
-					setData("searchResult", {
-						movie: data.results.filter(
-							({ media_type }) => media_type === "movie"
-						),
-						tv: data.results.filter(
-							({ media_type }) => media_type === "tv"
-						),
-					})
-				);
+				if (searchResult.total_page <= page) {
+					return;
+				} else if (page !== 1 && searchResult.total_page >= 2) {
+					console.log("fetching page ", page);
+					dispatch(
+						setData("searchResult", {
+							movie: [
+								...searchResult.movie,
+								...data.results.filter(
+									({ media_type }) => media_type === "movie"
+								),
+							],
+							tv: [
+								...searchResult.tv,
+								...data.results.filter(
+									({ media_type }) => media_type === "tv"
+								),
+							],
+							total_page: data.total_page,
+						})
+					);
+				} else {
+					dispatch(
+						setData("searchResult", {
+							movie: data.results.filter(
+								({ media_type }) => media_type === "movie"
+							),
+							tv: data.results.filter(
+								({ media_type }) => media_type === "tv"
+							),
+							total_page: data.total_page,
+						})
+					);
+				}
 				dispatch(setIsLoading("searchResult", false));
 			})
 			.catch((errors) => {

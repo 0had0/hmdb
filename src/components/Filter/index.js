@@ -12,8 +12,8 @@ import {
 } from "react-md";
 import "./Filter.css";
 
-const Filter = ({ label, action, render, state = null }) => {
-	const [expanded, , , toggle] = useToggle(false);
+const Filter = ({ label, action, open, render, state = null }) => {
+	const [expanded, , , toggle] = useToggle(open || false);
 	return (
 		<Card className="filter-card">
 			<CardHeader
