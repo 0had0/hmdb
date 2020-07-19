@@ -2,14 +2,14 @@ import React from "react";
 
 import HorizontalList from "../HorizontalList";
 
-function HorizontalNoFetchList({ label, list, component: Component }) {
+export default function({ label, list, component: Component }) {
 	return (
 		<HorizontalList label={label}>
-			{list?.map((item, i) => (
-				<Component key={`${i}-${item?.id}`} item={item} />
-			))}
+			{list.length === 0
+				? "No Trailer available"
+				: list?.map((item, i) => (
+						<Component key={`${i}-${item?.id}`} item={item} />
+				  ))}
 		</HorizontalList>
 	);
 }
-
-export default HorizontalNoFetchList;

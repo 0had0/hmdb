@@ -1,10 +1,14 @@
-.horizontal-list-item {
+.media-card {
 	margin-left: 1em;
 	width: 40vmin;
+	height: 72vmin;
 	transition: all 0.2s ease;
 }
-
-.horizontal-list-item-content {
+.media-card img {
+	width: 40vmin;
+	height: 60vmin;
+}
+.media-card-content {
 	width: 40vmin;
 	display: flex;
 	align-items: center;
@@ -18,7 +22,7 @@
 	color: #ffea00;
 }
 
-.horizontal-list-item:hover {
+.media-card:hover {
 	transform: scale(1.05);
 	cursor: pointer;
 }

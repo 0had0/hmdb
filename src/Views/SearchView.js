@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
 import {
-	Card,
 	AppBar,
 	AppBarAction,
 	SearchFontIcon,
@@ -9,15 +7,6 @@ import {
 	TextField,
 	FilterListFontIcon,
 	Button,
-	IconRotator,
-	KeyboardArrowDownSVGIcon,
-	CardHeader,
-	CardTitle,
-	CardContent,
-	VideocamFontIcon,
-	TvFontIcon,
-	useToggle,
-	Collapse,
 } from "react-md";
 import { useHistory, useLocation } from "react-router-dom";
 
@@ -163,7 +152,7 @@ const SearchView = () => {
 	const _handleKeyUp = (evt) => {
 		evt.preventDefault();
 		if (evt.key === "Enter") {
-			history.push(`/search/${query}`);
+			history.push(`/search/?q=${query}`);
 		}
 	};
 
@@ -173,7 +162,7 @@ const SearchView = () => {
 			1000
 		);
 		return () => clearTimeout(timeOutId);
-	}, [query]);
+	}, [query, history]);
 
 	return (
 		<React.Fragment>

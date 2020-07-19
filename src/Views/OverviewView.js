@@ -46,7 +46,7 @@ const OverviewView = ({
 		return () => {
 			isMounted = false;
 		};
-	}, [id, fetch, updateWatchlist, updateFavorite]);
+	}, [id, fetch, updateWatchlist, updateFavorite, isLogin]);
 
 	const renderTitle = () => {
 		const title = details?.title || details?.name;
@@ -69,6 +69,16 @@ const OverviewView = ({
 		return duration
 			? `${time} - ${genres} - ${h}h ${m}m`
 			: genres && `${time} - ${genres}`;
+	};
+
+	const renderMoreAboutSeries = () => {
+		return `${details?.number_of_seasons} seasons, ${
+			details?.number_of_episodes
+		} episode${
+			details?.next_episode_to_air
+				? `, next on ${details?.next_episode_to_air.air_date}`
+				: ""
+		}`;
 	};
 
 	return loading || details.length === 0 ? (
@@ -110,6 +120,12 @@ const OverviewView = ({
 						<div className="overview-view-header-row overview-view-more">
 							{renderMore()}
 						</div>
+						{details?.number_of_seasons &&
+							details?.number_of_episodes && (
+								<div className="overview-view-header-row overview-view-more">
+									{renderMoreAboutSeries()}
+								</div>
+							)}
 						<ActionBar
 							id={id}
 							vote_average={details.vote_average}

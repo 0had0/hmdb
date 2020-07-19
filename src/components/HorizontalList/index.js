@@ -4,7 +4,7 @@ import { Text } from "react-md";
 
 import "./HorizontalList.css";
 
-function HorizontalList({ label, children }) {
+export default function({ label, children }) {
 	return (
 		<div id={label} className="horizontal-list-root">
 			<Text type="headline-4" className="horizontal-list-title">
@@ -14,5 +14,3 @@ function HorizontalList({ label, children }) {
 		</div>
 	);
 }
-
-export default HorizontalList;

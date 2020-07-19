@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { useParams, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { List, ListItem, CircularProgress, Text } from "react-md";
 
 import { fetch_search_result } from "../../actions/appActions";
@@ -25,20 +25,23 @@ function SearchList({
 	let data = response[media_type];
 
 	if (genres.length !== 0) {
-		data = data.filter(({ genre_ids }) =>
-			genre_ids.some((item) => genres.includes(item))
+		data = data.filter(
+			({ genre_ids, status, popularity }) =>
+				genre_ids.some((item) => genres.includes(item)) &&
+				status === "Released" &&
+				popularity > 1
 		);
 	}
 
 	useEffect(() => {
 		fetch(query, page);
-	}, [query, page]);
+	}, [query, page, fetch]);
 
-	return response[media_type].length === 0 || loading ? (
+	return loading ? (
 		<div className="search-results-loading">
 			<CircularProgress id="search-results-fetch-loading" />
 		</div>
-	) : data.length === 0 ? (
+	) : response[media_type].length === 0 || data.length === 0 ? (
 		<div className="search-results-loading">
 			<Text>No match :(</Text>
 		</div>

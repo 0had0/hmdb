@@ -10,7 +10,7 @@ import {
 } from "react-md";
 
 import Skeleton from "react-loading-skeleton";
-import SekeletonBackground from "./skeleton.jpg";
+import SekeletonBackground from "../../../images/skeleton.jpg";
 
 import { useHistory } from "react-router-dom";
 
@@ -18,26 +18,29 @@ import "./MediaItem.css";
 
 function Item({ item, loading, error, handleClick }) {
 	const history = useHistory();
+	const [loaded, setLoaded] = React.useState(false);
 	const _GoToTheOverViewPage = () =>
 		item
 			? history.push(`/${item.name ? "tv" : "movie"}/${item.id}`)
 			: !loading && error && handleClick();
 	return (
 		<Card
-			className="horizontal-list-item"
+			className="media-card"
 			style={loading && { backgroundColor: "#212121" }}
 			onClick={_GoToTheOverViewPage}
 		>
 			<MediaContainer fullWidth>
 				<img
+					style={loaded ? {} : { visbility: "none" }}
 					src={
 						!item?.poster_path
 							? SekeletonBackground
 							: `https://image.tmdb.org/t/p/w185${item.poster_path}`
 					}
+					onLoad={() => setLoaded(true)}
 					alt={item?.id}
 				/>
-				{!loading && !error && (
+				{loaded && !loading && !error && (
 					<MediaOverlay>
 						<CardTitle style={{ fontSize: "5vmin" }}>
 							{item?.title || item.name}
@@ -45,7 +48,7 @@ function Item({ item, loading, error, handleClick }) {
 					</MediaOverlay>
 				)}
 			</MediaContainer>
-			<CardContent className="horizontal-list-item-content">
+			<CardContent className="media-card-content">
 				{error ? (
 					<RefreshSVGIcon />
 				) : (

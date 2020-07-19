@@ -12,7 +12,6 @@ import {
 	PermScanWifiFontIcon,
 	CircularProgress,
 	ListItem,
-	Avatar,
 } from "react-md";
 
 const reducer = (state, action) => {
@@ -39,26 +38,15 @@ async function fetchSearchResult(query, dispatch, cancelToken) {
 	if (query) {
 		dispatch({ type: "FETCH_START" });
 		try {
-			const [res1, res2] = await axios.all([
-				axios.get(
-					`${process.env.REACT_APP_API_URL}/search/movie?api_key=${process.env.REACT_APP_API_KEY}&query=${query}&page=1`,
-					{
-						cancelToken,
-					}
-				),
-				axios.get(
-					`${process.env.REACT_APP_API_URL}/search/tv?api_key=${process.env.REACT_APP_API_KEY}&query=${query}&page=1`,
-					{
-						cancelToken,
-					}
-				),
-			]);
+			const res = await axios.get(
+				`${process.env.REACT_APP_API_URL}/search/keyword?api_key=${process.env.REACT_APP_API_KEY}&query=${query}&page=1`,
+				{
+					cancelToken,
+				}
+			);
 			dispatch({
 				type: "FETCH_DONE",
-				payload: [
-					...res1.data.results.slice(0, 3),
-					...res2.data.results.slice(0, 3),
-				],
+				payload: [...res.data.results.splice(0, 5)],
 			});
 		} catch (err) {
 			dispatch({ type: "FETCH_FAILD" });
@@ -105,13 +93,15 @@ function Search({ style }) {
 			if (query) {
 				setQuery("");
 				_toggleInput();
-				history.push(`/search/?${query}`);
+				history.push(`/search/?q=${query}`);
 			}
 		}
 	};
 
-	const _GoToMovieOrTVPage = (item) =>
-		history.push(`/${item.title ? "movie" : "tv"}/${item.id}`);
+	const _GoToMovieOrTVPage = (item) => {
+		setQuery("");
+		history.push(`/search/?q=${item.name}`);
+	};
 
 	useEffect(() => {
 		isSearchPage.current = location.pathname.includes("/search");
@@ -121,7 +111,7 @@ function Search({ style }) {
 		if (showInput && isDiscoveryPage) {
 			inputRef.current.focus();
 		}
-	}, [showInput]);
+	}, [showInput, isDiscoveryPage]);
 
 	useEffect(() => {
 		const { cancel, token } = axios.CancelToken.source();
@@ -178,22 +168,12 @@ function Search({ style }) {
 						<ListItem
 							key={item.id}
 							onClick={() => _GoToMovieOrTVPage(item)}
-							leftAddon={
-								<Avatar
-									color="blue"
-									src={`https://image.tmdb.org/t/p/w45${item.poster_path}`}
-									alt={
-										item.original_title ||
-										item.original_name
-									}
-								/>
-							}
 							style={{
 								textDecoration: "none",
 								color: "#fff",
 							}}
 						>
-							{item.title ? item.title + " 📽" : item.name + " 📺"}
+							{item?.name}
 						</ListItem>
 					))}
 				</List>

@@ -1,9 +1,12 @@
 import React from "react";
 import { Card, MediaContainer, CardTitle, MediaOverlay } from "react-md";
 
+import SekeletonBackground from "../../../images/skeleton.jpg";
+
 import "./CastItem.css";
 
 function CastItem({ item, loading, error, handleClick }) {
+	const [loaded, setLoaded] = React.useState(false);
 	if (!item?.profile_path || !item?.name) {
 		return null;
 	}
@@ -11,18 +14,22 @@ function CastItem({ item, loading, error, handleClick }) {
 		<Card className="cast-item-root">
 			<MediaContainer fullWidth>
 				<img
+					style={loaded ? {} : { visbility: "none" }}
 					src={
 						item?.profile_path
 							? `https://image.tmdb.org/t/p/w185${item.profile_path}`
-							: null
+							: SekeletonBackground
 					}
 					alt={item?.id}
+					onLoad={() => setLoaded(true)}
 				/>
-				<MediaOverlay>
-					<CardTitle style={{ fontSize: "5vmin" }}>
-						{item?.name ?? null}
-					</CardTitle>
-				</MediaOverlay>
+				{loaded && (
+					<MediaOverlay>
+						<CardTitle style={{ fontSize: "5vmin" }}>
+							{item?.name ?? null}
+						</CardTitle>
+					</MediaOverlay>
+				)}
 			</MediaContainer>
 		</Card>
 	);

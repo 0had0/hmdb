@@ -37,7 +37,7 @@ const getURLof = (key, api, id) => {
 	const URLS = {
 		popular: `${api.URL}/trending/movie/day?api_key=${api.KEY}`,
 		trending: `${api.URL}/trending/tv/day?api_key=${api.KEY}`,
-		top_movie: `${api.URL}/movie/popular?api_key=${api.KEY}`,
+		top_movies: `${api.URL}/movie/popular?api_key=${api.KEY}`,
 		top_series: `${api.URL}/tv/popular?api_key=${api.KEY}`,
 		movie_page_details: `${api.URL}/movie/${id}?api_key=${api.KEY}&language=en-US`,
 		movie_page_videos: `${api.URL}/movie/${id}/videos?api_key=${api.KEY}&language=en-US`,
@@ -172,12 +172,11 @@ export function fetch_search_result(query, page = 1, adult = false) {
 							})
 						);
 					}
-					dispatch(setIsLoading("searchResult", false));
 				})
 				.catch((errors) => {
 					dispatch(setHasError("searchResult", true));
-					dispatch(setIsLoading("searchResult", false));
 					console.log(errors);
 				}));
+		dispatch(setIsLoading("searchResult", false));
 	};
 }

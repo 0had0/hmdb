@@ -13,6 +13,11 @@
 	font-size: 12vmin;
 	font-family: "Bangers", cursive;
 }
+@media only screen and (max-width: 700px) {
+	.discovery-view-cover-title {
+		font-size: 9vmin;
+	}
+}
 @media only screen and (max-width: 500px) {
 	.discovery-view-root header {
 		padding: 7vmin;

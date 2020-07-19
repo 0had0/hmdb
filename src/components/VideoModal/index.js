@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "react-md";
+import { Dialog, DialogContent } from "react-md";
 
 import { toggle_video_modal } from "../../actions/appActions";
 

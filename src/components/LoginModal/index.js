@@ -29,15 +29,16 @@ const LoginForm = ({
 	setPassword,
 	errorMessage,
 	loading,
+	login,
 }) => {
 	return (
 		<React.Fragment>
 			<TextField
 				style={{ marginBottom: "2em" }}
-				id="email"
-				type="email"
-				placeholder="Email"
-				label="Email or UserName"
+				id="username"
+				type="username"
+				placeholder="jef123"
+				label="User Name"
 				disabled={loading}
 				onChange={(evt) => setEmail(evt.target.value)}
 				value={email}
@@ -49,6 +50,11 @@ const LoginForm = ({
 				label="Password"
 				disabled={loading}
 				onChange={(evt) => setPassword(evt.target.value)}
+				onKeyUp={(evt) => {
+					if (evt.key === "Enter") {
+						login(email, password);
+					}
+				}}
 				value={password}
 			/>
 			<Text style={{ color: "red", textAlign: "center" }}>
@@ -68,6 +74,7 @@ const LoginDialog = ({ visible, errorMessage, loading, close, login }) => {
 		setPassword,
 		errorMessage,
 		loading,
+		login,
 	};
 	const _close = () => {
 		setEmail("");
@@ -83,7 +90,7 @@ const LoginDialog = ({ visible, errorMessage, loading, close, login }) => {
 			className="dialog-root"
 		>
 			<DialogHeader>
-				<DialogTitle id="login-title">Login Dialog</DialogTitle>
+				<DialogTitle id="login-title">Login</DialogTitle>
 			</DialogHeader>
 			<DialogContent>
 				<LoginForm {...FormProps} />
