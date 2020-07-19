@@ -24,8 +24,6 @@ import { useHistory, useLocation } from "react-router-dom";
 import SearchList from "../components/SearchList";
 import Filter from "../components/Filter";
 
-import { fetch_search_result } from "../actions/appActions";
-
 import "./SearchView.css";
 
 const GENRES = [
@@ -154,14 +152,12 @@ const Filters = ({ actions, states }) => {
 	);
 };
 
-const SearchView = ({ fetch }) => {
+const SearchView = () => {
 	const history = useHistory();
 
 	const [query, setQuery] = useState(useQuery().get("q"));
 	const [mediaType, setMediaType] = useState("movie");
 	const [genres, setGenres] = useState([]);
-	const [page, setPage] = useState(1);
-	const [prevY, setPrevY] = useState(0);
 
 	const _handleSearch = (e) => setQuery(e.target.value);
 	const _handleKeyUp = (evt) => {
@@ -178,23 +174,6 @@ const SearchView = ({ fetch }) => {
 		);
 		return () => clearTimeout(timeOutId);
 	}, [query]);
-
-	let bottomBoundaryRef = React.useRef(null);
-	const scrollObserver = React.useCallback((node) => {
-		new IntersectionObserver((entries) => {
-			entries.forEach((en) => {
-				if (en.intersectionRatio > 0) {
-					console.log("hey ", en.intersectionRatio);
-					setPage((page) => page + 1);
-				}
-			});
-		}).observe(node);
-	});
-	useEffect(() => {
-		if (bottomBoundaryRef.current) {
-			scrollObserver(bottomBoundaryRef.current);
-		}
-	}, [scrollObserver, bottomBoundaryRef]);
 
 	return (
 		<React.Fragment>
@@ -229,15 +208,10 @@ const SearchView = ({ fetch }) => {
 					media_type={mediaType}
 					genres={genres}
 					query={query}
-					page={page}
 				/>
-				<div id="page-bottom-boundary" ref={bottomBoundaryRef}></div>
 			</div>
 		</React.Fragment>
 	);
 };
 
-export default connect(null, (dispatch) => ({
-	fetch: (query, page = 1, adult = false) =>
-		dispatch(fetch_search_result(query, page, adult)),
-}))(SearchView);
+export default SearchView;
