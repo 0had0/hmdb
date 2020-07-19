@@ -1,0 +1,16 @@
+@import "~@react-md/elevation/dist/mixins";
+
+.search-results {
+	@include rmd-elevation(3);
+	grid-area: results;
+	width: 99%;
+	overflow-x: hidden;
+}
+.search-results-loading {
+	width: 100%;
+	min-height: 90vh;
+	grid-area: results;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}

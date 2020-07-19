@@ -127,3 +127,31 @@ export function fetchOverview(id, media_type) {
 			});
 	};
 }
+
+export function fetch_search_result(query, page = 1, adult = false) {
+	return async (dispatch, getState, api) => {
+		dispatch(setIsLoading("searchResult", true));
+		await axios
+			.get(
+				`${api.URL}/search/multi?api_key=${api.KEY}&language=en-US&query=${query}&page=${page}&include_adult=${adult}`
+			)
+			.then(({ data }) => {
+				dispatch(
+					setData("searchResult", {
+						movie: data.results.filter(
+							({ media_type }) => media_type === "movie"
+						),
+						tv: data.results.filter(
+							({ media_type }) => media_type === "tv"
+						),
+					})
+				);
+				dispatch(setIsLoading("searchResult", false));
+			})
+			.catch((errors) => {
+				dispatch(setHasError("searchResult", true));
+				dispatch(setIsLoading("searchResult", false));
+				console.log(errors);
+			});
+	};
+}

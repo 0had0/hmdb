@@ -15,6 +15,7 @@ const initState = {
 		top_movies: false,
 		top_series: false,
 		overview: true,
+		searchResult: false,
 	},
 	data: {
 		popular: [],
@@ -29,6 +30,10 @@ const initState = {
 			reviews: [],
 			credits: [],
 		},
+		searchResult: {
+			movie: [],
+			tv: [],
+		},
 	},
 	hasError: {
 		popular: null,
@@ -36,6 +41,7 @@ const initState = {
 		top_movies: null,
 		top_series: null,
 		overview: null,
+		searchResult: null,
 	},
 };
 

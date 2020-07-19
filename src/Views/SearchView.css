@@ -1,8 +1,12 @@
 .search-nav-outer {
 	display: flex;
+	position: sticky;
+	top: 0;
+	left: 0;
 	align-items: center;
 	justify-content: center;
 	background-color: #424242;
+	z-index: 9;
 }
 .search-nav-inner {
 	display: flex;
@@ -25,4 +29,28 @@
 .search-nav-input {
 	color: #fff;
 	border-radius: 2px;
+}
+.grid {
+	width: 100%;
+	display: grid;
+	grid-gap: 1em;
+	grid-template-areas: "filters results results results results results";
+	padding: 20px;
+}
+@media only screen and (max-width: 800px) {
+	.grid {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding: 0;
+	}
+}
+.grid aside {
+	position: relative;
+	grid-area: filters;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 300px;
 }
