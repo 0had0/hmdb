@@ -13,7 +13,7 @@ function VideoItem({ item, open }) {
 				<img
 					src={
 						item?.site === "YouTube" && item?.key
-							? `http://i.ytimg.com/vi/${item?.key}/mqdefault.jpg`
+							? `https://i.ytimg.com/vi/${item?.key}/mqdefault.jpg`
 							: null
 					}
 					width={100}
