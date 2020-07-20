@@ -24,10 +24,26 @@ export default () => {
 					style={{ opacity: 0.6 }}
 				/>
 			</div>
-			<HorizontalFetchList label="What's Popular" StateKey="popular" />
-			<HorizontalFetchList label="Trending" StateKey="trending" />
-			<HorizontalFetchList label="Top Movies" StateKey="top_movies" />
-			<HorizontalFetchList label="Top Series" StateKey="top_series" />
+			<HorizontalFetchList
+				label="What's Popular"
+				href="/movies"
+				StateKey="popular"
+			/>
+			<HorizontalFetchList
+				label="Trending"
+				href="/series"
+				StateKey="trending"
+			/>
+			<HorizontalFetchList
+				label="Top Movies"
+				href="/movies"
+				StateKey="top_movies"
+			/>
+			<HorizontalFetchList
+				label="Top Series"
+				href="/series"
+				StateKey="top_series"
+			/>
 			<Footer />
 		</React.Fragment>
 	);

@@ -1,7 +1,6 @@
 .media-card {
 	margin-left: 1em;
 	width: 40vmin;
-	height: 72vmin;
 	transition: all 0.2s ease;
 }
 .media-card img {

@@ -33,12 +33,12 @@ const setHasError = (payload) => ({
 	payload,
 });
 
-const getURLof = (key, api, id) => {
+const getURLof = (key, api, id, page = 1) => {
 	const URLS = {
 		popular: `${api.URL}/trending/movie/day?api_key=${api.KEY}`,
 		trending: `${api.URL}/trending/tv/day?api_key=${api.KEY}`,
-		top_movies: `${api.URL}/movie/popular?api_key=${api.KEY}`,
-		top_series: `${api.URL}/tv/popular?api_key=${api.KEY}`,
+		top_movies: `${api.URL}/movie/popular?api_key=${api.KEY}&language=en-US&page=${page}`,
+		top_series: `${api.URL}/tv/popular?api_key=${api.KEY}&language=en-US&page=${page}`,
 		movie_page_details: `${api.URL}/movie/${id}?api_key=${api.KEY}&language=en-US`,
 		movie_page_videos: `${api.URL}/movie/${id}/videos?api_key=${api.KEY}&language=en-US`,
 		movie_page_recommendations: `${api.URL}/movie/${id}/recommendations?api_key=${api.KEY}&language=en-US`,
@@ -54,14 +54,32 @@ const getURLof = (key, api, id) => {
 	return URLS[key];
 };
 
-export function fetchData(key, id = 0) {
+export function fetchData(key, id = 0, page = 1) {
 	return async (dispatch, getState, api) => {
+		const { app } = getState();
 		dispatch(setIsLoading(key, true));
 		await axios
-			.get(getURLof(key, api, id))
+			.get(getURLof(key, api, id, page))
 			.then(({ data }) => {
-				const { results, cast } = data;
-				dispatch(setData(key, results ?? cast ?? data));
+				const { results, cast, total_pages } = data;
+				if (page === 1) {
+					dispatch(setData(key, results ?? cast ?? data));
+					if (key.split("_")[0] === "top") {
+						dispatch(
+							setData(`${key}_pages_left`, +total_pages - page)
+						);
+						dispatch(setData(`${key}_filtered`, results));
+					}
+				} else {
+					dispatch(setData(key, [...app.data[key], ...results]));
+					dispatch(
+						setData(`${key}_filtered`, [
+							...app.data[key],
+							...results,
+						])
+					);
+					dispatch(setData(`${key}_pages_left`, +total_pages - page));
+				}
 				dispatch(setIsLoading(key, false));
 			})
 			.catch((err) => {
@@ -184,5 +202,84 @@ export function fetch_search_result(
 					console.log(errors);
 				}));
 		dispatch(setIsLoading("searchResult", false));
+	};
+}
+
+export function filter(media_type, filters) {
+	return (dispatch, getState) => {
+		const { data } = getState().app;
+
+		let input = filters.filter((obj) => !!obj);
+
+		dispatch(setIsLoading(`top_${media_type}`, true));
+
+		input.forEach(({ type, value }) => {
+			switch (type) {
+				case "year": {
+					const filteredByYear = data[
+						`top_${media_type}_filtered`
+					].filter(({ release_date, first_air_date }) => {
+						if (media_type === "movies") {
+							return +release_date.split("-")[0] <= +value;
+						} else return +first_air_date.split("-")[0] <= +value;
+					});
+					dispatch(
+						setData(`top_${media_type}_filtered`, filteredByYear)
+					);
+					break;
+				}
+				case "country": {
+					dispatch(
+						setData(
+							`top_${media_type}_filtered`,
+							data[`top_${media_type}`].filter(
+								({ origin_country }) =>
+									origin_country &&
+									origin_country.includes(value)
+							)
+						)
+					);
+					break;
+				}
+				case "genre": {
+					dispatch(
+						setData(
+							`top_${media_type}_filtered`,
+							data[`top_${media_type}`].filter(({ genre_ids }) =>
+								genre_ids.some((elm) => value.includes(elm))
+							)
+						)
+					);
+					break;
+				}
+				case "language": {
+					dispatch(
+						setData(
+							`top_${media_type}_filtered`,
+							data[`top_${media_type}`].filter(
+								({ original_language }) =>
+									original_language === value
+							)
+						)
+					);
+					break;
+				}
+				case "rating": {
+					dispatch(
+						setData(
+							`top_${media_type}_filtered`,
+							data[`top_${media_type}`].filter(
+								({ vote_average }) => vote_average <= value
+							)
+						)
+					);
+					break;
+				}
+				default: {
+					return;
+				}
+			}
+		});
+		dispatch(setIsLoading(`top_${media_type}`, false));
 	};
 }

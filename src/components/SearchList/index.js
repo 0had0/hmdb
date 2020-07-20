@@ -8,11 +8,13 @@ import { fetch_search_result } from "../../actions/appActions";
 
 import InfiniteScroll from "react-infinite-scroller";
 
+import SkeletonImage from "../../images/skeleton.jpg";
 import "./SearchList.scss";
 
 function SearchList({
 	media_type = "movie",
 	query,
+	sort,
 	page,
 	response,
 	loading,
@@ -35,11 +37,33 @@ function SearchList({
 		};
 	}, [query, page, fetch]);
 
+	if (sort) {
+		data = response[media_type].sort((a, b) => {
+			if (sort === "Rating") {
+				return b.vote_average - a.vote_average;
+			}
+			if (sort === "Year") {
+				if (a?.first_air_date) {
+					return (
+						b.first_air_date.split("-")[0] -
+						a.first_air_date.split("-")[0]
+					);
+				} else {
+					return (
+						b.release_date.split("-")[0] -
+						a.release_date.split("-")[0]
+					);
+				}
+			} else return 0;
+		});
+		console.log(data);
+	}
+
 	return loading ? (
 		<div className="search-results-loading">
 			<CircularProgress id="search-results-fetch-loading" />
 		</div>
-	) : data.length === 0 ? (
+	) : data.length === 0 && !hasMore ? (
 		<div className="search-results-loading error">
 			<Text>No match :(</Text>
 		</div>
@@ -74,8 +98,9 @@ function SearchList({
 										height={150}
 										width="auto"
 										src={
-											item?.poster_path &&
-											`https://image.tmdb.org/t/p/w500${item?.poster_path}`
+											item?.poster_path
+												? `https://image.tmdb.org/t/p/w500${item?.poster_path}`
+												: SkeletonImage
 										}
 										alt=""
 									/>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
 	AppBar,
-	AppBarAction,
 	SearchFontIcon,
 	TextField,
 	FilterListFontIcon,
@@ -9,6 +8,7 @@ import {
 	TabPanel,
 	Tabs,
 	TabPanels,
+	DropdownMenu,
 } from "react-md";
 import { useHistory, useLocation } from "react-router-dom";
 
@@ -22,6 +22,7 @@ const SearchView = () => {
 	const history = useHistory();
 
 	const [query, setQuery] = useState(useQuery().get("q"));
+	const [sort, setSort] = useState(null);
 
 	const _handleSearch = (e) => setQuery(e.target.value);
 	const _handleKeyUp = (evt) => {
@@ -52,19 +53,58 @@ const SearchView = () => {
 							onKeyUp={_handleKeyUp}
 						/>
 					</div>
-					<AppBarAction last>
+
+					<DropdownMenu
+						id="sort-dropdown"
+						items={[
+							{
+								children: "Rating",
+								onClick: () => setSort("Rating"),
+							},
+							{
+								children: "Year",
+								onClick: () => setSort("Year"),
+							},
+						]}
+						buttonType="icon"
+						aria-label="Sort"
+					>
 						<FilterListFontIcon style={{ color: "#fff" }} />
-					</AppBarAction>
+					</DropdownMenu>
 				</AppBar>
 			</AppBar>
 			<TabsManager tabs={["Movies", "Series"]} tabsId="basic-usage-tabs">
 				<Tabs className="tabs" />
-				<TabPanels style={{ width: "100%" }}>
-					<TabPanel>
-						<SearchList media_type={"movie"} query={query} />
+				<TabPanels
+					style={{
+						width: "100%",
+					}}
+				>
+					<TabPanel
+						style={{
+							display: "flex",
+							alignItems: "center",
+							justifyContent: "center",
+						}}
+					>
+						<SearchList
+							media_type={"movie"}
+							sort={sort}
+							query={query}
+						/>
 					</TabPanel>
-					<TabPanel>
-						<SearchList media_type={"tv"} query={query} />
+					<TabPanel
+						style={{
+							display: "flex",
+							alignItems: "center",
+							justifyContent: "center",
+						}}
+					>
+						<SearchList
+							media_type={"tv"}
+							sort={sort}
+							query={query}
+						/>
 					</TabPanel>
 				</TabPanels>
 			</TabsManager>

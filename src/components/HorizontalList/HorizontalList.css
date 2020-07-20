@@ -36,3 +36,7 @@
 .horizontal-list-list::-webkit-scrollbar:vertical {
 	display: none;
 }
+.label-link {
+	text-decoration: none;
+	color: #fff;
+}

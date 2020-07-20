@@ -11,6 +11,7 @@ function HorizontalFetchList({
 	StateKey: key,
 	id = null,
 	component: Component = Item,
+	href,
 	loadingItemsNumber,
 	loading = false,
 	withoutCheck = false,
@@ -41,7 +42,7 @@ function HorizontalFetchList({
 	}
 
 	return (
-		<HorizontalList label={label}>
+		<HorizontalList href={href} label={label}>
 			{loading(key) ? (
 				loadingItems.map((a, i) => <Component loading={true} key={i} />)
 			) : hasError(key) ? (

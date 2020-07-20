@@ -1,0 +1,45 @@
+.filter-bar {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+}
+.filter-bar-outer {
+	position: sticky;
+	overflow-x: auto;
+	top: 0;
+	left: 0;
+	z-index: 9;
+}
+.filter-bar-inner {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+.media-view-results {
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+	min-height: 70vh;
+}
+.media-view-margin {
+	margin: 20px;
+}
+@media only screen and (max-width: 500px) {
+	.media-view-margin {
+		width: 70vmin;
+	}
+	.media-view-margin img {
+		width: 70vmin;
+		height: auto;
+	}
+	.media-view-margin .media-card-content {
+		width: 100%;
+	}
+	.filter-bar-inner button {
+		margin: 0 2em;
+	}
+	.filter-bar-inner {
+		justify-content: flex-start;
+	}
+}

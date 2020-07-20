@@ -16,7 +16,7 @@ import { useHistory } from "react-router-dom";
 
 import "./MediaItem.css";
 
-function Item({ item, loading, error, handleClick }) {
+function Item({ item, loading, error, handleClick, classNames }) {
 	const history = useHistory();
 	const [loaded, setLoaded] = React.useState(false);
 	const _GoToTheOverViewPage = () =>
@@ -25,7 +25,7 @@ function Item({ item, loading, error, handleClick }) {
 			: !loading && error && handleClick();
 	return (
 		<Card
-			className="media-card"
+			className={"media-card " + classNames}
 			style={loading && { backgroundColor: "#212121" }}
 			onClick={_GoToTheOverViewPage}
 		>
