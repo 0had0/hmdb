@@ -24,7 +24,7 @@ const SearchView = () => {
 	const [query, setQuery] = useState(useQuery().get("q"));
 	const [sort, setSort] = useState(null);
 
-	const _handleSearch = (e) => setQuery(e.target.value);
+	const _handleChange = (e) => setQuery(e.target.value);
 	const _handleKeyUp = (evt) => {
 		evt.preventDefault();
 		if (evt.key === "Enter") {
@@ -45,7 +45,7 @@ const SearchView = () => {
 							theme="none"
 							placeholder="Movie or Tv"
 							value={query}
-							onChange={_handleSearch}
+							onChange={_handleChange}
 							onKeyUp={_handleKeyUp}
 						/>
 					</div>
@@ -83,11 +83,7 @@ const SearchView = () => {
 							justifyContent: "center",
 						}}
 					>
-						<SearchList
-							media_type={"movie"}
-							sort={sort}
-							query={query}
-						/>
+						<SearchList media_type={"movie"} sort={sort} />
 					</TabPanel>
 					<TabPanel
 						style={{
@@ -96,11 +92,7 @@ const SearchView = () => {
 							justifyContent: "center",
 						}}
 					>
-						<SearchList
-							media_type={"tv"}
-							sort={sort}
-							query={query}
-						/>
+						<SearchList media_type={"tv"} sort={sort} />
 					</TabPanel>
 				</TabPanels>
 			</TabsManager>

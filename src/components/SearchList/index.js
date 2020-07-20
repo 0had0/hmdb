@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { List, ListItem, CircularProgress, Text } from "react-md";
 
 import { fetch_search_result } from "../../actions/appActions";
@@ -11,9 +11,10 @@ import InfiniteScroll from "react-infinite-scroller";
 import SkeletonImage from "../../images/skeleton.jpg";
 import "./SearchList.scss";
 
+const useQuery = () => new URLSearchParams(useLocation().search);
+
 function SearchList({
 	media_type = "movie",
-	query,
 	sort,
 	page,
 	response,
@@ -23,6 +24,8 @@ function SearchList({
 	fetch,
 }) {
 	const history = useHistory();
+	const query = useQuery().get("q");
+	console.log(query);
 
 	let data = response[media_type];
 
@@ -38,9 +41,9 @@ function SearchList({
 			cancel("User loose interest");
 			clearTimeout(timeOutId);
 		};
-	}, [query, page, fetch]);
+	}, [query, page, fetch, history]);
 
-	if (sort) {
+	if (sort && data.length !== 0) {
 		data = response[media_type].sort((a, b) => {
 			if (sort === "Rating") {
 				return b.vote_average - a.vote_average;
@@ -65,7 +68,7 @@ function SearchList({
 		<div className="search-results-loading">
 			<CircularProgress id="search-results-fetch-loading" />
 		</div>
-	) : hasError ? (
+	) : hasError || data.length === 0 ? (
 		<div className="error">
 			<Text>No match :(</Text>
 		</div>
@@ -77,7 +80,7 @@ function SearchList({
 					loadMore={(page) => {
 						fetch(query, page);
 					}}
-					hasMore={hasMore && !!query}
+					hasMore={hasMore && !loading}
 					loader={
 						<div className="loader" key={0}>
 							<CircularProgress id="search-results-fetch-loading" />

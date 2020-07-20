@@ -24,8 +24,6 @@ const initState = {
 		top_series: [],
 		top_movies_pages_left: 2,
 		top_series_pages_left: 2,
-		top_movies_filtered: [],
-		top_series_filtered: [],
 		overview: {
 			details: [],
 			videos: [],

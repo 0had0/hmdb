@@ -7,7 +7,7 @@ import InfiniteScroll from "react-infinite-scroller";
 import Footer from "../components/Footer";
 import Item from "../components/Items/MediaItem";
 
-import { fetchData, filter } from "../actions/appActions";
+import { fetchData } from "../actions/appActions";
 import {
 	LANGUAGES,
 	GENRES,
@@ -54,7 +54,7 @@ const FilteredList = ({ list, filters }) => {
 	}
 	if (rating) {
 		items = items.filter(({ vote_average }) => {
-			return vote_average < rating;
+			return +rating <= +vote_average && +vote_average < 1 + rating;
 		});
 	}
 	if (items.length === 0) {
@@ -67,7 +67,11 @@ const FilteredList = ({ list, filters }) => {
 	return items.map((item, i) => {
 		if (!item) return null;
 		return (
-			<Item item={item} key={item.id} classNames="media-view-margin" />
+			<Item
+				item={item}
+				key={`${item.id}-${i}`}
+				classNames="media-view-margin"
+			/>
 		);
 	});
 };
@@ -185,6 +189,5 @@ export default connect(
 		fetch: (media_type, id, page) => {
 			dispatch(fetchData(`top_${media_type}`, id, page));
 		},
-		filter: (filters) => dispatch(filter(media_type, filters)),
 	})
 )(MediaFilterView);

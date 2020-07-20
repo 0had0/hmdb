@@ -68,16 +68,9 @@ export function fetchData(key, id = 0, page = 1) {
 						dispatch(
 							setData(`${key}_pages_left`, +total_pages - page)
 						);
-						dispatch(setData(`${key}_filtered`, results));
 					}
 				} else {
 					dispatch(setData(key, [...app.data[key], ...results]));
-					dispatch(
-						setData(`${key}_filtered`, [
-							...app.data[key],
-							...results,
-						])
-					);
 					dispatch(setData(`${key}_pages_left`, +total_pages - page));
 				}
 				dispatch(setIsLoading(key, false));
@@ -158,132 +151,51 @@ export function fetch_search_result(
 			setHasError("searchResult", false);
 		}
 		const { searchResult } = getState().app.data;
-		searchResult.pages_left > 0 &&
-			(await axios
-				.get(
-					`${api.URL}/search/multi?api_key=${api.KEY}&language=en-US&query=${query}&page=${page}&include_adult=${adult}`,
-					{ cancelToken }
-				)
-				.then(({ data }) => {
-					if (data.results.length === 0 || data.total_pages === 0) {
-						setHasError("searchResult", true);
-					}
-					if (page !== 1) {
-						dispatch(
-							setData("searchResult", {
-								movie: [
-									...searchResult.movie,
-									...data.results.filter(
-										({ media_type }) =>
-											media_type === "movie"
-									),
-								],
-								tv: [
-									...searchResult.tv,
-									...data.results.filter(
-										({ media_type }) => media_type === "tv"
-									),
-								],
-								pages_left: +data.total_pages - page,
-							})
-						);
-					} else {
-						dispatch(
-							setData("searchResult", {
-								movie: data.results.filter(
+		await axios
+			.get(
+				`${api.URL}/search/multi?api_key=${api.KEY}&language=en-US&query=${query}&page=${page}&include_adult=${adult}`,
+				{ cancelToken }
+			)
+			.then(({ data }) => {
+				if (data.results.length === 0 || data.total_pages === 0) {
+					setHasError("searchResult", true);
+				}
+				if (page !== 1) {
+					dispatch(
+						setData("searchResult", {
+							movie: [
+								...searchResult.movie,
+								...data.results.filter(
 									({ media_type }) => media_type === "movie"
 								),
-								tv: data.results.filter(
+							],
+							tv: [
+								...searchResult.tv,
+								...data.results.filter(
 									({ media_type }) => media_type === "tv"
 								),
-								pages_left: +data.total_pages - page,
-							})
-						);
-					}
-				})
-				.catch((errors) => {
-					dispatch(setHasError("searchResult", true));
-					console.log(errors);
-				}));
+							],
+							pages_left: +data.total_pages - page,
+						})
+					);
+				} else {
+					dispatch(
+						setData("searchResult", {
+							movie: data.results.filter(
+								({ media_type }) => media_type === "movie"
+							),
+							tv: data.results.filter(
+								({ media_type }) => media_type === "tv"
+							),
+							pages_left: +data.total_pages - page,
+						})
+					);
+				}
+			})
+			.catch((errors) => {
+				dispatch(setHasError("searchResult", true));
+				console.log(errors);
+			});
 		dispatch(setIsLoading("searchResult", false));
-	};
-}
-
-export function filter(media_type, filters) {
-	return (dispatch, getState) => {
-		const { data } = getState().app;
-
-		let input = filters.filter((obj) => !!obj);
-
-		dispatch(setIsLoading(`top_${media_type}`, true));
-
-		input.forEach(({ type, value }) => {
-			switch (type) {
-				case "year": {
-					const filteredByYear = data[
-						`top_${media_type}_filtered`
-					].filter(({ release_date, first_air_date }) => {
-						if (media_type === "movies") {
-							return +release_date.split("-")[0] <= +value;
-						} else return +first_air_date.split("-")[0] <= +value;
-					});
-					dispatch(
-						setData(`top_${media_type}_filtered`, filteredByYear)
-					);
-					break;
-				}
-				case "country": {
-					dispatch(
-						setData(
-							`top_${media_type}_filtered`,
-							data[`top_${media_type}`].filter(
-								({ origin_country }) =>
-									origin_country &&
-									origin_country.includes(value)
-							)
-						)
-					);
-					break;
-				}
-				case "genre": {
-					dispatch(
-						setData(
-							`top_${media_type}_filtered`,
-							data[`top_${media_type}`].filter(({ genre_ids }) =>
-								genre_ids.some((elm) => value.includes(elm))
-							)
-						)
-					);
-					break;
-				}
-				case "language": {
-					dispatch(
-						setData(
-							`top_${media_type}_filtered`,
-							data[`top_${media_type}`].filter(
-								({ original_language }) =>
-									original_language === value
-							)
-						)
-					);
-					break;
-				}
-				case "rating": {
-					dispatch(
-						setData(
-							`top_${media_type}_filtered`,
-							data[`top_${media_type}`].filter(
-								({ vote_average }) => vote_average <= value
-							)
-						)
-					);
-					break;
-				}
-				default: {
-					return;
-				}
-			}
-		});
-		dispatch(setIsLoading(`top_${media_type}`, false));
 	};
 }
