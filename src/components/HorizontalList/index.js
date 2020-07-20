@@ -13,7 +13,7 @@ export default function({ label, href, children }) {
 						{label}
 					</a>
 				) : (
-					{ label }
+					label
 				)}
 			</Text>
 			<div className="horizontal-list-list">{children}</div>
