@@ -151,51 +151,53 @@ export function fetch_search_result(
 			setHasError("searchResult", false);
 		}
 		const { searchResult } = getState().app.data;
-		await axios
-			.get(
-				`${api.URL}/search/multi?api_key=${api.KEY}&language=en-US&query=${query}&page=${page}&include_adult=${adult}`,
-				{ cancelToken }
-			)
-			.then(({ data }) => {
-				if (data.results.length === 0 || data.total_pages === 0) {
-					setHasError("searchResult", true);
-				}
-				if (page !== 1) {
-					dispatch(
-						setData("searchResult", {
-							movie: [
-								...searchResult.movie,
-								...data.results.filter(
+		query &&
+			(await axios
+				.get(
+					`${api.URL}/search/multi?api_key=${api.KEY}&language=en-US&query=${query}&page=${page}&include_adult=${adult}`,
+					{ cancelToken }
+				)
+				.then(({ data }) => {
+					if (data.results.length === 0 || data.total_pages === 0) {
+						setHasError("searchResult", true);
+					}
+					if (page !== 1) {
+						dispatch(
+							setData("searchResult", {
+								movie: [
+									...searchResult.movie,
+									...data.results.filter(
+										({ media_type }) =>
+											media_type === "movie"
+									),
+								],
+								tv: [
+									...searchResult.tv,
+									...data.results.filter(
+										({ media_type }) => media_type === "tv"
+									),
+								],
+								pages_left: +data.total_pages - page,
+							})
+						);
+					} else {
+						dispatch(
+							setData("searchResult", {
+								movie: data.results.filter(
 									({ media_type }) => media_type === "movie"
 								),
-							],
-							tv: [
-								...searchResult.tv,
-								...data.results.filter(
+								tv: data.results.filter(
 									({ media_type }) => media_type === "tv"
 								),
-							],
-							pages_left: +data.total_pages - page,
-						})
-					);
-				} else {
-					dispatch(
-						setData("searchResult", {
-							movie: data.results.filter(
-								({ media_type }) => media_type === "movie"
-							),
-							tv: data.results.filter(
-								({ media_type }) => media_type === "tv"
-							),
-							pages_left: +data.total_pages - page,
-						})
-					);
-				}
-			})
-			.catch((errors) => {
-				dispatch(setHasError("searchResult", true));
-				console.log(errors);
-			});
+								pages_left: +data.total_pages - page,
+							})
+						);
+					}
+				})
+				.catch((errors) => {
+					dispatch(setHasError("searchResult", true));
+					console.log(errors);
+				}));
 		dispatch(setIsLoading("searchResult", false));
 	};
 }

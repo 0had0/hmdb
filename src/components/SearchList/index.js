@@ -68,7 +68,7 @@ function SearchList({
 		<div className="search-results-loading">
 			<CircularProgress id="search-results-fetch-loading" />
 		</div>
-	) : hasError || data.length === 0 ? (
+	) : hasError ? (
 		<div className="error">
 			<Text>No match :(</Text>
 		</div>

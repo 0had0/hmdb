@@ -21,7 +21,8 @@ const useQuery = () => new URLSearchParams(useLocation().search);
 const SearchView = () => {
 	const history = useHistory();
 
-	const [query, setQuery] = useState(useQuery().get("q"));
+	const [query, setQuery] = useState(useQuery().get("q") || "");
+
 	const [sort, setSort] = useState(null);
 
 	const _handleChange = (e) => setQuery(e.target.value);
