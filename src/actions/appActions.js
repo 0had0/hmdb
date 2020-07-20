@@ -128,7 +128,12 @@ export function fetchOverview(id, media_type) {
 	};
 }
 
-export function fetch_search_result(query, page = 1, adult = false) {
+export function fetch_search_result(
+	query,
+	page = 1,
+	adult = false,
+	cancelToken
+) {
 	return async (dispatch, getState, api) => {
 		if (page === 1) {
 			dispatch(setIsLoading("searchResult", true));
@@ -137,7 +142,8 @@ export function fetch_search_result(query, page = 1, adult = false) {
 		searchResult.pages_left > 0 &&
 			(await axios
 				.get(
-					`${api.URL}/search/multi?api_key=${api.KEY}&language=en-US&query=${query}&page=${page}&include_adult=${adult}`
+					`${api.URL}/search/multi?api_key=${api.KEY}&language=en-US&query=${query}&page=${page}&include_adult=${adult}`,
+					{ cancelToken }
 				)
 				.then(({ data }) => {
 					if (page !== 1) {

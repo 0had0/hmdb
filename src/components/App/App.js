@@ -1,7 +1,12 @@
 import React from "react";
 import { Route, Switch, withRouter } from "react-router-dom";
 
-import { SearchView, OverviewView, DiscoveryView } from "../../Views";
+import {
+	SearchView,
+	OverviewView,
+	DiscoveryView,
+	MediaFilterView,
+} from "../../Views";
 
 import Navigation from "../Navigation";
 import LoginModal from "../LoginModal";
@@ -43,6 +48,14 @@ function App() {
 					component={WithFullPage(OverviewView)}
 				/>
 				<Route path="/tv/:id" component={WithFullPage(OverviewView)} />
+				<Route
+					path="/movies"
+					component={WithFullPage(MediaFilterView)}
+				/>
+				<Route
+					path="/series"
+					component={WithFullPage(MediaFilterView)}
+				/>
 				<Route
 					exact
 					path="/movies"

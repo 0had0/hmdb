@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import axios from "axios";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { List, ListItem, CircularProgress, Text } from "react-md";
@@ -11,7 +12,6 @@ import "./SearchList.scss";
 
 function SearchList({
 	media_type = "movie",
-	genres,
 	query,
 	page,
 	response,
@@ -24,25 +24,23 @@ function SearchList({
 
 	let data = response[media_type];
 
-	if (genres.length !== 0) {
-		data = data.filter(
-			({ genre_ids, status, popularity }) =>
-				genre_ids.some((item) => genres.includes(item)) &&
-				status === "Released" &&
-				popularity > 1
-		);
-	}
-
 	useEffect(() => {
-		fetch(query, page);
+		const { cancel, token } = axios.CancelToken.source();
+		let timeOutId = setTimeout(function() {
+			fetch(query, page, token);
+		}, 1000);
+		return () => {
+			cancel("User loose interest");
+			clearTimeout(timeOutId);
+		};
 	}, [query, page, fetch]);
 
 	return loading ? (
 		<div className="search-results-loading">
 			<CircularProgress id="search-results-fetch-loading" />
 		</div>
-	) : response[media_type].length === 0 || data.length === 0 ? (
-		<div className="search-results-loading">
+	) : data.length === 0 ? (
+		<div className="search-results-loading error">
 			<Text>No match :(</Text>
 		</div>
 	) : (
@@ -110,7 +108,7 @@ export default connect(
 		hasMore: app.data.searchResult.pages_left > 0,
 	}),
 	(dispatch) => ({
-		fetch: (query, page, adult = false) =>
-			dispatch(fetch_search_result(query, page, adult)),
+		fetch: (query, page, adult = false, token) =>
+			dispatch(fetch_search_result(query, page, adult, token)),
 	})
 )(SearchList);
