@@ -27,6 +27,9 @@ function SearchList({
 	let data = response[media_type];
 
 	useEffect(() => {
+		if (!query) {
+			return;
+		}
 		const { cancel, token } = axios.CancelToken.source();
 		let timeOutId = setTimeout(function() {
 			fetch(query, page, token);
@@ -56,15 +59,14 @@ function SearchList({
 				}
 			} else return 0;
 		});
-		console.log(data);
 	}
 
 	return loading ? (
 		<div className="search-results-loading">
 			<CircularProgress id="search-results-fetch-loading" />
 		</div>
-	) : data.length === 0 && !hasMore ? (
-		<div className="search-results-loading error">
+	) : hasError ? (
+		<div className="error">
 			<Text>No match :(</Text>
 		</div>
 	) : (
@@ -75,7 +77,7 @@ function SearchList({
 					loadMore={(page) => {
 						fetch(query, page);
 					}}
-					hasMore={hasMore}
+					hasMore={hasMore && !!query}
 					loader={
 						<div className="loader" key={0}>
 							<CircularProgress id="search-results-fetch-loading" />

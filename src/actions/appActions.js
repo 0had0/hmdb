@@ -155,6 +155,7 @@ export function fetch_search_result(
 	return async (dispatch, getState, api) => {
 		if (page === 1) {
 			dispatch(setIsLoading("searchResult", true));
+			setHasError("searchResult", false);
 		}
 		const { searchResult } = getState().app.data;
 		searchResult.pages_left > 0 &&
@@ -164,6 +165,9 @@ export function fetch_search_result(
 					{ cancelToken }
 				)
 				.then(({ data }) => {
+					if (data.results.length === 0 || data.total_pages === 0) {
+						setHasError("searchResult", true);
+					}
 					if (page !== 1) {
 						dispatch(
 							setData("searchResult", {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
 	AppBar,
 	SearchFontIcon,
@@ -28,13 +28,9 @@ const SearchView = () => {
 	const _handleKeyUp = (evt) => {
 		evt.preventDefault();
 		if (evt.key === "Enter") {
-			history.push(`/search/?q=${query}`);
+			query !== "" && history.push(`/search/?q=${query}`);
 		}
 	};
-
-	useEffect(() => {
-		history.push(`/search/?q=${query}`);
-	}, [query, history]);
 
 	return (
 		<React.Fragment>
