@@ -6,7 +6,7 @@ import {
 	OverviewView,
 	DiscoveryView,
 	MediaFilterView,
-} from "../../Views";
+} from "../../views";
 
 import Navigation from "../Navigation";
 import LoginModal from "../LoginModal";
@@ -56,12 +56,6 @@ function App() {
 					path="/series"
 					component={WithFullPage(MediaFilterView)}
 				/>
-				<Route
-					exact
-					path="/movies"
-					component={WithFullPage(SearchView)}
-				/>
-				<Route exact path="/tv" component={WithFullPage(SearchView)} />
 				<Route exact path="/" component={WithFullPage(DiscoveryView)} />
 			</Switch>
 		</React.Fragment>

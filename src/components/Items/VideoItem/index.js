@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Card, MediaContainer, PlayArrowFontIcon, Button } from "react-md";
 
-import { toggle_video_modal } from "../../../actions/appActions";
+import { toggleVideoModal } from "actions/modals/video.action";
 
 import "./VideoItem.css";
 
@@ -32,5 +32,5 @@ function VideoItem({ item, open }) {
 }
 
 export default connect(null, (dispatch) => ({
-	open: (vkey) => dispatch(toggle_video_modal(vkey)),
+	open: (vkey) => dispatch(toggleVideoModal(vkey)),
 }))(VideoItem);

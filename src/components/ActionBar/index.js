@@ -11,8 +11,8 @@ import {
 	Tooltipped,
 } from "react-md";
 
-import { favorite, watchlist } from "../../actions/authActions";
-import { toggle_modal } from "../../actions/appActions";
+import { toggleFavorite, toggleWatchlist } from "api/user.action";
+import { toggleLoginModal } from "actions/modals/login.action";
 
 import "./ActionBar.css";
 
@@ -31,10 +31,10 @@ function ActionBar({
 	const [fav, setFav] = useState(checkFavorite());
 	const [save, setSave] = useState(checkSave());
 
-	const _setFav = () => {
+	const handleFav = () => {
 		!isLogin ? open() : setFav(!fav);
 	};
-	const _save = () => {
+	const handleSave = () => {
 		!isLogin ? open() : setSave(!save);
 	};
 
@@ -59,7 +59,7 @@ function ActionBar({
 					id="favorite"
 					buttonType="icon"
 					aria-label="add to favorite"
-					onClick={_setFav}
+					onClick={handleFav}
 				>
 					<FavoriteFontIcon style={{ color: fav && "#D50000" }} />
 				</Button>
@@ -73,7 +73,7 @@ function ActionBar({
 					id="bookmark"
 					buttonType="icon"
 					aria-label="add to watchlist"
-					onClick={_save}
+					onClick={handleSave}
 				>
 					<BookmarkFontIcon style={{ color: save && "#F44336" }} />
 				</Button>
@@ -97,18 +97,18 @@ function ActionBar({
 }
 
 export default connect(
-	({ auth }) => ({
+	({ user, auth }) => ({
 		isLogin: auth.isLogin,
-		fav_list: auth.favorite[document.location.pathname.split("/")[1]],
+		fav_list: user.favorite[document.location.pathname.split("/")[1]],
 		watchlist_list:
-			auth.watchlist[document.location.pathname.split("/")[1]],
+			user.watchlist[document.location.pathname.split("/")[1]],
 		checkFavorite: () => {
-			const { favorite } = auth;
+			const { favorite } = user;
 			const [, media_type, id] = document.location.pathname.split("/");
 			return favorite[media_type].includes(+id);
 		},
 		checkSave: () => {
-			const { watchlist } = auth;
+			const { watchlist } = user;
 			const [, media_type, id] = document.location.pathname.split("/");
 			return watchlist[media_type].includes(+id);
 		},
@@ -116,12 +116,20 @@ export default connect(
 	(dispatch) => ({
 		setFavorite: (id, value) =>
 			dispatch(
-				favorite(id, document.location.pathname.split("/")[1], value)
+				toggleFavorite(
+					id,
+					document.location.pathname.split("/")[1],
+					value
+				)
 			),
 		setWatchlist: (id, value) =>
 			dispatch(
-				watchlist(id, document.location.pathname.split("/")[1], value)
+				toggleWatchlist(
+					id,
+					document.location.pathname.split("/")[1],
+					value
+				)
 			),
-		open: () => dispatch(toggle_modal()),
+		open: () => dispatch(toggleLoginModal()),
 	})
 )(React.memo(ActionBar));

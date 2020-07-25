@@ -1,0 +1,7 @@
+export const SEARCH_START = "SEARCH_START";
+
+export const SEARCH_SUCCESS = "SEARCH_SUCCESS";
+
+export const SEARCH_UPDATE = "SEARCH_UPDATE";
+
+export const SEARCH_FAILD = "SEARCH_FAILD";

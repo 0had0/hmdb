@@ -1,10 +1,5 @@
 import React from "react";
 
-import { connect } from "react-redux";
-
-import { toggle_modal } from "../../actions/appActions";
-import { logout } from "../../actions/authActions";
-
 import {
 	AppBarAction,
 	ExitToAppSVGIcon,
@@ -12,20 +7,25 @@ import {
 	CircularProgress,
 } from "react-md";
 
-function Log({ isLogin, loading, _open_modal, _logout }) {
+import { connect } from "react-redux";
+
+import { toggleLoginModal } from "actions/modals/login.action";
+import { logout } from "api/auth.action";
+
+function Log({ isLogin, loading, open, logout }) {
 	const first = loading ? (
 		<AppBarAction last aria-label="logout-loading">
 			<CircularProgress id="logout" style={{ width: 24, height: 24 }} />
 		</AppBarAction>
 	) : (
-		<AppBarAction onClick={_logout} last aria-label="Logout">
+		<AppBarAction onClick={logout} last aria-label="Logout">
 			<ExitToAppSVGIcon />
 		</AppBarAction>
 	);
 	return isLogin ? (
 		first
 	) : (
-		<AppBarAction last aria-label="Login" onClick={_open_modal}>
+		<AppBarAction last aria-label="Login" onClick={open}>
 			<PersonSVGIcon />
 		</AppBarAction>
 	);
@@ -34,13 +34,13 @@ function Log({ isLogin, loading, _open_modal, _logout }) {
 export default connect(
 	({ app, auth }) => ({
 		isLogin: auth.isLogin,
-		loading: auth.logout_loading,
+		loading: auth.loading.logout,
 	}),
 	(dispatch) => ({
-		_open_modal: () => {
-			dispatch(toggle_modal());
+		open: () => {
+			dispatch(toggleLoginModal());
 		},
-		_logout: () => {
+		logout: () => {
 			dispatch(logout());
 		},
 	})

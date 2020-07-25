@@ -16,9 +16,8 @@ import {
 	TextIconSpacing,
 } from "react-md";
 
-import { toggle_modal } from "../../actions/appActions";
-import { toggle_error } from "../../actions/authActions";
-import { login } from "../../actions/authActions";
+import { toggleLoginModal, setErrorMessage } from "actions/modals/login.action";
+import { login } from "api/auth.action";
 
 import "./LoginModal.css";
 
@@ -76,7 +75,7 @@ const LoginDialog = ({ visible, errorMessage, loading, close, login }) => {
 		loading,
 		login,
 	};
-	const _close = () => {
+	const handleClose = () => {
 		setEmail("");
 		setPassword("");
 		close();
@@ -85,7 +84,7 @@ const LoginDialog = ({ visible, errorMessage, loading, close, login }) => {
 		<Dialog
 			id="login-dialog"
 			visible={visible}
-			onRequestClose={_close}
+			onRequestClose={handleClose}
 			aria-labelledby="login"
 			className="dialog-root"
 		>
@@ -116,7 +115,7 @@ const LoginDialog = ({ visible, errorMessage, loading, close, login }) => {
 						Login
 					</TextIconSpacing>
 				</Button>
-				<Button id="login-close" onClick={_close}>
+				<Button id="login-close" onClick={handleClose}>
 					Close
 				</Button>
 			</DialogFooter>
@@ -126,15 +125,15 @@ const LoginDialog = ({ visible, errorMessage, loading, close, login }) => {
 
 export default connect(
 	({ app, auth }) => ({
-		visible: app.toggleModal,
-		errorMessage: auth.errorMessage,
-		loading: auth.loading,
+		visible: app.modals.toggleLoginModal,
+		errorMessage: app.modals.errorMessage,
+		loading: auth.loading.login,
 	}),
 	(dispatch) => ({
 		login: (email, password) => dispatch(login(email, password)),
 		close: () => {
-			dispatch(toggle_modal());
-			dispatch(toggle_error());
+			dispatch(toggleLoginModal());
+			dispatch(setErrorMessage(null));
 		},
 	})
 )(LoginDialog);

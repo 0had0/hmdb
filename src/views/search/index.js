@@ -12,7 +12,7 @@ import {
 } from "react-md";
 import { useHistory, useLocation } from "react-router-dom";
 
-import SearchList from "../components/SearchList";
+import SearchList from "./SearchList";
 
 import "./SearchView.css";
 
@@ -25,10 +25,10 @@ const SearchView = () => {
 
 	const [sort, setSort] = useState(null);
 
-	const _handleChange = (e) => setQuery(e.target.value);
-	const _handleKeyUp = (evt) => {
-		evt.preventDefault();
-		if (evt.key === "Enter") {
+	const handleChange = (e) => setQuery(e.target.value);
+	const handleKeyUp = (e) => {
+		e.preventDefault();
+		if (e.key === "Enter") {
 			query !== "" && history.push(`/search/?q=${query}`);
 		}
 	};
@@ -46,8 +46,8 @@ const SearchView = () => {
 							theme="none"
 							placeholder="Movie or Tv"
 							value={query}
-							onChange={_handleChange}
-							onKeyUp={_handleKeyUp}
+							onChange={handleChange}
+							onKeyUp={handleKeyUp}
 						/>
 					</div>
 

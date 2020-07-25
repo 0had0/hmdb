@@ -1,9 +1,9 @@
 import React from "react";
 import { Text } from "react-md";
-import src from "../images/breackingBad3.jpg";
+import src from "images/breackingBad3.jpg";
 
-import HorizontalFetchList from "../components/HorizontalFetchList";
-import Footer from "../components/Footer";
+import HorizontalFetchList from "components/HorizontalFetchList";
+import Footer from "components/Footer";
 
 import "./DiscoveryView.css";
 

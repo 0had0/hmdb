@@ -3,18 +3,18 @@ import { useParams } from "react-router-dom";
 import { connect } from "react-redux";
 import { Text, Card, CircularProgress } from "react-md";
 
-import { fetchOverview } from "../actions/appActions";
-import { update_favorite, update_watchlist } from "../actions/authActions";
+import { fetchOnce } from "api/fetch.overview.action";
+import { updateFavorite, updateWatchlist } from "api/user.action";
 
-import ActionBar from "../components/ActionBar";
-import HorizontalNoFetchList from "../components/HorizontalNoFetchList";
+import ActionBar from "components/ActionBar";
+import HorizontalNoFetchList from "components/HorizontalNoFetchList";
 
-import VideoItem from "../components/Items/VideoItem";
-import CastItem from "../components/Items/CastItem";
-import MediaItem from "../components/Items/MediaItem";
+import VideoItem from "components/Items/VideoItem";
+import CastItem from "components/Items/CastItem";
+import MediaItem from "components/Items/MediaItem";
 
-import Reviews from "../components/Reviews";
-import Footer from "../components/Footer";
+import Reviews from "components/Reviews";
+import Footer from "components/Footer";
 
 import "./OverviewView.css";
 import "./_filter.scss";
@@ -35,12 +35,12 @@ const OverviewView = ({
 	const { id } = useParams();
 
 	useEffect(() => {
-		const media_type = document.location.pathname.split("/")[1];
+		const mediaType = document.location.pathname.split("/")[1];
 		let isMounted = true;
 		if (isMounted) {
-			fetch(id, media_type);
-			isLogin && updateFavorite(media_type);
-			isLogin && updateWatchlist(media_type);
+			fetch(id, mediaType);
+			isLogin && updateFavorite(mediaType);
+			isLogin && updateWatchlist(mediaType);
 			setTimeout(() => window.scrollTo(0, 0), 200);
 		}
 		return () => {
@@ -167,18 +167,18 @@ const OverviewView = ({
 
 export default connect(
 	({ app, auth }) => ({
-		loading: app.isLoading.overview.loading,
-		details: app.data.overview.details,
-		videos: app.data.overview.videos,
-		similar: app.data.overview.similar,
-		reviews: app.data.overview.reviews,
-		credits: app.data.overview.credits,
-		hasError: app.hasError.overview,
+		loading: app.overview.loading,
+		details: app.overview.data.details,
+		videos: app.overview.data.videos,
+		similar: app.overview.data.similar,
+		reviews: app.overview.data.reviews,
+		credits: app.overview.data.credits,
+		hasError: app.overview.error,
 		isLogin: auth.isLogin,
 	}),
 	(dispatch) => ({
-		fetch: (id, media_type) => dispatch(fetchOverview(id, media_type)),
-		updateFavorite: (media_type) => dispatch(update_favorite(media_type)),
-		updateWatchlist: (media_type) => dispatch(update_watchlist(media_type)),
+		fetch: (id, mediaType) => dispatch(fetchOnce(id, mediaType)),
+		updateFavorite: (mediaType) => dispatch(updateFavorite(mediaType)),
+		updateWatchlist: (mediaType) => dispatch(updateWatchlist(mediaType)),
 	})
 )(React.memo(OverviewView));

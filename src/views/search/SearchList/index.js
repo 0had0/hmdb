@@ -1,33 +1,40 @@
 import React, { useEffect } from "react";
+
 import axios from "axios";
+
 import { connect } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 import { List, ListItem, CircularProgress, Text } from "react-md";
 
-import { fetch_search_result } from "../../actions/appActions";
-
 import InfiniteScroll from "react-infinite-scroller";
 
-import SkeletonImage from "../../images/skeleton.jpg";
+import {
+	fetchMoviesOnce,
+	fetchTvOnce,
+	fetchMoviesMulti,
+	fetchTvMulti,
+} from "api/fetch.search.action";
+
+import SkeletonImage from "images/skeleton.jpg";
 import "./SearchList.scss";
 
 const useQuery = () => new URLSearchParams(useLocation().search);
 
 function SearchList({
-	media_type = "movie",
+	mediaType = "movie",
 	sort,
-	page,
 	response,
 	loading,
 	hasError,
-	hasMore,
+	hasMoreMovie,
+	hasMoreTv,
 	fetch,
+	fetchNext,
 }) {
 	const history = useHistory();
 	const query = useQuery().get("q");
-	console.log(query);
 
-	let data = response[media_type];
+	let data = response[mediaType];
 
 	useEffect(() => {
 		if (!query) {
@@ -35,16 +42,16 @@ function SearchList({
 		}
 		const { cancel, token } = axios.CancelToken.source();
 		let timeOutId = setTimeout(function() {
-			fetch(query, page, token);
+			fetch(mediaType, query, token);
 		}, 1000);
 		return () => {
 			cancel("User loose interest");
 			clearTimeout(timeOutId);
 		};
-	}, [query, page, fetch, history]);
+	}, [query, fetch, history]);
 
 	if (sort && data.length !== 0) {
-		data = response[media_type].sort((a, b) => {
+		data = response[mediaType].sort((a, b) => {
 			if (sort === "Rating") {
 				return b.vote_average - a.vote_average;
 			}
@@ -64,11 +71,11 @@ function SearchList({
 		});
 	}
 
-	return loading ? (
+	return loading[mediaType] ? (
 		<div className="search-results-loading">
 			<CircularProgress id="search-results-fetch-loading" />
 		</div>
-	) : hasError ? (
+	) : hasError[mediaType] ? (
 		<div className="error">
 			<Text>No match :(</Text>
 		</div>
@@ -78,9 +85,12 @@ function SearchList({
 				<InfiniteScroll
 					pageStart={1}
 					loadMore={(page) => {
-						fetch(query, page);
+						fetchNext(mediaType, query, page);
 					}}
-					hasMore={hasMore && !loading}
+					hasMore={
+						(mediaType === "movie" ? hasMoreMovie : hasMoreTv) &&
+						!loading[mediaType]
+					}
 					loader={
 						<div className="loader" key={0}>
 							<CircularProgress id="search-results-fetch-loading" />
@@ -94,7 +104,7 @@ function SearchList({
 								key={`${i}-${item?.name || item.title}`}
 								onClick={() =>
 									history.push(
-										`/${item?.media_type}/${item?.id}`
+										`/${item?.mediaType}/${item?.id}`
 									)
 								}
 								className="search-results-item"
@@ -132,13 +142,21 @@ function SearchList({
 
 export default connect(
 	({ app }) => ({
-		response: app.data.searchResult,
-		loading: app.isLoading.searchResult,
-		hasError: app.hasError.searchResult,
-		hasMore: app.data.searchResult.pages_left > 0,
+		response: app.search.data,
+		loading: app.search.loading,
+		hasError: app.search.error,
+		hasMoreMovie: app.search.movies_pages_left > 0,
+		hasMoreTv: app.search.series_pages_left > 0,
 	}),
 	(dispatch) => ({
-		fetch: (query, page, adult = false, token) =>
-			dispatch(fetch_search_result(query, page, adult, token)),
+		fetch: (mediaType, query, token, adult = false) =>
+			mediaType === "movie"
+				? dispatch(fetchMoviesOnce(query, token, adult))
+				: dispatch(fetchTvOnce(query, token, adult)),
+		fetchNext: (mediaType, query, page, adult = false) => {
+			mediaType === "movie"
+				? dispatch(fetchMoviesMulti(query, page, adult))
+				: dispatch(fetchTvMulti(query, page, adult));
+		},
 	})
 )(SearchList);

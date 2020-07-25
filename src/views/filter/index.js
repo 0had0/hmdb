@@ -4,79 +4,18 @@ import { CircularProgress, AppBar, DropdownMenu } from "react-md";
 
 import InfiniteScroll from "react-infinite-scroller";
 
-import Footer from "../components/Footer";
-import Item from "../components/Items/MediaItem";
+import Footer from "components/Footer";
 
-import { fetchData } from "../actions/appActions";
-import {
-	LANGUAGES,
-	GENRES,
-	COUNTRIES,
-	RATING,
-	YEARS,
-} from "../constants/filter";
+import { fetchOnce, fetchMulti } from "api/fetch.discovery.action";
+import { LANGUAGES, GENRES, COUNTRIES, RATING, YEARS } from "constants/filter";
+
+import FilteredList from "./FilteredList";
 
 import "./MediaFilterView.css";
 
-const media_type = document.location.href.split("/")[3];
+const mediaType = document.location.href.split("/")[3];
 
-const FilteredList = ({ list, filters }) => {
-	const [year, lang, country, genre, rating] = filters;
-	let items = list;
-	if (!list) {
-		return null;
-	}
-	if (year) {
-		items = items.filter(({ release_date, first_air_date }) => {
-			if (media_type === "movies") {
-				return release_date.split("-")[0] <= year;
-			} else {
-				return +first_air_date.split("-")[0] <= +year;
-			}
-		});
-	}
-	if (lang) {
-		items = items.filter(({ original_language }) => {
-			return original_language === lang.iso_639_1;
-		});
-	}
-	if (country) {
-		items = items.filter(({ origin_country }) => {
-			return (
-				origin_country && origin_country.includes(country.iso_3166_1)
-			);
-		});
-	}
-	if (genre) {
-		items = items.filter(({ genre_ids }) => {
-			return genre_ids.includes(genre.id);
-		});
-	}
-	if (rating) {
-		items = items.filter(({ vote_average }) => {
-			return +rating <= +vote_average && +vote_average < 1 + rating;
-		});
-	}
-	if (items.length === 0) {
-		return (
-			<div className="loader" key={0}>
-				<CircularProgress id="loading" />
-			</div>
-		);
-	}
-	return items.map((item, i) => {
-		if (!item) return null;
-		return (
-			<Item
-				item={item}
-				key={`${item.id}-${i}`}
-				classNames="media-view-margin"
-			/>
-		);
-	});
-};
-
-function MediaFilterView({ data, hasMore, loading, fetch, filter }) {
+function MediaFilterView({ data, hasMore, loading, fetch, fetchNext }) {
 	const [year, setYear] = useState(null);
 	const [lang, setLang] = useState(null);
 	const [country, setCountry] = useState(null);
@@ -94,7 +33,7 @@ function MediaFilterView({ data, hasMore, loading, fetch, filter }) {
 			!genre &&
 			!rating
 		) {
-			fetch(media_type, null, 1);
+			fetch();
 		}
 		// eslint-disable-next-line
 	}, [fetch, data]);
@@ -157,7 +96,7 @@ function MediaFilterView({ data, hasMore, loading, fetch, filter }) {
 			{data.length !== 0 && (
 				<InfiniteScroll
 					pageStart={1}
-					loadMore={(page) => fetch(media_type, null, page)}
+					loadMore={(page) => fetchNext(page)}
 					hasMore={hasMore && !loading}
 					loader={
 						<div className="loader" key={0}>
@@ -181,13 +120,18 @@ function MediaFilterView({ data, hasMore, loading, fetch, filter }) {
 
 export default connect(
 	({ app }) => ({
-		data: app.data[`top_${media_type}`],
-		hasMore: app.data[`top_${media_type}_pages_left`] > 0,
-		loading: app.isLoading[`top_${media_type}`],
+		data: app.discovery.data[`top_${mediaType}`],
+		hasMore: app.discovery.left_pages[`top_${mediaType}`] > 0,
+		loading: app.discovery.loading[`top_${mediaType}`],
 	}),
 	(dispatch) => ({
-		fetch: (media_type, id, page) => {
-			dispatch(fetchData(`top_${media_type}`, id, page));
-		},
+		fetch: () =>
+			mediaType === "movies"
+				? dispatch(fetchOnce(`top_${mediaType}`))
+				: dispatch(fetchOnce(`top_${mediaType}`)),
+		fetchNext: (page) =>
+			mediaType === "movies"
+				? dispatch(fetchMulti(`top_${mediaType}`, page))
+				: dispatch(fetchMulti(`top_${mediaType}`, page)),
 	})
 )(MediaFilterView);

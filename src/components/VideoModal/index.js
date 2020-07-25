@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Dialog, DialogContent } from "react-md";
 
-import { toggle_video_modal } from "../../actions/appActions";
+import { toggleVideoModal } from "actions/modals/video.action";
 
 function Video({ vkey }) {
 	return (
@@ -46,10 +46,10 @@ const VideoDialog = ({ visible, vkey, close }) => {
 
 export default connect(
 	({ app }) => ({
-		visible: app.toggleVideoModal,
-		vkey: app.videoModalKey,
+		visible: app.modals.toggleVideoModal,
+		vkey: app.modals.videoModalKey,
 	}),
 	(dispatch) => ({
-		close: () => dispatch(toggle_video_modal()),
+		close: () => dispatch(toggleVideoModal()),
 	})
 )(VideoDialog);

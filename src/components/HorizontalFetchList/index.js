@@ -1,7 +1,7 @@
 import React, { useLayoutEffect } from "react";
 import { connect } from "react-redux";
 
-import { fetchData, clearData } from "../../actions/appActions";
+import { fetchOnce } from "api/fetch.discovery.action";
 
 import HorizontalList from "../HorizontalList";
 import Item from "../Items/MediaItem";
@@ -15,11 +15,9 @@ function HorizontalFetchList({
 	loadingItemsNumber,
 	loading = false,
 	withoutCheck = false,
-	clearAfter = false,
 	data,
 	hasError,
 	fetch,
-	clear,
 }) {
 	const loadingItems = React.useMemo(
 		() => new Array(loadingItemsNumber ?? 9).fill({}),
@@ -32,7 +30,6 @@ function HorizontalFetchList({
 		}
 		return () => {
 			isMounted = false;
-			clearAfter && clear(key);
 		};
 		// eslint-disable-next-line
 	}, [key, fetch, id]);
@@ -58,12 +55,11 @@ function HorizontalFetchList({
 
 export default connect(
 	({ app }) => ({
-		loading: (key) => app.isLoading[key],
-		data: (key) => app.data[key],
-		hasError: (key) => app.hasError[key],
+		loading: (key) => app.discovery.loading[key],
+		data: (key) => app.discovery.data[key],
+		hasError: (key) => app.discovery.error[key],
 	}),
 	(dispatch) => ({
-		fetch: (key, id) => dispatch(fetchData(key, id)),
-		clear: (key) => dispatch(clearData(key)),
+		fetch: (key) => dispatch(fetchOnce(key)),
 	})
 )(React.memo(HorizontalFetchList));
