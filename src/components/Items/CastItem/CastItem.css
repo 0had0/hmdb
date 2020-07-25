@@ -1,6 +1,21 @@
 .cast-item-root {
-	min-width: 189px;
-	min-height: 282px;
+	min-width: 159px;
+	min-height: 218px;
 	padding: 4px;
 	margin: 0 5px;
+}
+
+.cast-item-root img {
+	width: 100%;
+	height: auto;
+}
+
+.cast-item-title {
+	font-size: 5vmin;
+}
+
+@media only screen and (min-width: 800px) {
+	.cast-item-title {
+		font-size: 2vmin;
+	}
 }

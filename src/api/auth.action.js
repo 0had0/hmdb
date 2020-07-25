@@ -12,7 +12,7 @@ import {
 } from "actions/auth/logout.action";
 
 import { updateName } from "actions/user/name.action";
-import { setErrorMessage } from "actions/modals/login.action";
+import { toggleLoginModal, setErrorMessage } from "actions/modals/login.action";
 
 import { updateFavorite, updateWatchlist } from "api/user.action";
 
@@ -34,27 +34,37 @@ export const login = (username, password) => {
 					},
 				})
 					.then(async ({ data }) => {
-						const { success, session_id } = data;
-						if (success) {
-							localStorage.setItem("session_id", session_id);
-							dispatch(loginSuccess(session_id));
-							// toggle login modal
-							await axios
-								.get(
-									`${api.URL}/account?api_key=${api.KEY}&session_id=${session_id}`
-								)
-								.then(({ data }) => {
-									dispatch(updateName(data.name));
-									localStorage.setItem("id", data.id);
-									dispatch(updateFavorite());
-									dispatch(updateWatchlist());
-								});
+						if (data.success) {
+							await axios({
+								method: "post",
+								url: `${api.URL}/authentication/session/new?api_key=${api.KEY}`,
+								headers: {},
+								data: { request_token },
+							}).then(async ({ data }) => {
+								const { success, session_id } = data;
+								localStorage.setItem("session_id", session_id);
+								await axios
+									.get(
+										`${api.URL}/account?api_key=${api.KEY}&session_id=${session_id}`
+									)
+									.then(({ data }) => {
+										dispatch(updateName(data.name));
+										localStorage.setItem("id", data.id);
+										dispatch(
+											loginSuccess(+data.id, session_id)
+										);
+										dispatch(updateFavorite());
+										dispatch(toggleLoginModal());
+										dispatch(updateWatchlist());
+									});
+							});
 						}
 					})
 					.catch((err) => {
-						dispatch(
-							setErrorMessage(err.response.data.status_message)
-						);
+						console.log(err);
+						// dispatch(
+						// 	setErrorMessage(err.response.data.status_message)
+						// );
 					});
 			});
 	};

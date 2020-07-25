@@ -6,10 +6,11 @@ import { updateWatchlist as updateWatchlistAction } from "actions/user/watchlist
 export const updateFavorite = () => {
 	return async (dispatch, getState, api) => {
 		const { sessionId, id } = getState().auth;
+		console.log(getState().auth);
 		await axios
 			.all([
 				axios.get(
-					`${api.URL}/account/${id}/favorite/movie?api_key=${api.KEY}&session_id=${sessionId}`
+					`${api.URL}/account/${id}/favorite/movies?api_key=${api.KEY}&session_id=${sessionId}`
 				),
 				axios.get(
 					`${api.URL}/account/${id}/favorite/tv?api_key=${api.KEY}&session_id=${sessionId}`
@@ -18,14 +19,19 @@ export const updateFavorite = () => {
 			.then(
 				axios.spread((...responses) => {
 					const [movie, tv] = responses;
-					dispatch(updateFavoriteAction({ movie, tv }));
+					dispatch(
+						updateFavoriteAction({
+							movie: movie.data.results.map((am) => am.id),
+							tv: tv.data.results.map((am) => am.id),
+						})
+					);
 				})
 			)
 			.catch((err) => console.log(err));
 	};
 };
 
-export const toggleFavorite = (toggle, mediaType, id) => {
+export const toggleFavorite = (id, mediaType, toggle) => {
 	return async (dispatch, getState, api) => {
 		const { sessionId, ...rest } = getState().auth;
 		await axios({
@@ -34,7 +40,7 @@ export const toggleFavorite = (toggle, mediaType, id) => {
 			headers: {},
 			data: {
 				media_type: mediaType,
-				media_id: id,
+				media_id: +id,
 				favorite: toggle,
 			},
 		}).then(() => {
@@ -49,7 +55,7 @@ export const updateWatchlist = () => {
 		await axios
 			.all([
 				axios.get(
-					`${api.URL}/account/${id}/watchlist/movie?api_key=${api.KEY}&session_id=${sessionId}`
+					`${api.URL}/account/${id}/watchlist/movies?api_key=${api.KEY}&session_id=${sessionId}`
 				),
 				axios.get(
 					`${api.URL}/account/${id}/watchlist/tv?api_key=${api.KEY}&session_id=${sessionId}`
@@ -58,14 +64,19 @@ export const updateWatchlist = () => {
 			.then(
 				axios.spread((...responses) => {
 					const [movie, tv] = responses;
-					dispatch(updateWatchlistAction({ movie, tv }));
+					dispatch(
+						updateWatchlistAction({
+							movie: movie.data.results.map((am) => am.id),
+							tv: tv.data.results.map((am) => am.id),
+						})
+					);
 				})
 			)
 			.catch((err) => console.log(err));
 	};
 };
 
-export const toggleWatchlist = (toggle, mediaType, id) => {
+export const toggleWatchlist = (id, mediaType, toggle) => {
 	return async (dispatch, getState, api) => {
 		const { sessionId, ...rest } = getState().auth;
 		await axios({

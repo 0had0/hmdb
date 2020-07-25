@@ -25,3 +25,22 @@
 	transform: scale(1.05);
 	cursor: pointer;
 }
+
+.media-card-title {
+	font-size: 5vmin;
+}
+@media only screen and (min-width: 800px) {
+	.media-card-title {
+		font-size: 3vmin;
+	}
+	.media-card {
+		width: 30vmin;
+	}
+	.media-card img {
+		width: 30vmin;
+		height: 45vmin;
+	}
+	.media-card-content {
+		width: 30vmin;
+	}
+}

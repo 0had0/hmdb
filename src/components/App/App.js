@@ -6,7 +6,7 @@ import {
 	OverviewView,
 	DiscoveryView,
 	MediaFilterView,
-} from "../../views";
+} from "views";
 
 import Navigation from "../Navigation";
 import LoginModal from "../LoginModal";

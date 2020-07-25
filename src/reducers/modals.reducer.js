@@ -16,14 +16,14 @@ export default (state = initState, action) => {
 		case TOGGLE_LOGIN_MODAL: {
 			return {
 				...state,
-				toggleLoginModal: !state.toggleModal,
+				toggleLoginModal: !state.toggleLoginModal,
 			};
 		}
 		case TOGGLE_VIDEO_MODAL: {
 			return {
 				...state,
 				toggleVideoModal: !state.toggleVideoModal,
-				videoModalKey: !state.toggleModal ? action.payload : null,
+				videoModalKey: !state.toggleVideoModal ? action.payload : null,
 			};
 		}
 		case ERROR_MESSAGE: {

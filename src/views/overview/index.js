@@ -106,7 +106,7 @@ const OverviewView = ({
 					</Card>
 					<div className="overview-view-header-info">
 						<Text
-							type="headline-4"
+							type="headline-3"
 							className="overview-view-header-row"
 						>
 							{renderTitle()}
@@ -143,12 +143,12 @@ const OverviewView = ({
 					</Text>
 					<Text type="body-2">{details?.overview}</Text>
 				</div>
+				<HorizontalNoFetchList
+					label={"Trailers"}
+					component={VideoItem}
+					list={videos}
+				/>
 			</header>
-			<HorizontalNoFetchList
-				label={"Trailers"}
-				component={VideoItem}
-				list={videos}
-			/>
 			<div className="flex-center">
 				<Text type="headline-6" className="overview-view-header-row">
 					Featured Review:

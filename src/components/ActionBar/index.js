@@ -104,13 +104,13 @@ export default connect(
 			user.watchlist[document.location.pathname.split("/")[1]],
 		checkFavorite: () => {
 			const { favorite } = user;
-			const [, media_type, id] = document.location.pathname.split("/");
-			return favorite[media_type].includes(+id);
+			const [, mediaType, id] = document.location.pathname.split("/");
+			return favorite[mediaType].includes(+id);
 		},
 		checkSave: () => {
 			const { watchlist } = user;
-			const [, media_type, id] = document.location.pathname.split("/");
-			return watchlist[media_type].includes(+id);
+			const [, mediaType, id] = document.location.pathname.split("/");
+			return watchlist[mediaType].includes(+id);
 		},
 	}),
 	(dispatch) => ({

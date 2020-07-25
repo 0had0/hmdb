@@ -10,7 +10,7 @@
 	z-index: 2;
 	background: linear-gradient(
 		0deg,
-		$rmd-theme-dark-background 50%,
+		$rmd-theme-dark-background 60%,
 		rgba(255, 255, 255, 0) 100%
 	);
 }
@@ -18,7 +18,7 @@
 	.overview-view-outer-img::after {
 		background: linear-gradient(
 			0deg,
-			$rmd-theme-dark-background 80%,
+			$rmd-theme-dark-background 90%,
 			rgba(255, 255, 255, 0) 100%
 		);
 	}

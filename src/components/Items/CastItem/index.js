@@ -25,7 +25,7 @@ function CastItem({ item, loading, error, handleClick }) {
 				/>
 				{loaded && (
 					<MediaOverlay>
-						<CardTitle style={{ fontSize: "5vmin" }}>
+						<CardTitle className="cast-item-title">
 							{item?.name ?? null}
 						</CardTitle>
 					</MediaOverlay>

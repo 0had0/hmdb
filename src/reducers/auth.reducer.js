@@ -9,7 +9,7 @@ import {
 
 const initState = {
 	sessionId: localStorage.getItem("session_id") || null,
-	id: localStorage.getItem("id") || null,
+	id: +localStorage.getItem("id") || null,
 	isLogin: localStorage.getItem("session_id") || false,
 	loading: {
 		login: false,
@@ -29,7 +29,7 @@ export default (state = initState, action) => {
 				isLogin: true,
 				loading: { ...state.loading, login: false },
 				sessionId,
-				id,
+				id: +id,
 			};
 		}
 		case LOGIN_FAILD: {

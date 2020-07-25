@@ -27,7 +27,7 @@ export const fetchMulti = (key, page) => {
 	return async (dispatch, getState, api) => {
 		dispatch(loading(key));
 		await axios
-			.get(getUrlOf(key, api))
+			.get(getUrlOf(key, api, null, null, page))
 			.then(({ data }) => {
 				const { results, cast, total_pages } = data;
 				dispatch(update(key, results ?? cast ?? data));

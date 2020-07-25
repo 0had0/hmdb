@@ -42,7 +42,7 @@ function Item({ item, loading, error, handleClick, classNames }) {
 				/>
 				{loaded && !loading && !error && (
 					<MediaOverlay>
-						<CardTitle style={{ fontSize: "5vmin" }}>
+						<CardTitle className="media-card-title">
 							{item?.title || item.name}
 						</CardTitle>
 					</MediaOverlay>

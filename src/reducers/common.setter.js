@@ -20,7 +20,11 @@ export const update = (state, payload) => {
 	const { key, value } = payload;
 	return {
 		...state,
-		data: { ...state.data, [key]: [...state.data[key], ...value] },
+		loading: { ...state.loading, [key]: false },
+		data: {
+			...state.data,
+			[key]: [...state.data[key], ...value],
+		},
 	};
 };
 
@@ -38,6 +42,6 @@ export const setPageLeftOf = (state, payload) => {
 	const { key, value } = payload;
 	return {
 		...state,
-		page_left: { ...state.page_left, [key]: value },
+		left_pages: { ...state.page_left, [key]: value },
 	};
 };
