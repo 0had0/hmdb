@@ -7,6 +7,7 @@ import {
 	CardContent,
 	StarFontIcon,
 	RefreshSVGIcon,
+	ArrowForwardFontIcon,
 } from "react-md";
 
 import Skeleton from "react-loading-skeleton";
@@ -16,18 +17,28 @@ import { useHistory } from "react-router-dom";
 
 import "./MediaItem.css";
 
-function Item({ item, loading, error, handleClick, classNames }) {
+function Item({
+	item,
+	loading,
+	error,
+	handleClick,
+	classNames,
+	last,
+	goToFilterPage,
+}) {
 	const history = useHistory();
 	const [loaded, setLoaded] = React.useState(false);
-	const _GoToTheOverViewPage = () =>
+	const goToTheOverViewPage = () =>
 		item
 			? history.push(`/${item.name ? "tv" : "movie"}/${item.id}`)
-			: !loading && error && handleClick();
+			: !loading && error
+			? handleClick()
+			: last && goToFilterPage();
 	return (
 		<Card
 			className={"media-card " + classNames}
-			style={loading && { backgroundColor: "#212121" }}
-			onClick={_GoToTheOverViewPage}
+			style={(loading || last) && { backgroundColor: "#212121" }}
+			onClick={goToTheOverViewPage}
 		>
 			<MediaContainer fullWidth>
 				<img
@@ -40,10 +51,10 @@ function Item({ item, loading, error, handleClick, classNames }) {
 					onLoad={() => setLoaded(true)}
 					alt={item?.id}
 				/>
-				{loaded && !loading && !error && (
+				{loaded && !loading && !error && !last && (
 					<MediaOverlay>
 						<CardTitle className="media-card-title">
-							{item?.title || item.name}
+							{item?.title || item?.name || null}
 						</CardTitle>
 					</MediaOverlay>
 				)}
@@ -51,6 +62,11 @@ function Item({ item, loading, error, handleClick, classNames }) {
 			<CardContent className="media-card-content">
 				{error ? (
 					<RefreshSVGIcon />
+				) : last ? (
+					<React.Fragment>
+						See More&nbsp;&nbsp;
+						<ArrowForwardFontIcon />
+					</React.Fragment>
 				) : (
 					<React.Fragment>
 						<div className="stars">

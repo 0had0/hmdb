@@ -1,4 +1,5 @@
 import React, { useLayoutEffect } from "react";
+import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 
 import { fetchOnce } from "api/fetch.discovery.action";
@@ -8,7 +9,7 @@ import Item from "../Items/MediaItem";
 
 function HorizontalFetchList({
 	label,
-	StateKey: key,
+	stateKey: key,
 	id = null,
 	component: Component = Item,
 	href,
@@ -19,6 +20,7 @@ function HorizontalFetchList({
 	hasError,
 	fetch,
 }) {
+	const history = useHistory();
 	const loadingItems = React.useMemo(
 		() => new Array(loadingItemsNumber ?? 9).fill({}),
 		[loadingItemsNumber]
@@ -45,9 +47,19 @@ function HorizontalFetchList({
 			) : hasError(key) ? (
 				<Component error handleClick={() => fetch(key)} />
 			) : (
-				data(key)?.map((item, i) => (
-					<Component key={`${item?.name}-${item?.id}`} item={item} />
-				))
+				<React.Fragment>
+					{data(key)?.map((item, i) => (
+						<Component
+							key={`${item?.name}-${item?.id}`}
+							item={item}
+						/>
+					))}
+					<Component
+						key={`${key}-see-more`}
+						goToFilterPage={() => history.push(href)}
+						last
+					/>
+				</React.Fragment>
 			)}
 		</HorizontalList>
 	);

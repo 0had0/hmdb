@@ -27,22 +27,22 @@ export default () => {
 			<HorizontalFetchList
 				label="What's Popular"
 				href="/movies"
-				StateKey="popular"
+				stateKey="popular"
 			/>
 			<HorizontalFetchList
 				label="Trending"
 				href="/series"
-				StateKey="trending"
+				stateKey="trending"
 			/>
 			<HorizontalFetchList
 				label="Top Movies"
 				href="/movies"
-				StateKey="top_movies"
+				stateKey="top_movies"
 			/>
 			<HorizontalFetchList
 				label="Top Series"
 				href="/series"
-				StateKey="top_series"
+				stateKey="top_series"
 			/>
 			<Footer />
 		</React.Fragment>
