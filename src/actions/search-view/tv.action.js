@@ -3,6 +3,7 @@ import {
 	SEARCH_SUCCESS,
 	SEARCH_UPDATE,
 	SEARCH_FAILD,
+	SEARCH_SET_PAGE_LEFT,
 } from "constants/search-view";
 
 export const tvFetchStart = () => ({
@@ -25,6 +26,14 @@ export const tvFetchUpdate = (value) => ({
 });
 export const tvFetchFaild = (value) => ({
 	type: SEARCH_FAILD,
+	payload: {
+		value,
+		key: "tv",
+	},
+});
+
+export const setTvLeftPages = (value) => ({
+	type: SEARCH_SET_PAGE_LEFT,
 	payload: {
 		value,
 		key: "tv",

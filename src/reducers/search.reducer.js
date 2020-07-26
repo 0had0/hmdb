@@ -11,8 +11,10 @@ const initState = {
 		tv: [],
 	},
 	error: { movie: null, tv: null },
-	movies_pages_left: 2,
-	series_pages_left: 2,
+	pages_left: {
+		tv: 2,
+		movie: 2,
+	},
 };
 
 export default (state = initState, action) => {
@@ -28,6 +30,13 @@ export default (state = initState, action) => {
 		}
 		case TYPES.SEARCH_FAILD: {
 			return error(state, action.payload);
+		}
+		case TYPES.SEARCH_SET_PAGE_LEFT: {
+			const { key, value } = action.payload;
+			return {
+				...state,
+				pages_left: { ...state.pages_left, [key]: value },
+			};
 		}
 		default: {
 			return state;

@@ -5,3 +5,5 @@ export const SEARCH_SUCCESS = "SEARCH_SUCCESS";
 export const SEARCH_UPDATE = "SEARCH_UPDATE";
 
 export const SEARCH_FAILD = "SEARCH_FAILD";
+
+export const SEARCH_SET_PAGE_LEFT = "SEARCH_SET_PAGE_LEFT";

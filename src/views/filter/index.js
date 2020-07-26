@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
+import {
+	CircularProgress,
+	AppBar,
+	DropdownMenu,
+	PermScanWifiFontIcon,
+} from "react-md";
+import { useLocation } from "react-router-dom";
 import { connect } from "react-redux";
-import { CircularProgress, AppBar, DropdownMenu } from "react-md";
 
 import InfiniteScroll from "react-infinite-scroller";
 
@@ -13,30 +19,25 @@ import FilteredList from "./FilteredList";
 
 import "./MediaFilterView.css";
 
-const mediaType = document.location.href.split("/")[3];
+const useKey = () => new URLSearchParams(useLocation().search);
 
-function MediaFilterView({ data, hasMore, loading, fetch, fetchNext }) {
-	const [year, setYear] = useState(null);
-	const [lang, setLang] = useState(null);
-	const [country, setCountry] = useState(null);
-	const [genre, setGenre] = useState(null);
-	const [rating, setRating] = useState(null);
+function MediaFilterView({ data, hasMore, loading, error, fetch, fetchNext }) {
+	const mediaType = useLocation().pathname.split("/")[1];
+	const key = `${useKey().get("key")}_${mediaType}`;
+
+	const [year, setYear] = useState(+useKey().get("year"));
+	const [lang, setLang] = useState(useKey().get("lang"));
+	const [country, setCountry] = useState(useKey().get("country"));
+	const [genre, setGenre] = useState(useKey().get("genre"));
+	const [rating, setRating] = useState(+useKey().get("rating"));
 
 	const handleClick = (cb) => (e) => cb(e.currentTarget.textContent);
 
 	useEffect(() => {
-		if (
-			data.length === 0 &&
-			!year &&
-			!lang &&
-			!country &&
-			!genre &&
-			!rating
-		) {
-			fetch();
+		if (data(key).length === 0) {
+			fetch(key);
 		}
-		// eslint-disable-next-line
-	}, [fetch, data]);
+	}, [fetch, data, key]);
 
 	return (
 		<React.Fragment>
@@ -93,25 +94,32 @@ function MediaFilterView({ data, hasMore, loading, fetch, fetchNext }) {
 					</AppBar>
 				</AppBar>
 			</AppBar>
-			{data.length !== 0 && (
-				<InfiniteScroll
-					pageStart={1}
-					loadMore={(page) => fetchNext(page)}
-					hasMore={hasMore && !loading}
-					loader={
-						<div className="loader" key={0}>
-							<CircularProgress id="loading" />
+			{!error(key) ? (
+				data(key).length !== 0 && (
+					<InfiniteScroll
+						pageStart={1}
+						loadMore={(page) => fetchNext(key, page)}
+						hasMore={hasMore(key) && !loading(key)}
+						loader={
+							<div className="loader" key={0}>
+								<CircularProgress id="loading" />
+							</div>
+						}
+						useWindow
+					>
+						<div className="media-view-results">
+							<FilteredList
+								list={data(key)}
+								filters={[year, lang, country, genre, rating]}
+							/>
 						</div>
-					}
-					useWindow
-				>
-					<div className="media-view-results">
-						<FilteredList
-							list={data}
-							filters={[year, lang, country, genre, rating]}
-						/>
-					</div>
-				</InfiniteScroll>
+					</InfiniteScroll>
+				)
+			) : (
+				<div className="media-view-error">
+					<PermScanWifiFontIcon id="error" />
+					<p>no connection :(</p>
+				</div>
 			)}
 			<Footer />
 		</React.Fragment>
@@ -120,18 +128,13 @@ function MediaFilterView({ data, hasMore, loading, fetch, fetchNext }) {
 
 export default connect(
 	({ app }) => ({
-		data: app.discovery.data[`top_${mediaType}`],
-		hasMore: app.discovery.left_pages[`top_${mediaType}`] > 0,
-		loading: app.discovery.loading[`top_${mediaType}`],
+		data: (key) => app.discovery.data[key],
+		hasMore: (key) => app.discovery.left_pages[key] > 0,
+		loading: (key) => app.discovery.loading[key],
+		error: (key) => app.discovery.error[key],
 	}),
 	(dispatch) => ({
-		fetch: () =>
-			mediaType === "movies"
-				? dispatch(fetchOnce(`top_${mediaType}`))
-				: dispatch(fetchOnce(`top_${mediaType}`)),
-		fetchNext: (page) =>
-			mediaType === "movies"
-				? dispatch(fetchMulti(`top_${mediaType}`, page))
-				: dispatch(fetchMulti(`top_${mediaType}`, page)),
+		fetch: (key) => dispatch(fetchOnce(key)),
+		fetchNext: (key, page) => dispatch(fetchMulti(key, page)),
 	})
 )(MediaFilterView);

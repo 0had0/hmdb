@@ -4,13 +4,7 @@ import axios from "axios";
 
 import { connect } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
-import {
-	List,
-	ListItem,
-	CircularProgress,
-	LinearProgress,
-	Text,
-} from "react-md";
+import { List, ListItem, CircularProgress, Text } from "react-md";
 
 import InfiniteScroll from "react-infinite-scroller";
 
@@ -32,8 +26,7 @@ function SearchList({
 	response,
 	loading,
 	hasError,
-	hasMoreMovie,
-	hasMoreTv,
+	hasMore,
 	fetch,
 	fetchNext,
 }) {
@@ -85,17 +78,14 @@ function SearchList({
 		<React.Fragment>
 			<List className="search-results">
 				{!!loading[mediaType] && (
-					<LinearProgress id="simple-linear-progress" />
+					<CircularProgress id="searh-results-progress" />
 				)}
 				<InfiniteScroll
 					pageStart={1}
 					loadMore={(page) => {
 						fetchNext(mediaType, query, page);
 					}}
-					hasMore={
-						(mediaType === "movie" ? hasMoreMovie : hasMoreTv) &&
-						!loading[mediaType]
-					}
+					hasMore={hasMore(mediaType) && !loading[mediaType]}
 					loader={
 						<div className="loader" key={0}>
 							<CircularProgress id="search-results-fetch-loading" />
@@ -150,8 +140,7 @@ export default connect(
 		response: app.search.data,
 		loading: app.search.loading,
 		hasError: app.search.error,
-		hasMoreMovie: app.search.movies_pages_left > 0,
-		hasMoreTv: app.search.series_pages_left > 0,
+		hasMore: (mediaType) => app.search.pages_left[mediaType] > 0,
 	}),
 	(dispatch) => ({
 		fetch: (mediaType, query, token, adult = false) =>
@@ -159,6 +148,7 @@ export default connect(
 				? dispatch(fetchMoviesOnce(query, token, adult))
 				: dispatch(fetchTvOnce(query, token, adult)),
 		fetchNext: (mediaType, query, page, adult = false) => {
+			console.log("fetching page: ", page);
 			mediaType === "movie"
 				? dispatch(fetchMoviesMulti(query, page, adult))
 				: dispatch(fetchTvMulti(query, page, adult));

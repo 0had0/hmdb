@@ -14,7 +14,14 @@ export const fetchOnce = (id, mediaType) => {
 			.all([
 				axios.get(getUrlOf(`${mediaType}_page_details`, api, null, id)),
 				axios.get(getUrlOf(`${mediaType}_page_videos`, api, null, id)),
-				axios.get(getUrlOf(`${mediaType}_page_similar`, api, null, id)),
+				axios.get(
+					getUrlOf(
+						`similar_${mediaType === "tv" ? "series" : "movies"}`,
+						api,
+						null,
+						id
+					)
+				),
 				axios.get(getUrlOf(`${mediaType}_page_reviews`, api, null, id)),
 				axios.get(getUrlOf(`${mediaType}_page_credits`, api, null, id)),
 			])

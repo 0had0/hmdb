@@ -1,22 +1,26 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
 import { CircularProgress } from "react-md";
 
 import Item from "components/Items/MediaItem";
 
-const mediaType = document.location.href.split("/")[3];
-
 const FilteredList = ({ list, filters }) => {
+	const mediaType = useLocation().pathname.split("/")[1];
+
 	const [year, lang, country, genre, rating] = filters;
-	let items = list;
+
 	if (!list) {
 		return null;
 	}
+
+	let items = list;
+
 	if (year) {
 		items = items.filter(({ release_date, first_air_date }) => {
 			if (mediaType === "movies") {
-				return release_date.split("-")[0] <= year;
+				return +release_date.split("-")[0] === +year;
 			} else {
-				return +first_air_date.split("-")[0] <= +year;
+				return +first_air_date.split("-")[0] === +year;
 			}
 		});
 	}

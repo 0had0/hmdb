@@ -3,6 +3,7 @@ import {
 	SEARCH_SUCCESS,
 	SEARCH_UPDATE,
 	SEARCH_FAILD,
+	SEARCH_SET_PAGE_LEFT,
 } from "constants/search-view";
 
 export const moviesFetchStart = () => ({
@@ -25,6 +26,14 @@ export const moviesFetchUpdate = (value) => ({
 });
 export const moviesFetchFaild = (value) => ({
 	type: SEARCH_FAILD,
+	payload: {
+		value,
+		key: "movie",
+	},
+});
+
+export const setMovieLeftPages = (value) => ({
+	type: SEARCH_SET_PAGE_LEFT,
 	payload: {
 		value,
 		key: "movie",

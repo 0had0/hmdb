@@ -9,28 +9,28 @@ import {
 
 const initState = {
 	loading: {
-		popular: false,
-		trending: false,
-		top_movies: false,
-		top_series: false,
+		popular_movies: false,
+		popular_series: false,
+		trending_movies: false,
+		trending_series: false,
 	},
 	data: {
-		popular: [],
-		trending: [],
-		top_movies: [],
-		top_series: [],
+		popular_movies: [],
+		popular_series: [],
+		trending_movies: [],
+		trending_series: [],
 	},
 	error: {
-		popular: null,
-		trending: null,
-		top_movies: null,
-		top_series: null,
+		popular_movies: null,
+		popular_series: null,
+		trending_movies: null,
+		trending_series: null,
 	},
 	left_pages: {
-		popular: 2,
-		trending: 2,
-		top_movies: 2,
-		top_series: 2,
+		popular_movies: 2,
+		popular_series: 2,
+		trending_movies: 2,
+		trending_series: 2,
 	},
 };
 
