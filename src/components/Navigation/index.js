@@ -6,55 +6,22 @@ import { AppBar, AppBarTitle, Text, LocalMoviesFontIcon } from "react-md";
 import Log from "./Log";
 import SearchInput from "./Search";
 
+import "./Navigation.css";
+
 const Navigation = () => {
 	return (
-		<AppBar
-			theme="default"
-			style={{
-				display: "flex",
-				alignItems: "center",
-				justifyContent: "center",
-			}}
-		>
-			<AppBar
-				theme="default"
-				style={{
-					maxWidth: 500,
-					padding: "0 2em",
-					display: "flex",
-					alignItems: "center",
-					justifyContent: "space-between",
-				}}
-			>
+		<AppBar theme="default" className="navigation-outer">
+			<AppBar theme="default" className="navigation-inner">
 				<AppBarTitle>
-					<Text
-						component={Link}
-						to="/"
-						style={{
-							display: "flex",
-							alignItems: "center",
-							justifyContent: "center",
-							textDecoration: "none",
-							color: "#fff",
-						}}
-					>
-						<LocalMoviesFontIcon style={{ color: "#429ffd" }} />
+					<Text to="/" component={Link} className="navigation-title">
+						<LocalMoviesFontIcon className="navigation-logo" />
 						&nbsp;HMDB
 					</Text>
 				</AppBarTitle>
-				<div
-					style={{
-						display: "flex",
-						alignItems: "center",
-						justifyContent: "center",
-						height: "90%",
-						minWidth: 120,
-						maxWidth: 250,
-					}}
-				>
+				<div className="navigation-search-container">
 					<SearchInput />
-					<Log />
 				</div>
+				<Log />
 			</AppBar>
 		</AppBar>
 	);
