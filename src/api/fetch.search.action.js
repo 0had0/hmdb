@@ -66,7 +66,7 @@ export const fetchTvMulti = (query, page, adult = false) => {
 	return async (dispatch, getState, api) => {
 		dispatch(tvFetchStart());
 		await axios
-			.get(getUrlOf("search_movie", api, query, page, adult))
+			.get(getUrlOf("search_tv", api, query, page, adult))
 			.then(({ data }) => {
 				if (data.length === 0 || data.total_pages === 0) {
 					dispatch(tvFetchFaild("No More results :("));

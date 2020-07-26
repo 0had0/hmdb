@@ -78,27 +78,27 @@ function Search({ style }) {
 
 	const history = useHistory();
 
-	const _toggleInput = () =>
+	const toggleInput = () =>
 		setShowInput(isSearchPage.current ? false : !showInput);
 
-	const _toggleWithTimeout = () => setTimeout(_toggleInput, 500);
+	const toggleWithTimeout = () => setTimeout(toggleInput, 500);
 
-	const _handleType = (evt) => {
+	const handleType = (evt) => {
 		setQuery(evt.target.value);
 	};
 
-	const _GoToSearchPage = (evt) => {
+	const goToSearchPage = (evt) => {
 		evt.preventDefault();
 		if (evt.key === "Enter") {
 			if (query) {
 				setQuery("");
-				_toggleInput();
+				toggleInput();
 				history.push(`/search/?q=${query}`);
 			}
 		}
 	};
 
-	const _GoToMovieOrTVPage = (item) => {
+	const goToMovieOrTVPage = (item) => {
 		setQuery("");
 		history.push(`/search/?q=${item.name}`);
 	};
@@ -139,16 +139,16 @@ function Search({ style }) {
 			>
 				<SearchFontIcon
 					style={{ color: "#fff" }}
-					onClick={_toggleInput}
+					onClick={toggleInput}
 				/>
 				<TextField
 					id="search"
 					style={{ margin: "0 .5em" }}
 					ref={inputRef}
 					theme="none"
-					onChange={_handleType}
-					onBlur={_toggleWithTimeout}
-					onKeyUp={_GoToSearchPage}
+					onChange={handleType}
+					onBlur={toggleWithTimeout}
+					onKeyUp={goToSearchPage}
 					value={query}
 					autoComplete="off"
 					placeholder="Series, Movies ..."
@@ -167,7 +167,7 @@ function Search({ style }) {
 					{data.map((item, i) => (
 						<ListItem
 							key={item.id}
-							onClick={() => _GoToMovieOrTVPage(item)}
+							onClick={() => goToMovieOrTVPage(item)}
 							style={{
 								textDecoration: "none",
 								color: "#fff",

@@ -84,7 +84,7 @@ const SearchView = () => {
 							justifyContent: "center",
 						}}
 					>
-						<SearchList media_type={"movie"} sort={sort} />
+						<SearchList mediaType="movie" sort={sort} />
 					</TabPanel>
 					<TabPanel
 						style={{
@@ -93,7 +93,7 @@ const SearchView = () => {
 							justifyContent: "center",
 						}}
 					>
-						<SearchList media_type={"tv"} sort={sort} />
+						<SearchList mediaType="tv" sort={sort} />
 					</TabPanel>
 				</TabPanels>
 			</TabsManager>

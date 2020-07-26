@@ -14,11 +14,20 @@
 		rgba(255, 255, 255, 0) 100%
 	);
 }
+@media only screen and (min-width: 800px) {
+	.overview-view-outer-img::after {
+		background: linear-gradient(
+			0deg,
+			$rmd-theme-dark-background 40%,
+			rgba(255, 255, 255, 0) 100%
+		);
+	}
+}
 @media only screen and (max-width: 500px) {
 	.overview-view-outer-img::after {
 		background: linear-gradient(
 			0deg,
-			$rmd-theme-dark-background 90%,
+			$rmd-theme-dark-background 85%,
 			rgba(255, 255, 255, 0) 100%
 		);
 	}

@@ -4,9 +4,12 @@ export const loginStart = () => ({
 	type: LOGIN_START,
 });
 
-export const loginSuccess = (payload) => ({
+export const loginSuccess = (id, sessionId) => ({
 	type: LOGIN_SUCCESS,
-	payload,
+	payload: {
+		id,
+		sessionId,
+	},
 });
 
 export const loginFaild = () => ({

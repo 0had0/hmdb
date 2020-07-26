@@ -6,7 +6,6 @@ import { updateWatchlist as updateWatchlistAction } from "actions/user/watchlist
 export const updateFavorite = () => {
 	return async (dispatch, getState, api) => {
 		const { sessionId, id } = getState().auth;
-		console.log(getState().auth);
 		await axios
 			.all([
 				axios.get(

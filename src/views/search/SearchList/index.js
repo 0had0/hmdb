@@ -4,7 +4,13 @@ import axios from "axios";
 
 import { connect } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
-import { List, ListItem, CircularProgress, Text } from "react-md";
+import {
+	List,
+	ListItem,
+	CircularProgress,
+	LinearProgress,
+	Text,
+} from "react-md";
 
 import InfiniteScroll from "react-infinite-scroller";
 
@@ -48,7 +54,7 @@ function SearchList({
 			cancel("User loose interest");
 			clearTimeout(timeOutId);
 		};
-	}, [query, fetch, history]);
+	}, [query, fetch, history, mediaType]);
 
 	if (sort && data.length !== 0) {
 		data = response[mediaType].sort((a, b) => {
@@ -71,17 +77,16 @@ function SearchList({
 		});
 	}
 
-	return loading[mediaType] ? (
-		<div className="search-results-loading">
-			<CircularProgress id="search-results-fetch-loading" />
-		</div>
-	) : hasError[mediaType] ? (
+	return hasError[mediaType] ? (
 		<div className="error">
 			<Text>No match :(</Text>
 		</div>
 	) : (
 		<React.Fragment>
 			<List className="search-results">
+				{!!loading[mediaType] && (
+					<LinearProgress id="simple-linear-progress" />
+				)}
 				<InfiniteScroll
 					pageStart={1}
 					loadMore={(page) => {
