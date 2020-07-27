@@ -1,17 +1,17 @@
-import { LOGIN_SUCCESS, LOGIN_START, LOGIN_FAILD } from "constants/auth";
+import { LOGIN_SUCCESS, LOGIN_START, LOGIN_FAILD } from 'constants/auth';
 
 export const loginStart = () => ({
-	type: LOGIN_START,
+  type: LOGIN_START,
 });
 
 export const loginSuccess = (id, sessionId) => ({
-	type: LOGIN_SUCCESS,
-	payload: {
-		id,
-		sessionId,
-	},
+  type: LOGIN_SUCCESS,
+  payload: {
+    id,
+    sessionId,
+  },
 });
 
 export const loginFaild = () => ({
-	type: LOGIN_FAILD,
+  type: LOGIN_FAILD,
 });

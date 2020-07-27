@@ -1,22 +1,22 @@
-import "./index.scss";
+import './index.scss';
 
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router } from 'react-router-dom';
 
-import { Configuration, NestedDialogContextProvider } from "react-md";
+import { Configuration, NestedDialogContextProvider } from 'react-md';
 
-import { createStore, applyMiddleware } from "redux";
-import { Provider } from "react-redux";
-import thunk from "redux-thunk";
+import { createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
 
-import { SkeletonTheme } from "react-loading-skeleton";
+import { SkeletonTheme } from 'react-loading-skeleton';
 
-import reducers from "./reducers";
-import App from "./components/App";
+import reducers from './reducers';
+import App from './components/App';
 
-import * as serviceWorker from "./serviceWorker";
+import * as serviceWorker from './serviceWorker';
 
 const API = {
   URL: process.env.REACT_APP_API_URL,
@@ -26,7 +26,7 @@ const API = {
 
 const store = createStore(
   reducers,
-  applyMiddleware(thunk.withExtraArgument(API))
+  applyMiddleware(thunk.withExtraArgument(API)),
 );
 
 ReactDOM.render(
@@ -43,7 +43,7 @@ ReactDOM.render(
       </Router>
     </Provider>
   </React.StrictMode>,
-  document.getElementById("root")
+  document.getElementById('root'),
 );
 
 serviceWorker.unregister();
