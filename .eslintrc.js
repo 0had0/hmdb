@@ -22,5 +22,6 @@ module.exports = {
   plugins: ['prettier'],
   rules: {
     'prettier/prettier': ['error', prettierOptions],
+    'import/no-unresolved': [0],
   },
 };
