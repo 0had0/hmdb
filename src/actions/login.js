@@ -6,11 +6,9 @@ import {
 } from 'api/auth';
 
 import { LOGIN_SUCCESS, LOGIN_START, LOGIN_FAILD } from 'constants/auth';
-import { UPDATE_NAME } from 'constants/user';
-import { ERROR_MESSAGE } from 'constants/modals';
 
 import { updateWatchlist, updateFavorite, updateName } from './user';
-import { toggleLoginModal } from './modals';
+import { toggleLoginModal, setErrorMessage } from './modals';
 
 const loginStart = () => ({
   type: LOGIN_START,
@@ -26,11 +24,6 @@ const loginSuccess = (id, sessionId) => ({
 
 const loginFaild = () => ({
   type: LOGIN_FAILD,
-});
-
-const setErrorMessage = (payload) => ({
-  type: ERROR_MESSAGE,
-  payload,
 });
 
 export default (username, password) => {

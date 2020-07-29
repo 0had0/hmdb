@@ -12,7 +12,7 @@ export const getMediaInfo = (mediaType, id, cb) =>
   axios
     .all([
       axios.get(
-        `${api.URL}/${mediaType}/${id}/videos?api_key=${api.KEY}&language=en-US`,
+        `${api.URL}/${mediaType}/${id}?api_key=${api.KEY}&language=en-US`,
       ),
       axios.get(
         `${api.URL}/${mediaType}/${id}/videos?api_key=${api.KEY}&language=en-US`,

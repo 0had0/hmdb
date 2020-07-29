@@ -8,12 +8,7 @@ import { List, ListItem, CircularProgress, Text } from 'react-md';
 
 import InfiniteScroll from 'react-infinite-scroller';
 
-import {
-  fetchMoviesOnce,
-  fetchTvOnce,
-  fetchMoviesMulti,
-  fetchTvMulti,
-} from 'api/fetch.search.action';
+import { fetchOnce, fetchMulti } from 'actions/search';
 
 import SkeletonImage from 'images/skeleton.jpg';
 import './SearchList.scss';
@@ -133,14 +128,8 @@ export default connect(
   }),
   (dispatch) => ({
     fetch: (mediaType, query, token, adult = false) =>
-      mediaType === 'movie'
-        ? dispatch(fetchMoviesOnce(query, token, adult))
-        : dispatch(fetchTvOnce(query, token, adult)),
-    fetchNext: (mediaType, query, page, adult = false) => {
-      console.log('fetching page: ', page);
-      mediaType === 'movie'
-        ? dispatch(fetchMoviesMulti(query, page, adult))
-        : dispatch(fetchTvMulti(query, page, adult));
-    },
+      fetchOnce(mediaType, query, token, adult),
+    fetchNext: (mediaType, query, page, adult = false) =>
+      fetchMulti(mediaType, query, page, adult),
   }),
 )(SearchList);

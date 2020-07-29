@@ -35,4 +35,4 @@ export const deleteSessionId = (sessionId) =>
   });
 
 export const getAccountInfo = (sessionId) =>
-  axios.get(`${api.URL}/account?api_key=${api.KEY}&session_id=${session_id}`);
+  axios.get(`${api.URL}/account?api_key=${api.KEY}&session_id=${sessionId}`);

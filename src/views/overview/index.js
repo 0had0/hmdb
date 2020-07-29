@@ -3,8 +3,11 @@ import { useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Text, Card, CircularProgress } from 'react-md';
 
-import { fetchOnce } from 'api/fetch.overview.action';
-import { updateFavorite, updateWatchlist } from 'api/user.action';
+import fetchOnce from 'actions/media-info';
+import {
+  fetchFavorite as updateFavorite,
+  fetchWatchlist as updateWatchlist,
+} from 'actions/user';
 
 import ActionBar from 'components/ActionBar';
 import HorizontalNoFetchList from 'components/HorizontalNoFetchList';
@@ -166,7 +169,7 @@ export default connect(
   }),
   (dispatch) => ({
     fetch: (id, mediaType) => dispatch(fetchOnce(id, mediaType)),
-    updateFavorite: (mediaType) => dispatch(updateFavorite(mediaType)),
-    updateWatchlist: (mediaType) => dispatch(updateWatchlist(mediaType)),
+    updateFavorite: () => dispatch(updateFavorite()),
+    updateWatchlist: () => dispatch(updateWatchlist()),
   }),
 )(React.memo(OverviewView));

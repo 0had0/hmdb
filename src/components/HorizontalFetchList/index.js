@@ -2,7 +2,7 @@ import React, { useLayoutEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { fetchOnce } from 'api/fetch.discovery.action';
+import { fetchOnce } from 'actions/media-list';
 
 import HorizontalList from '../HorizontalList';
 import Item from '../Items/MediaItem';
@@ -34,7 +34,7 @@ function HorizontalFetchList({
       isMounted = false;
     };
     // eslint-disable-next-line
-	}, [key, fetch, id]);
+  }, [key, fetch, id]);
 
   if (data(key).length === 0 && !loading(key)) {
     return null;

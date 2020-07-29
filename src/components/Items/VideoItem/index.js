@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Card, MediaContainer, PlayArrowFontIcon, Button } from 'react-md';
 
-import { toggleVideoModal } from 'actions/modals/video.action';
+import { toggleVideoModal } from 'actions/modals';
 
 import './VideoItem.css';
 

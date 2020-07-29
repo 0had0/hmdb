@@ -11,8 +11,8 @@ import {
   Tooltipped,
 } from 'react-md';
 
-import { toggleFavorite, toggleWatchlist } from 'api/user.action';
-import { toggleLoginModal } from 'actions/modals/login.action';
+import { toggleFavorite, toggleWatchlist } from 'actions/user';
+import { toggleLoginModal } from 'actions/modals';
 
 import './ActionBar.css';
 
@@ -41,12 +41,12 @@ function ActionBar({
   useEffect(() => {
     isLogin && setFavorite(id, fav);
     // eslint-disable-next-line
-	}, [fav, isLogin, setFavorite]);
+  }, [fav, isLogin, setFavorite]);
 
   useEffect(() => {
     isLogin && setWatchlist(id, save);
     // eslint-disable-next-line
-	}, [save, isLogin, setWatchlist]);
+  }, [save, isLogin, setWatchlist]);
 
   return (
     <div className="action-bar-root">

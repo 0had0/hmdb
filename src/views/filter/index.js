@@ -12,7 +12,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 
 import Footer from 'components/Footer';
 
-import { fetchOnce, fetchMulti } from 'api/fetch.discovery.action';
+import { fetchOnce, fetchMulti } from 'actions/media-list';
 import { LANGUAGES, GENRES, COUNTRIES, RATING, YEARS } from 'constants/filter';
 
 import FilteredList from './FilteredList';

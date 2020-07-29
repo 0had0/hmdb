@@ -9,8 +9,8 @@ import {
 
 import { connect } from 'react-redux';
 
-import { toggleLoginModal } from 'actions/modals/login.action';
-import { logout } from 'api/auth.action';
+import { toggleLoginModal } from 'actions/modals';
+import logout from 'actions/logout';
 
 function Log({ isLogin, loading, open, logout }) {
   const first = loading ? (

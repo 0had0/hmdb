@@ -16,8 +16,8 @@ import {
   TextIconSpacing,
 } from 'react-md';
 
-import { toggleLoginModal, setErrorMessage } from 'actions/modals/login.action';
-import { login } from 'api/auth.action';
+import { toggleLoginModal, setErrorMessage } from 'actions/modals';
+import login from 'actions/login';
 
 import './LoginModal.css';
 

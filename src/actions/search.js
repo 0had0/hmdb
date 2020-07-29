@@ -45,7 +45,7 @@ const setMediaLeftPages = (key, value) => ({
 export const fetchOnce = (mediaType, query, cancelToken, adult = false) => {
   return async (dispatch, getState, api) => {
     dispatch(mediaFetchStart(mediaType));
-    await fetchMediaFirstPage(mediaType, query, adult, cancelToken)
+    await fetchMediaFirstPage(mediaType, query, cancelToken, adult)
       .then(({ data }) => {
         if (data.length === 0 || data.total_pages === 0) {
           dispatch(mediaFetchFaild(mediaType, 'No results :('));
