@@ -22,6 +22,9 @@ module.exports = {
   plugins: ['prettier'],
   rules: {
     'prettier/prettier': ['error', prettierOptions],
+    'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
     'import/no-unresolved': [0],
+    'no-console': [0],
+    'no-param-reassign': [0],
   },
 };
