@@ -66,7 +66,7 @@ function SearchList({
       <Text>No match :(</Text>
     </div>
   ) : (
-    <>
+    <React.Fragment>
       <List className="search-results">
         {!!loading[mediaType] && (
           <CircularProgress id="searh-results-progress" />
@@ -115,7 +115,7 @@ function SearchList({
           })}
         </InfiniteScroll>
       </List>
-    </>
+    </React.Fragment>
   );
 }
 
@@ -128,8 +128,8 @@ export default connect(
   }),
   (dispatch) => ({
     fetch: (mediaType, query, token, adult = false) =>
-      fetchOnce(mediaType, query, token, adult),
+      dispatch(fetchOnce(mediaType, query, token, adult)),
     fetchNext: (mediaType, query, page, adult = false) =>
-      fetchMulti(mediaType, query, page, adult),
+      dispatch(fetchMulti(mediaType, query, page, adult)),
   }),
 )(SearchList);
