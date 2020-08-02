@@ -1,11 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import { Card, MediaContainer, CardTitle, MediaOverlay } from 'react-md';
 
 import SekeletonBackground from '../../../images/skeleton.jpg';
 
 import './CastItem.css';
 
-function CastItem({ item, loading, error, handleClick }) {
+function CastItem({ item }) {
   const [loaded, setLoaded] = React.useState(false);
   if (!item?.profile_path || !item?.name) {
     return null;
@@ -34,5 +36,9 @@ function CastItem({ item, loading, error, handleClick }) {
     </Card>
   );
 }
+
+CastItem.propTypes = {
+  item: PropTypes.object.isRequired,
+};
 
 export default CastItem;

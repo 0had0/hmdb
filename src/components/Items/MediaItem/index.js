@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import {
   Card,
   MediaContainer,
@@ -88,5 +90,15 @@ function Item({
     </Card>
   );
 }
+
+Item.propTypes = {
+  item: PropTypes.object,
+  loading: PropTypes.bool,
+  error: PropTypes.bool,
+  handleClick: PropTypes.func,
+  classNames: PropTypes.object,
+  last: PropTypes.bool,
+  goToFilterPage: PropTypes.func,
+};
 
 export default React.memo(Item);

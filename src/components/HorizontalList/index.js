@@ -1,10 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { Text } from 'react-md';
 
 import './HorizontalList.css';
 
-export default function ({ label, href, children }) {
+function HorizontalList({ label, href, children }) {
   return (
     <div id={label} className="horizontal-list-root">
       <Text type="headline-4" className="horizontal-list-title">
@@ -20,3 +21,11 @@ export default function ({ label, href, children }) {
     </div>
   );
 }
+
+HorizontalList.propTypes = {
+  label: PropTypes.string.isRequired,
+  href: PropTypes.string,
+  children: PropTypes.node.isRequired,
+};
+
+export default HorizontalList;

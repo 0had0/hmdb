@@ -48,13 +48,17 @@ export const fetchOnce = (mediaType, query, cancelToken, adult = false) => {
     await fetchMediaFirstPage(mediaType, query, cancelToken, adult)
       .then(({ data }) => {
         if (data.length === 0 || data.total_pages === 0) {
-          dispatch(mediaFetchFaild(mediaType, 'No results :('));
+          dispatch(mediaFetchFaild(mediaType, { message: 'No Results 🙄🤔' }));
         } else {
           dispatch(mediaFetchSuccess(mediaType, data.results));
           dispatch(setMediaLeftPages(mediaType, +data.total_pages - 1));
         }
       })
-      .catch((err) => dispatch(mediaFetchFaild(mediaType, err.status_message)));
+      .catch(() =>
+        dispatch(
+          mediaFetchFaild(mediaType, { message: 'Connection Error 😢😭' }),
+        ),
+      );
   };
 };
 
@@ -64,12 +68,16 @@ export const fetchMulti = (mediaType, query, page, adult = false) => {
     await fetchMediaPage(mediaType, query, page, adult)
       .then(({ data }) => {
         if (data.length === 0 || data.total_pages === 0) {
-          dispatch(mediaFetchFaild(mediaType, 'No More results :('));
+          dispatch(mediaFetchFaild(mediaType, { message: 'No Results 🙄🤔' }));
         } else {
           dispatch(mediaFetchUpdate(mediaType, data.results));
           dispatch(setMediaLeftPages(mediaType, +data.total_pages - page));
         }
       })
-      .catch((err) => dispatch(mediaFetchFaild(mediaType, err.status_message)));
+      .catch(() =>
+        dispatch(
+          mediaFetchFaild(mediaType, { message: 'Connection Error 😢😭' }),
+        ),
+      );
   };
 };

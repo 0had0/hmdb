@@ -51,6 +51,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.20.3",
     "prettier": "^2.0.5",
+    "redux-mock-store": "^1.5.4",
     "typescript": "^3.9.7"
   }
 }

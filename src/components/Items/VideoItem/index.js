@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import { connect } from 'react-redux';
 import { Card, MediaContainer, PlayArrowFontIcon, Button } from 'react-md';
 
@@ -29,6 +31,10 @@ function VideoItem({ item, open }) {
   );
 }
 
+VideoItem.propsTypes = {
+  item: PropTypes.object.isRequired,
+  open: PropTypes.func.isRequired,
+};
 export default connect(null, (dispatch) => ({
   open: (vkey) => dispatch(toggleVideoModal(vkey)),
 }))(VideoItem);

@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+
 import { connect } from 'react-redux';
 
 import {
@@ -20,8 +22,6 @@ function ActionBar({
   id,
   vote_average,
   isLogin,
-  fav_list,
-  watchlist_list,
   checkFavorite,
   checkSave,
   setFavorite,
@@ -89,11 +89,20 @@ function ActionBar({
   );
 }
 
+ActionBar.propTypes = {
+  id: PropTypes.string.isRequired,
+  vote_average: PropTypes.number.isRequired,
+  isLogin: PropTypes.bool.isRequired,
+  checkFavorite: PropTypes.func.isRequired,
+  checkSave: PropTypes.func.isRequired,
+  setFavorite: PropTypes.func.isRequired,
+  setWatchlist: PropTypes.func.isRequired,
+  open: PropTypes.func.isRequired,
+};
+
 export default connect(
   ({ user, auth }) => ({
     isLogin: auth.isLogin,
-    fav_list: user.favorite[document.location.pathname.split('/')[1]],
-    watchlist_list: user.watchlist[document.location.pathname.split('/')[1]],
     checkFavorite: () => {
       const { favorite } = user;
       const [, mediaType, id] = document.location.pathname.split('/');

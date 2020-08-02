@@ -1,10 +1,17 @@
 import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 import axios from 'axios';
 
 import { connect } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
-import { List, ListItem, CircularProgress, Text } from 'react-md';
+import {
+  List,
+  ListItem,
+  CircularProgress,
+  Text,
+  ErrorOutlineFontIcon,
+} from 'react-md';
 
 import InfiniteScroll from 'react-infinite-scroller';
 
@@ -16,7 +23,7 @@ import './SearchList.scss';
 const useQuery = () => new URLSearchParams(useLocation().search);
 
 function SearchList({
-  mediaType = 'movie',
+  mediaType,
   sort,
   response,
   loading,
@@ -63,14 +70,12 @@ function SearchList({
 
   return hasError[mediaType] ? (
     <div className="error">
-      <Text>No match :(</Text>
+      <ErrorOutlineFontIcon className="notify-icon" />
+      <Text className="notify-text">{hasError[mediaType].message}</Text>
     </div>
   ) : (
-    <React.Fragment>
+    <>
       <List className="search-results">
-        {!!loading[mediaType] && (
-          <CircularProgress id="searh-results-progress" />
-        )}
         <InfiniteScroll
           pageStart={1}
           loadMore={(page) => {
@@ -115,9 +120,35 @@ function SearchList({
           })}
         </InfiniteScroll>
       </List>
-    </React.Fragment>
+      {!!loading[mediaType] && <CircularProgress id="searh-results-progress" />}
+    </>
   );
 }
+
+SearchList.defaultProps = {
+  mediaType: 'movie',
+  sort: null,
+};
+
+SearchList.propTypes = {
+  mediaType: PropTypes.oneOf(['movie', 'tv']),
+  sort: PropTypes.oneOf(['Rating', 'Year']),
+  response: PropTypes.shape({
+    movie: PropTypes.array,
+    tv: PropTypes.array,
+  }).isRequired,
+  loading: PropTypes.shape({
+    movie: PropTypes.bool,
+    tv: PropTypes.bool,
+  }).isRequired,
+  hasError: PropTypes.shape({
+    movie: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+    tv: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  }).isRequired,
+  hasMore: PropTypes.func.isRequired,
+  fetch: PropTypes.func.isRequired,
+  fetchNext: PropTypes.func.isRequired,
+};
 
 export default connect(
   ({ app }) => ({

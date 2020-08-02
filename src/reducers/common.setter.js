@@ -33,7 +33,7 @@ export const error = (state, payload) => {
   return {
     ...state,
     loading: { ...state.loading, [key]: false },
-    data: { ...state.data, [key]: null },
+    data: { ...state.data, [key]: [] },
     error: { ...state.error, [key]: value },
   };
 };

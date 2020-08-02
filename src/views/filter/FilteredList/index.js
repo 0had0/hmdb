@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import { useLocation } from 'react-router-dom';
 import { CircularProgress } from 'react-md';
 
@@ -60,6 +62,15 @@ const FilteredList = ({ list, filters }) => {
       />
     );
   });
+};
+
+FilteredList.defaultProps = {
+  filters: [],
+};
+
+FilteredList.propTypes = {
+  list: PropTypes.array,
+  filters: PropTypes.array,
 };
 
 export default FilteredList;

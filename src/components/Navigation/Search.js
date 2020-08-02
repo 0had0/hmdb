@@ -55,7 +55,14 @@ async function fetchSearchResult(query, dispatch, cancelToken) {
   }
 }
 
-function Search({ style }) {
+function Search({
+  style,
+  initState = {
+    hasError: false,
+    loading: false,
+    data: [],
+  },
+}) {
   const location = useLocation();
   const isSearchPage = React.useRef(location.pathname.includes('/search'));
 
@@ -68,11 +75,10 @@ function Search({ style }) {
 
   const inputRef = useRef(null);
 
-  const [{ hasError, loading, data }, dispatch] = useReducer(reducer, {
-    hasError: false,
-    loading: false,
-    data: [],
-  });
+  const [{ hasError, loading, data }, dispatch] = useReducer(
+    reducer,
+    initState,
+  );
 
   const history = useHistory();
 
@@ -132,9 +138,13 @@ function Search({ style }) {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-        <SearchFontIcon style={{ color: '#fff' }} onClick={toggleInput} />
+        <SearchFontIcon
+          id="search-icon"
+          style={{ color: '#fff' }}
+          onClick={toggleInput}
+        />
         <TextField
-          id="search"
+          id="search-input"
           style={{ margin: '0 .5em' }}
           ref={inputRef}
           theme="none"
@@ -145,13 +155,14 @@ function Search({ style }) {
           autoComplete="off"
           placeholder="Series, Movies ..."
         />
-        {showInput && loading && (
-          <CircularProgress id="simple-circular-progress" />
+        {showInput && loading && <CircularProgress id="search-loading" />}
+        {showInput && !loading && hasError && (
+          <PermScanWifiFontIcon id="search-error" />
         )}
-        {showInput && !loading && hasError && <PermScanWifiFontIcon />}
       </div>
       {data.length !== 0 && (
         <List
+          id="search-suggestions"
           className={`suggestions-menu suggestions-menu-${
             showInput ? 'open' : 'close'
           }`}>

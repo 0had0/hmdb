@@ -1,4 +1,5 @@
 import React, { useLayoutEffect } from 'react';
+import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -10,31 +11,30 @@ import Item from '../Items/MediaItem';
 function HorizontalFetchList({
   label,
   stateKey: key,
-  id = null,
-  component: Component = Item,
+  component: Component,
   href,
   loadingItemsNumber,
-  loading = false,
-  withoutCheck = false,
+  loading,
+  withoutCheck,
   data,
   hasError,
   fetch,
 }) {
   const history = useHistory();
   const loadingItems = React.useMemo(
-    () => new Array(loadingItemsNumber ?? 9).fill({}),
+    () => new Array(loadingItemsNumber).fill({}),
     [loadingItemsNumber],
   );
   useLayoutEffect(() => {
     let isMounted = true;
     if ((isMounted && data(key).length === 0) || withoutCheck) {
-      fetch(key, id);
+      fetch(key);
     }
     return () => {
       isMounted = false;
     };
     // eslint-disable-next-line
-  }, [key, fetch, id]);
+  }, [key, fetch]);
 
   if (data(key).length === 0 && !loading(key)) {
     return null;
@@ -61,6 +61,25 @@ function HorizontalFetchList({
     </HorizontalList>
   );
 }
+
+HorizontalFetchList.defaultProps = {
+  component: Item,
+  withoutCheck: false,
+  loadingItemsNumber: 9,
+};
+
+HorizontalFetchList.propTypes = {
+  label: PropTypes.string.isRequired,
+  stateKey: PropTypes.string.isRequired,
+  component: PropTypes.elementType,
+  href: PropTypes.string.isRequired,
+  loadingItemsNumber: PropTypes.number,
+  withoutCheck: PropTypes.bool,
+  loading: PropTypes.func.isRequired,
+  data: PropTypes.func.isRequired,
+  hasError: PropTypes.func.isRequired,
+  fetch: PropTypes.func.isRequired,
+};
 
 export default connect(
   ({ app }) => ({

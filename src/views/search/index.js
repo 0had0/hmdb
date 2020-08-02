@@ -50,7 +50,6 @@ const SearchView = () => {
               onKeyUp={handleKeyUp}
             />
           </div>
-
           <DropdownMenu
             id="sort-dropdown"
             items={[

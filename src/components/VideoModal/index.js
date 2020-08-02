@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import { connect } from 'react-redux';
 import { Dialog, DialogContent } from 'react-md';
 
@@ -17,6 +19,10 @@ function Video({ vkey }) {
     />
   );
 }
+
+Video.propTypes = {
+  vkey: PropTypes.any,
+};
 
 const VideoDialog = ({ visible, vkey, close }) => {
   const FormProps = {
@@ -41,6 +47,12 @@ const VideoDialog = ({ visible, vkey, close }) => {
       </DialogContent>
     </Dialog>
   );
+};
+
+VideoDialog.propTypes = {
+  visible: PropTypes.bool.isRequired,
+  vkey: PropTypes.any,
+  close: PropTypes.func.isRequired,
 };
 
 export default connect(

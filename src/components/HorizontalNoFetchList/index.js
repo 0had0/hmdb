@@ -1,8 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import HorizontalList from '../HorizontalList';
 
-export default function ({ label, list, component: Component }) {
+function HorizontalNoFetchList({ label, list, component: Component }) {
   return (
     <HorizontalList label={label}>
       {list.length === 0
@@ -13,3 +14,11 @@ export default function ({ label, list, component: Component }) {
     </HorizontalList>
   );
 }
+
+HorizontalNoFetchList.propTypes = {
+  label: PropTypes.string.isRequired,
+  list: PropTypes.array.isRequired,
+  component: PropTypes.elementType.isRequired,
+};
+
+export default HorizontalNoFetchList;

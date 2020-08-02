@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+
 import { connect } from 'react-redux';
 
 import {
@@ -35,7 +37,7 @@ const LoginForm = ({
       <TextField
         style={{ marginBottom: '2em' }}
         id="username"
-        type="username"
+        type="text"
         placeholder="jef123"
         label="User Name"
         disabled={loading}
@@ -61,6 +63,16 @@ const LoginForm = ({
       </Text>
     </>
   );
+};
+
+LoginForm.propTypes = {
+  email: PropTypes.string.isRequired,
+  setEmail: PropTypes.func.isRequired,
+  password: PropTypes.string.isRequired,
+  setPassword: PropTypes.func.isRequired,
+  errorMessage: PropTypes.string,
+  loading: PropTypes.bool.isRequired,
+  login: PropTypes.func.isRequired,
 };
 
 const LoginDialog = ({ visible, errorMessage, loading, close, login }) => {
@@ -116,6 +128,14 @@ const LoginDialog = ({ visible, errorMessage, loading, close, login }) => {
       </DialogFooter>
     </Dialog>
   );
+};
+
+LoginDialog.propTypes = {
+  visible: PropTypes.bool.isRequired,
+  errorMessage: PropTypes.string,
+  loading: PropTypes.bool.isRequired,
+  close: PropTypes.func.isRequired,
+  login: PropTypes.func.isRequired,
 };
 
 export default connect(

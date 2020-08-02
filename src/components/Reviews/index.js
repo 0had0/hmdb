@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import {
   Text,
   Avatar,
@@ -61,5 +62,10 @@ function Reviews({ id, list }) {
     </>
   );
 }
+
+Reviews.propTypes = {
+  id: PropTypes.string.isRequired,
+  list: PropTypes.array.isRequired,
+};
 
 export default React.memo(Reviews);
