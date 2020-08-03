@@ -8,25 +8,25 @@ import {
 
 import { fetchMediaFirstPage, fetchMediaPage } from 'api/search';
 
-const mediaFetchStart = (key) => ({
+export const mediaFetchStart = (key) => ({
   type: SEARCH_START,
   key,
 });
-const mediaFetchSuccess = (key, value) => ({
+export const mediaFetchSuccess = (key, value) => ({
   type: SEARCH_SUCCESS,
   payload: {
     value,
     key,
   },
 });
-const mediaFetchUpdate = (key, value) => ({
+export const mediaFetchUpdate = (key, value) => ({
   type: SEARCH_UPDATE,
   payload: {
     value,
     key,
   },
 });
-const mediaFetchFaild = (key, value) => ({
+export const mediaFetchFaild = (key, value) => ({
   type: SEARCH_FAILD,
   payload: {
     value,
@@ -34,7 +34,7 @@ const mediaFetchFaild = (key, value) => ({
   },
 });
 
-const setMediaLeftPages = (key, value) => ({
+export const setMediaLeftPages = (key, value) => ({
   type: SEARCH_SET_PAGE_LEFT,
   payload: {
     value,

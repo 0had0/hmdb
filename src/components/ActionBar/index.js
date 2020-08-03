@@ -18,9 +18,9 @@ import { toggleLoginModal } from 'actions/modals';
 
 import './ActionBar.css';
 
-function ActionBar({
+export function ActionBar({
   id,
-  vote_average,
+  vote_average: VoteAverage,
   isLogin,
   checkFavorite,
   checkSave,
@@ -28,8 +28,8 @@ function ActionBar({
   setWatchlist,
   open,
 }) {
-  const [fav, setFav] = useState(checkFavorite());
-  const [save, setSave] = useState(checkSave());
+  const [fav, setFav] = useState(isLogin ? checkFavorite() : false);
+  const [save, setSave] = useState(isLogin ? checkSave() : false);
 
   const handleFav = () => {
     !isLogin ? open() : setFav(!fav);
@@ -49,17 +49,21 @@ function ActionBar({
   }, [save, isLogin, setWatchlist]);
 
   return (
-    <div className="action-bar-root">
+    <div className="action-bar-root" data-testid="action-bar-root">
       <Tooltipped
         id="tooltipped-favorite"
         tooltip={!isLogin ? 'Login First' : 'favorite'}
         position="below">
         <Button
           id="favorite"
+          data-testid="favorite"
           buttonType="icon"
           aria-label="add to favorite"
           onClick={handleFav}>
-          <FavoriteFontIcon style={{ color: fav && '#D50000' }} />
+          <FavoriteFontIcon
+            data-testid="favorite-icon"
+            style={{ color: fav && '#D50000' }}
+          />
         </Button>
       </Tooltipped>
       <Tooltipped
@@ -67,18 +71,22 @@ function ActionBar({
         tooltip={!isLogin ? 'Login First' : 'watchlist'}
         position="below">
         <Button
-          id="bookmark"
+          id="watchlist"
+          data-testid="watchlist"
           buttonType="icon"
           aria-label="add to watchlist"
           onClick={handleSave}>
-          <BookmarkFontIcon style={{ color: save && '#F44336' }} />
+          <BookmarkFontIcon
+            data-testid="watchlist-icon"
+            style={{ color: save && '#F44336' }}
+          />
         </Button>
       </Tooltipped>
-      <div className="overview-view-rating">
+      <div className="overview-view-rating" data-testid="rating">
         <StarFontIcon style={{ color: '#FFEA00' }} />
-        &nbsp;{vote_average}
+        &nbsp;{VoteAverage}
       </div>
-      <Button>
+      <Button data-testid="trailer">
         <TextIconSpacing icon={<PlayArrowFontIcon />} iconAfter>
           <a href="#Trailers" style={{ textDecoration: 'none', color: '#fff' }}>
             Trailer
@@ -106,12 +114,12 @@ export default connect(
     checkFavorite: () => {
       const { favorite } = user;
       const [, mediaType, id] = document.location.pathname.split('/');
-      return favorite[mediaType].includes(+id);
+      return favorite[mediaType]?.includes(+id) ?? false;
     },
     checkSave: () => {
       const { watchlist } = user;
       const [, mediaType, id] = document.location.pathname.split('/');
-      return watchlist[mediaType].includes(+id);
+      return watchlist[mediaType]?.includes(+id) ?? false;
     },
   }),
   (dispatch) => ({

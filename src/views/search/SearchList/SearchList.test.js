@@ -1,7 +1,9 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { render, getByText } from '@testing-library/react';
-import configureStore from 'redux-mock-store';
+import { render, cleanup } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
+import thunk from 'redux-thunk';
+import configureMockStore from 'redux-mock-store';
 
 import SearchList from '.';
 
@@ -15,21 +17,9 @@ jest.mock('react-router-dom', () => ({
   })),
 }));
 
-jest.mock('axios', () => ({
-  get: jest
-    .fn()
-    .mockImplementation(() =>
-      Promise.resolve({ data: { results: ['lsak', 'asodk'] } }),
-    ),
-  CancelToken: {
-    source: jest.fn().mockImplementation(() => ({
-      cancel: jest.fn(),
-      token: '',
-    })),
-  },
-}));
+jest.mock('axios');
 
-const mockStore = configureStore([]);
+const mockStore = configureMockStore([thunk]);
 
 const initState = {
   app: {
@@ -54,137 +44,65 @@ const initState = {
   },
 };
 
-describe('on error message', () => {
-  const fetchOnce = jest.fn();
-  const fetchNext = jest.fn();
+let store;
 
-  let store = mockStore({
-    app: {
-      search: {
-        ...initState.app.search,
-        error: {
-          movie: { message: 'No Results 🙄🤔' },
-          tv: { message: 'No Results 🙄🤔' },
-        },
-      },
-    },
-  });
-
-  it('should render a no results message if data is empty', async () => {
-    const { container } = render(
+describe('before fetch', () => {
+  store = mockStore(initState);
+  it('should render loading progress', () => {
+    const { getByTestId } = render(
       <Provider store={store}>
-        <SearchList
-          mediaType="movie"
-          sort={null}
-          fetch={fetchOnce}
-          fetchNext={fetchNext}
-        />
+        <SearchList />
       </Provider>,
     );
-    expect(container.querySelector('.error')).not.toBeNull();
-    expect(
-      await getByText(
-        container.querySelector('.notify-text'),
-        'No Results 🙄🤔',
-      ),
-    ).toBeInTheDocument();
-  });
-
-  it('should render an error message if connection reset', async () => {
-    store = mockStore({
-      app: {
-        search: {
-          ...initState.app.search,
-          error: {
-            movie: { message: 'Connection Error 😢😭' },
-            tv: { message: 'Connection Error 😢😭' },
-          },
-        },
-      },
-    });
-
-    const { container } = render(
-      <Provider store={store}>
-        <SearchList
-          mediaType="movie"
-          sort={null}
-          fetch={fetchOnce}
-          fetchNext={fetchNext}
-        />
-      </Provider>,
-    );
-    expect(container.querySelector('.error')).not.toBeNull();
-    expect(
-      await getByText(
-        container.querySelector('.notify-text'),
-        /Connection Error/,
-      ),
-    ).toBeInTheDocument();
+    expect(getByTestId('search-progress')).not.toBeNull();
   });
 });
 
-describe('when no error occurs', () => {
-  let store = mockStore({
-    app: {
-      search: {
-        ...initState.app.search,
-        error: {
-          movie: false,
-          tv: false,
-        },
-        loading: {
-          movie: false,
-          tv: false,
-        },
-      },
-    },
+describe('after fetch', () => {
+  afterEach(cleanup);
+
+  beforeEach(() => {
+    store.dispatch = jest.fn();
   });
 
-  const fetchOnce = jest.fn();
-  const fetchNext = jest.fn();
-
-  it('should render a movie list and no loading progress when loading is false', () => {
-    const { container } = render(
-      <Provider store={store}>
-        <SearchList
-          mediaType="movie"
-          sort={null}
-          fetch={fetchOnce}
-          fetchNext={fetchNext}
-        />
-      </Provider>,
-    );
-    expect(container.querySelector('.search-results')).not.toBeNull();
-    expect(container.querySelector('#searh-results-progress')).toBeNull();
-  });
-
-  it('should render a movie list and loading progress when loading is true', () => {
+  it('should render error message on error', () => {
     store = mockStore({
       app: {
         search: {
           ...initState.app.search,
           error: {
-            movie: false,
-            tv: false,
-          },
-          loading: {
-            movie: true,
-            tv: true,
+            movie: { message: 'this is an error message' },
           },
         },
       },
     });
-    const { container } = render(
+
+    const { getByText } = render(
       <Provider store={store}>
-        <SearchList
-          mediaType="movie"
-          sort={null}
-          fetch={fetchOnce}
-          fetchNext={fetchNext}
-        />
+        <SearchList mediaType="movie" />
       </Provider>,
     );
-    expect(container.querySelector('.search-results')).not.toBeNull();
-    expect(container.querySelector('#searh-results-progress')).not.toBeNull();
+
+    expect(getByText(/this is an error message/)).not.toBeNull();
+  });
+
+  it('should render data', () => {
+    store = mockStore({
+      app: {
+        search: {
+          ...initState.app.search,
+          data: {
+            movie: [{}, {}, {}],
+          },
+        },
+      },
+    });
+
+    const { getByTestId } = render(
+      <Provider store={store}>
+        <SearchList mediaType="movie" />
+      </Provider>,
+    );
+    expect(getByTestId('search-results')).not.toBeNull();
   });
 });

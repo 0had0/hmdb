@@ -69,13 +69,13 @@ function SearchList({
   }
 
   return hasError[mediaType] ? (
-    <div className="error">
+    <div className="error" data-testid="search-error">
       <ErrorOutlineFontIcon className="notify-icon" />
       <Text className="notify-text">{hasError[mediaType].message}</Text>
     </div>
   ) : (
     <>
-      <List className="search-results">
+      <List className="search-results" data-testid="search-results">
         <InfiniteScroll
           pageStart={1}
           loadMore={(page) => {
@@ -84,7 +84,10 @@ function SearchList({
           hasMore={hasMore(mediaType) && !loading[mediaType]}
           loader={
             <div className="loader" key={0}>
-              <CircularProgress id="search-results-fetch-loading" />
+              <CircularProgress
+                id="search-progress"
+                data-testid="search-progress"
+              />
             </div>
           }
           useWindow>
@@ -120,7 +123,12 @@ function SearchList({
           })}
         </InfiniteScroll>
       </List>
-      {!!loading[mediaType] && <CircularProgress id="searh-results-progress" />}
+      {(!!loading[mediaType] || response[mediaType] === null) && (
+        <CircularProgress
+          id="searh-results-progress"
+          data-testid="search-progress"
+        />
+      )}
     </>
   );
 }
@@ -128,6 +136,10 @@ function SearchList({
 SearchList.defaultProps = {
   mediaType: 'movie',
   sort: null,
+  response: {
+    movie: null,
+    tv: null,
+  },
 };
 
 SearchList.propTypes = {
@@ -136,7 +148,7 @@ SearchList.propTypes = {
   response: PropTypes.shape({
     movie: PropTypes.array,
     tv: PropTypes.array,
-  }).isRequired,
+  }),
   loading: PropTypes.shape({
     movie: PropTypes.bool,
     tv: PropTypes.bool,

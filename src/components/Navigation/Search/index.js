@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useReducer, useRef } from 'react';
+import PropTypes from 'prop-types';
 import { useHistory, useLocation } from 'react-router-dom';
 
 import axios from 'axios';
@@ -55,14 +56,7 @@ async function fetchSearchResult(query, dispatch, cancelToken) {
   }
 }
 
-function Search({
-  style,
-  initState = {
-    hasError: false,
-    loading: false,
-    data: [],
-  },
-}) {
+function Search({ style, initState }) {
   const location = useLocation();
   const isSearchPage = React.useRef(location.pathname.includes('/search'));
 
@@ -140,11 +134,13 @@ function Search({
         }}>
         <SearchFontIcon
           id="search-icon"
+          data-testid="search-icon"
           style={{ color: '#fff' }}
           onClick={toggleInput}
         />
         <TextField
           id="search-input"
+          data-testid="search-input"
           style={{ margin: '0 .5em' }}
           ref={inputRef}
           theme="none"
@@ -155,14 +151,17 @@ function Search({
           autoComplete="off"
           placeholder="Series, Movies ..."
         />
-        {showInput && loading && <CircularProgress id="search-loading" />}
+        {showInput && loading && (
+          <CircularProgress id="search-loading" data-testid="search-loading" />
+        )}
         {showInput && !loading && hasError && (
-          <PermScanWifiFontIcon id="search-error" />
+          <PermScanWifiFontIcon id="search-error" data-testid="search-error" />
         )}
       </div>
       {data.length !== 0 && (
         <List
           id="search-suggestions"
+          data-testid="search-suggestions"
           className={`suggestions-menu suggestions-menu-${
             showInput ? 'open' : 'close'
           }`}>
@@ -182,5 +181,19 @@ function Search({
     </div>
   );
 }
+
+Search.defaultProps = {
+  style: null,
+  initState: {
+    hasError: false,
+    loading: false,
+    data: [],
+  },
+};
+
+Search.propTypes = {
+  style: PropTypes.object,
+  initState: PropTypes.object,
+};
 
 export default React.memo(Search);
