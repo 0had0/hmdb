@@ -1,19 +1,18 @@
 import React, { useState, useEffect, useReducer, useRef } from 'react';
-import PropTypes from 'prop-types';
 import { useHistory, useLocation } from 'react-router-dom';
-
+import PropTypes from 'prop-types';
 import axios from 'axios';
-
-import './Search.css';
 
 import {
   TextField,
-  List,
   SearchFontIcon,
   PermScanWifiFontIcon,
   CircularProgress,
-  ListItem,
 } from 'react-md';
+
+import Suggestions from './Suggestions';
+
+import './Search.css';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -124,24 +123,26 @@ function Search({ style, initState }) {
     };
   }, [query]);
 
+  const status =
+    showInput && loading ? (
+      <CircularProgress id="search-loading-icon" data-testid="search-loading" />
+    ) : hasError ? (
+      <PermScanWifiFontIcon id="search-error-icon" data-testid="search-error" />
+    ) : null;
+
   return (
     <div className={`search-box search-box-${showInput ? 'open' : 'close'}`}>
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
+      <div className="search-box-inner">
         <SearchFontIcon
           id="search-icon"
+          className="search-icon"
           data-testid="search-icon"
-          style={{ color: '#fff' }}
           onClick={toggleInput}
         />
         <TextField
           id="search-input"
+          className="search-input"
           data-testid="search-input"
-          style={{ margin: '0 .5em' }}
           ref={inputRef}
           theme="none"
           onChange={handleType}
@@ -151,33 +152,13 @@ function Search({ style, initState }) {
           autoComplete="off"
           placeholder="Series, Movies ..."
         />
-        {showInput && loading && (
-          <CircularProgress id="search-loading" data-testid="search-loading" />
-        )}
-        {showInput && !loading && hasError && (
-          <PermScanWifiFontIcon id="search-error" data-testid="search-error" />
-        )}
+        {status}
       </div>
-      {data.length !== 0 && (
-        <List
-          id="search-suggestions"
-          data-testid="search-suggestions"
-          className={`suggestions-menu suggestions-menu-${
-            showInput ? 'open' : 'close'
-          }`}>
-          {data.map((item, i) => (
-            <ListItem
-              key={item.id}
-              onClick={() => goToMovieOrTVPage(item)}
-              style={{
-                textDecoration: 'none',
-                color: '#fff',
-              }}>
-              {item?.name}
-            </ListItem>
-          ))}
-        </List>
-      )}
+      <Suggestions
+        open={!!showInput}
+        data={data}
+        handleClick={goToMovieOrTVPage}
+      />
     </div>
   );
 }

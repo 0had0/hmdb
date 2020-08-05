@@ -30,11 +30,11 @@ describe('navigation search input', () => {
     );
     expect(getByTestId('search-icon')).not.toBeNull();
     expect(getByTestId('search-input')).not.toBeNull();
-    expect(container.querySelector('#search-error')).not.toBeNull();
+    expect(container.querySelector('#search-error-icon')).not.toBeNull();
     fireEvent.change(getByTestId('search-input'), {
       target: { value: 'any value' },
     });
-    expect(container.querySelector('#search-error')).toBeNull();
+    expect(container.querySelector('#search-error-icon')).toBeNull();
     fireEvent.change(getByTestId('search-input'), {
       target: { value: '' },
     });
@@ -54,7 +54,7 @@ describe('navigation search input', () => {
     );
     expect(getByTestId('search-icon')).not.toBeNull();
     expect(getByTestId('search-input')).not.toBeNull();
-    expect(container.querySelector('#search-error')).toBeNull();
+    expect(container.querySelector('#search-error-icon')).toBeNull();
     expect(getByTestId('search-loading')).not.toBeNull();
   });
   it('automatic focus in discovery page', async () => {

@@ -9,6 +9,17 @@
 	height: 90%;
 	transition: all 0.4s ease;
 }
+.search-box-inner {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.search-icon {
+	color: #fff;
+}
+.search-input {
+	margin: 0 0.5em;
+}
 .search-box-open {
 	width: 300px;
 	background-color: rgba(255, 255, 255, 0.1);
