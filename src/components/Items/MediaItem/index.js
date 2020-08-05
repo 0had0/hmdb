@@ -18,7 +18,7 @@ import SekeletonBackground from '../../../images/skeleton.jpg';
 
 import './MediaItem.css';
 
-function Item({
+export function Item({
   item,
   loading,
   error,
@@ -42,6 +42,7 @@ function Item({
       onClick={goToTheOverViewPage}>
       <MediaContainer fullWidth>
         <img
+          data-testid="image"
           style={loaded ? {} : { visbility: 'none' }}
           src={
             !item?.poster_path
@@ -53,7 +54,7 @@ function Item({
         />
         {loaded && !loading && !error && !last && (
           <MediaOverlay>
-            <CardTitle className="media-card-title">
+            <CardTitle className="media-card-title" data-testid="name">
               {item?.title || item?.name || null}
             </CardTitle>
           </MediaOverlay>
@@ -61,27 +62,29 @@ function Item({
       </MediaContainer>
       <CardContent className="media-card-content">
         {error ? (
-          <RefreshSVGIcon />
+          <RefreshSVGIcon data-testid="error" />
         ) : last ? (
           <>
             See More&nbsp;&nbsp;
-            <ArrowForwardFontIcon />
+            <ArrowForwardFontIcon data-testid="see-more" />
           </>
         ) : (
           <>
-            <div className="stars">
+            <div className="stars" data-testid="rating">
               <StarFontIcon
                 style={{
                   color: loading || !item?.vote_average ? '#616161' : '#FFEA00',
                 }}
               />
               &nbsp;
-              {item?.vote_average || <Skeleton width="5vmin" />}
+              {item?.vote_average || (
+                <Skeleton data-testid="skeleton-rating" width="5vmin" />
+              )}
             </div>
             <i>
               {item?.release_date?.split('-')[0] ||
                 item?.first_air_date?.split('-')[0] || (
-                  <Skeleton width="5vmin" />
+                  <Skeleton width="5vmin" data-testid="skeleton-time" />
                 )}
             </i>
           </>
