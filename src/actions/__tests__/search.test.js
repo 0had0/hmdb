@@ -3,12 +3,82 @@ import { cleanup } from '@testing-library/react';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
-import { fetchOnce, fetchMulti } from '../search';
+import {
+  fetchOnce,
+  fetchMulti,
+  mediaFetchStart,
+  fetchMediaSuccess,
+  fetchMediaUpdate,
+  fetchMediaFailed,
+  setMediaLeftPages,
+} from '../search';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
-describe('Search Action', () => {
+describe('Sync Search Actions', () => {
+  it('should return a valid mediaFetchStart action', () => {
+    const expectedAction = {
+      type: 'SEARCH_START',
+      key: 'this is a key',
+    };
+    expect(mediaFetchStart('this is a key')).toStrictEqual(expectedAction);
+  });
+
+  it('should return a valid fetchMediaSuccess action', () => {
+    const expectedAction = {
+      type: 'SEARCH_SUCCESS',
+      payload: {
+        key: 'this is a key',
+        value: 'this is value',
+      },
+    };
+    expect(fetchMediaSuccess('this is a key', 'this is value')).toStrictEqual(
+      expectedAction,
+    );
+  });
+
+  it('should return a valid fetchMediaUpdate action', () => {
+    const expectedAction = {
+      type: 'SEARCH_UPDATE',
+      payload: {
+        key: 'this is a key',
+        value: 'this is value',
+      },
+    };
+    expect(fetchMediaUpdate('this is a key', 'this is value')).toStrictEqual(
+      expectedAction,
+    );
+  });
+
+  it('should return a valid fetchMediaFailed action', () => {
+    const expectedAction = {
+      type: 'SEARCH_FAILD',
+      payload: {
+        key: 'this is a key',
+        value: 'this is value',
+      },
+    };
+    expect(fetchMediaFailed('this is a key', 'this is value')).toStrictEqual(
+      expectedAction,
+    );
+  });
+
+  it('should return a valid setMediaLeftPages action', () => {
+    const expectedAction = {
+      type: 'SEARCH_SET_PAGE_LEFT',
+      payload: {
+        key: 'this is a key',
+        value: 'this is value',
+      },
+    };
+    expect(setMediaLeftPages('this is a key', 'this is value')).toStrictEqual(
+      expectedAction,
+    );
+  });
+});
+
+describe('Search fetch Action', () => {
   let store;
 
   afterEach(cleanup);

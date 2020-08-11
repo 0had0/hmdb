@@ -4,29 +4,29 @@ import { LOGOUT_START, LOGOUT_SUCCESS, LOGOUT_FAILD } from 'constants/auth';
 
 import { updateName } from './user';
 
-const logoutStart = () => ({
+const fetchLogoutStart = () => ({
   type: LOGOUT_START,
 });
 
-const logoutSuccess = () => ({
+const fetchLogoutSuccess = () => ({
   type: LOGOUT_SUCCESS,
 });
 
-const logoutFaild = () => ({
+const fetchLogoutFailed = () => ({
   type: LOGOUT_FAILD,
 });
 
 export default () => {
-  return async (dispatch, getState, api) => {
-    dispatch(logoutStart());
+  return async (dispatch, getState) => {
+    dispatch(fetchLogoutStart());
     const { auth } = getState();
     await deleteSessionId(auth.sessionId)
       .then(() => {
         localStorage.removeItem('session_id');
         localStorage.removeItem('id');
         dispatch(updateName(null));
-        dispatch(logoutSuccess());
+        dispatch(fetchLogoutSuccess());
       })
-      .catch(() => dispatch(logoutFaild()));
+      .catch(() => dispatch(fetchLogoutFailed()));
   };
 };

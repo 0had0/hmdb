@@ -8,25 +8,25 @@ import {
 
 import { getFirstListOfKey, getListOfKeyAndPage } from 'api/media';
 
-const loadingMediaList = (key) => ({
+export const fetchMediaListLoading = (key) => ({
   type: DISCOVERY_LOADING,
   key,
 });
-const successMediaList = (key, value) => ({
+export const fetchMediaListSuccess = (key, value) => ({
   type: DISCOVERY_SUCCESS,
   payload: {
     value,
     key,
   },
 });
-const updateMediaList = (key, value) => ({
+export const fetchMediaListUpdate = (key, value) => ({
   type: DISCOVERY_UPDATE,
   payload: {
     value,
     key,
   },
 });
-const faildMediaList = (key, value) => ({
+export const fetchMediaListFailed = (key, value) => ({
   type: DISCOVERY_FAILD,
   payload: {
     value,
@@ -34,7 +34,7 @@ const faildMediaList = (key, value) => ({
   },
 });
 
-const setLastPageOfMediaList = (key, value) => ({
+export const setLastPageOfMediaList = (key, value) => ({
   type: DISCOVERY_SET_LAST_PAGE,
   payload: {
     value,
@@ -51,27 +51,27 @@ export const clearMediaList = (key) => ({
 });
 
 export const fetchOnce = (key) => {
-  return async (dispatch, getState, api) => {
-    dispatch(loadingMediaList(key));
+  return async (dispatch, getState) => {
+    dispatch(fetchMediaListLoading(key));
     await getFirstListOfKey(key)
       .then(({ data }) => {
         const { results, cast, total_pages: totalPages } = data;
-        dispatch(successMediaList(key, results ?? cast ?? data));
+        dispatch(fetchMediaListSuccess(key, results ?? cast ?? data));
         dispatch(setLastPageOfMediaList(key, +totalPages - 1));
       })
-      .catch((err) => dispatch(faildMediaList(key, err)));
+      .catch((err) => dispatch(fetchMediaListFailed(key, err)));
   };
 };
 
 export const fetchMulti = (key, page) => {
-  return async (dispatch, getState, api) => {
-    dispatch(loadingMediaList(key));
+  return async (dispatch, getState) => {
+    dispatch(fetchMediaListLoading(key));
     await getListOfKeyAndPage(key, page)
       .then(({ data }) => {
         const { results, cast, total_pages: totalPages } = data;
-        dispatch(updateMediaList(key, results ?? cast ?? data));
+        dispatch(fetchMediaListUpdate(key, results ?? cast ?? data));
         dispatch(setLastPageOfMediaList(key, +totalPages - page));
       })
-      .catch((err) => dispatch(faildMediaList(key, err)));
+      .catch((err) => dispatch(fetchMediaListFailed(key, err)));
   };
 };

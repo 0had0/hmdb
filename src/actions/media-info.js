@@ -6,21 +6,21 @@ import {
 
 import { getMediaInfo } from 'api/media';
 
-const overviewFetchStart = () => ({
+export const fetchOverviewStart = () => ({
   type: OVERVIEW_FETCH_START,
 });
-const overviewFetchSuccess = (payload) => ({
+export const fetchOverviewSuccess = (payload) => ({
   type: OVERVIEW_FETCH_SUCCESS,
   payload,
 });
-const overviewFetchFaild = (payload) => ({
+export const fetchOverviewFailed = (payload) => ({
   type: OVERVIEW_FETCH_FAILD,
   payload,
 });
 
 export default (id, mediaType) => {
   return async (dispatch, getState, api) => {
-    dispatch(overviewFetchStart());
+    dispatch(fetchOverviewStart());
     await getMediaInfo(mediaType, id, (...responses) => {
       const [
         detailsRes,
@@ -30,7 +30,7 @@ export default (id, mediaType) => {
         creditsRes,
       ] = responses;
       dispatch(
-        overviewFetchSuccess({
+        fetchOverviewSuccess({
           details: detailsRes.data,
           videos: videosRes.data.results,
           similar: similarRes.data.results,
@@ -41,6 +41,6 @@ export default (id, mediaType) => {
               : creditsRes.data.cast,
         }),
       );
-    }).catch((errors) => dispatch(overviewFetchFaild(errors)));
+    }).catch((errors) => dispatch(fetchOverviewFailed(errors)));
   };
 };

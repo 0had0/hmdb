@@ -18,7 +18,7 @@ export const updateFavorite = (payload) => ({
 });
 
 export const fetchFavorite = () => {
-  return async (dispatch, getState, api) => {
+  return async (dispatch, getState) => {
     const { sessionId, id } = getState().auth;
     await getListMedia('favorite', id, sessionId, (responses) => {
       const [movie, tv] = responses;
@@ -33,7 +33,7 @@ export const fetchFavorite = () => {
 };
 
 export const toggleFavorite = (id, mediaType, value) => {
-  return async (dispatch, getState, api) => {
+  return async (dispatch, getState) => {
     const { sessionId, ...rest } = getState().auth;
     await setList('favorite', rest.id, sessionId, mediaType, id, value).then(
       () => {
@@ -44,7 +44,7 @@ export const toggleFavorite = (id, mediaType, value) => {
 };
 
 export const fetchWatchlist = () => {
-  return async (dispatch, getState, api) => {
+  return async (dispatch, getState) => {
     const { sessionId, id } = getState().auth;
     await getListMedia('watchlist', id, sessionId, (responses) => {
       const [movie, tv] = responses;
@@ -59,7 +59,7 @@ export const fetchWatchlist = () => {
 };
 
 export const toggleWatchlist = (id, mediaType, value) => {
-  return async (dispatch, getState, api) => {
+  return async (dispatch, getState) => {
     const { sessionId, ...rest } = getState().auth;
     await setList('watchlist', rest.id, sessionId, mediaType, id, value).then(
       () => {

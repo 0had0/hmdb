@@ -12,21 +12,21 @@ export const mediaFetchStart = (key) => ({
   type: SEARCH_START,
   key,
 });
-export const mediaFetchSuccess = (key, value) => ({
+export const fetchMediaSuccess = (key, value) => ({
   type: SEARCH_SUCCESS,
   payload: {
     value,
     key,
   },
 });
-export const mediaFetchUpdate = (key, value) => ({
+export const fetchMediaUpdate = (key, value) => ({
   type: SEARCH_UPDATE,
   payload: {
     value,
     key,
   },
 });
-export const mediaFetchFaild = (key, value) => ({
+export const fetchMediaFailed = (key, value) => ({
   type: SEARCH_FAILD,
   payload: {
     value,
@@ -48,15 +48,15 @@ export const fetchOnce = (mediaType, query, cancelToken, adult = false) => {
     await fetchMediaFirstPage(mediaType, query, cancelToken, adult)
       .then(({ data }) => {
         if (data.length === 0 || data.total_pages === 0) {
-          dispatch(mediaFetchFaild(mediaType, { message: 'No Results 🙄🤔' }));
+          dispatch(fetchMediaFailed(mediaType, { message: 'No Results 🙄🤔' }));
         } else {
-          dispatch(mediaFetchSuccess(mediaType, data.results));
+          dispatch(fetchMediaSuccess(mediaType, data.results));
           dispatch(setMediaLeftPages(mediaType, +data.total_pages - 1));
         }
       })
       .catch(() =>
         dispatch(
-          mediaFetchFaild(mediaType, { message: 'Connection Error 😢😭' }),
+          fetchMediaFailed(mediaType, { message: 'Connection Error 😢😭' }),
         ),
       );
   };
@@ -68,15 +68,15 @@ export const fetchMulti = (mediaType, query, page, adult = false) => {
     await fetchMediaPage(mediaType, query, page, adult)
       .then(({ data }) => {
         if (data.length === 0 || data.total_pages === 0) {
-          dispatch(mediaFetchFaild(mediaType, { message: 'No Results 🙄🤔' }));
+          dispatch(fetchMediaFailed(mediaType, { message: 'No Results 🙄🤔' }));
         } else {
-          dispatch(mediaFetchUpdate(mediaType, data.results));
+          dispatch(fetchMediaUpdate(mediaType, data.results));
           dispatch(setMediaLeftPages(mediaType, +data.total_pages - page));
         }
       })
       .catch(() =>
         dispatch(
-          mediaFetchFaild(mediaType, { message: 'Connection Error 😢😭' }),
+          fetchMediaFailed(mediaType, { message: 'Connection Error 😢😭' }),
         ),
       );
   };

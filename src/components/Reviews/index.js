@@ -17,7 +17,7 @@ function Reviews({ id, list }) {
   const [first, ...rest] = list;
   const [all, setShowAll] = useState(false);
 
-  const _toggle_reviews = () => setShowAll(!all);
+  const toggle_reviews = () => setShowAll(!all);
 
   if (list.length === 0 || !list) {
     return <Text type="body-2">No reviews</Text>;
@@ -57,7 +57,7 @@ function Reviews({ id, list }) {
       </Card>
       {all && renderAll()}
       {rest.length !== 0 && (
-        <Button onClick={_toggle_reviews}>{!all ? 'Show More' : 'Less'}</Button>
+        <Button onClick={toggle_reviews}>{!all ? 'Show More' : 'Less'}</Button>
       )}
     </>
   );

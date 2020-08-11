@@ -3,12 +3,96 @@ import { cleanup } from '@testing-library/react';
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 
-import { fetchOnce, fetchMulti } from '../media-list';
+import {
+  fetchOnce,
+  fetchMulti,
+  fetchMediaListLoading,
+  fetchMediaListSuccess,
+  fetchMediaListUpdate,
+  fetchMediaListFailed,
+  setLastPageOfMediaList,
+  clearMediaList,
+} from '../media-list';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
-describe('Discovery (media key) Action', () => {
+describe('Sync Discovery Action', () => {
+  it('should return a valid fetchMediaListLoading action', () => {
+    const expectedAction = {
+      type: 'DISCOVERY_LOADING',
+      key: 'this is a key',
+    };
+    expect(fetchMediaListLoading('this is a key')).toStrictEqual(
+      expectedAction,
+    );
+  });
+
+  it('should return a valid fetchMediaListSuccess action', () => {
+    const expectedAction = {
+      type: 'DISCOVERY_SUCCESS',
+      payload: {
+        key: 'this is a key',
+        value: 'this is a value',
+      },
+    };
+    expect(
+      fetchMediaListSuccess('this is a key', 'this is a value'),
+    ).toStrictEqual(expectedAction);
+  });
+
+  it('should return a valid fetchMediaListUpdate action', () => {
+    const expectedAction = {
+      type: 'DISCOVERY_UPDATE',
+      payload: {
+        key: 'this is a key',
+        value: 'this is a value',
+      },
+    };
+    expect(
+      fetchMediaListUpdate('this is a key', 'this is a value'),
+    ).toStrictEqual(expectedAction);
+  });
+
+  it('should return a valid fetchMediaListFailed action', () => {
+    const expectedAction = {
+      type: 'DISCOVERY_FAILD',
+      payload: {
+        key: 'this is a key',
+        value: 'this is a value',
+      },
+    };
+    expect(
+      fetchMediaListFailed('this is a key', 'this is a value'),
+    ).toStrictEqual(expectedAction);
+  });
+
+  it('should return a valid setLastPageOfMediaList action', () => {
+    const expectedAction = {
+      type: 'DISCOVERY_SET_LAST_PAGE',
+      payload: {
+        key: 'this is a key',
+        value: 'this is a value',
+      },
+    };
+    expect(
+      setLastPageOfMediaList('this is a key', 'this is a value'),
+    ).toStrictEqual(expectedAction);
+  });
+
+  it('should return a valid clearMediaList action', () => {
+    const expectedAction = {
+      type: 'DISCOVERY_SUCCESS',
+      payload: {
+        key: 'this is a key',
+        value: [],
+      },
+    };
+    expect(clearMediaList('this is a key')).toStrictEqual(expectedAction);
+  });
+});
+
+describe('Discovery (media key) fetch Action', () => {
   let store;
 
   afterEach(cleanup);

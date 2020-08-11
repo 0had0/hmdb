@@ -1,6 +1,10 @@
 import axios from 'axios';
 import { cleanup } from '@testing-library/react';
-import fetch from '../media-info';
+import fetch, {
+  fetchOverviewStart,
+  fetchOverviewSuccess,
+  fetchOverviewFailed,
+} from '../media-info';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
@@ -9,7 +13,36 @@ const mockStore = configureMockStore(middlewares);
 
 let store;
 
-describe('Media Info Action', () => {
+describe('Sync Media Info Action', () => {
+  it('should return a valid fetchOverviewStart action', () => {
+    const expectedAction = {
+      type: 'OVERVIEW_FETCH_START',
+    };
+    expect(fetchOverviewStart()).toStrictEqual(expectedAction);
+  });
+
+  it('should return a valid fetchOverviewSuccess action', () => {
+    const expectedAction = {
+      type: 'OVERVIEW_FETCH_SUCCESS',
+      payload: 'this is a payload',
+    };
+    expect(fetchOverviewSuccess('this is a payload')).toStrictEqual(
+      expectedAction,
+    );
+  });
+
+  it('should return a valid fetchOverviewFailed action', () => {
+    const expectedAction = {
+      type: 'OVERVIEW_FETCH_FAILD',
+      payload: 'this is a payload',
+    };
+    expect(fetchOverviewFailed('this is a payload')).toStrictEqual(
+      expectedAction,
+    );
+  });
+});
+
+describe('Media Info fetch Action', () => {
   afterEach(cleanup);
 
   beforeEach(() => {
