@@ -1,35 +1,24 @@
 import axios from 'axios';
-import api from 'api';
 
 const list = {
-  trending_movies: `${api.URL}/trending/movie/day?api_key=${api.KEY}`,
-  trending_series: `${api.URL}/trending/tv/day?api_key=${api.KEY}`,
-  popular_movies: `${api.URL}/movie/popular?api_key=${api.KEY}&language=en-US`,
-  popular_series: `${api.URL}/tv/popular?api_key=${api.KEY}&language=en-US`,
+  trending_movies: `/trending/movie/day`,
+  trending_series: `/trending/tv/day`,
+  popular_movies: `/movie/popular?language=en-US`,
+  popular_series: `/tv/popular?language=en-US`,
 };
 
 export const getMediaInfo = (mediaType, id, cb) =>
   axios
     .all([
-      axios.get(
-        `${api.URL}/${mediaType}/${id}?api_key=${api.KEY}&language=en-US`,
-      ),
-      axios.get(
-        `${api.URL}/${mediaType}/${id}/videos?api_key=${api.KEY}&language=en-US`,
-      ),
-      axios.get(
-        `${api.URL}/${mediaType}/${id}/similar?api_key=${api.KEY}&language=en-US`,
-      ),
-      axios.get(
-        `${api.URL}/${mediaType}/${id}/reviews?api_key=${api.KEY}&language=en-US`,
-      ),
-      axios.get(
-        `${api.URL}/${mediaType}/${id}/credits?api_key=${api.KEY}&language=en-US`,
-      ),
+      axios.get(`/${mediaType}/${id}?language=en-US`),
+      axios.get(`/${mediaType}/${id}/videos?language=en-US`),
+      axios.get(`/${mediaType}/${id}/similar?language=en-US`),
+      axios.get(`/${mediaType}/${id}/reviews?language=en-US`),
+      axios.get(`/${mediaType}/${id}/credits?language=en-US`),
     ])
     .then(axios.spread(cb));
 
 export const getFirstListOfKey = (key) => axios.get(list[key]);
 
 export const getListOfKeyAndPage = (key, page) =>
-  axios.get(`${list[key]}&page=${page}`);
+  axios.get(`${list[key]}?page=${page}`);

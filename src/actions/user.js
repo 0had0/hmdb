@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { getListMedia, setList } from 'api/user';
 
 import { UPDATE_FAVORITE, UPDATE_WATCHLIST, UPDATE_NAME } from 'constants/user';
@@ -20,24 +21,26 @@ export const updateFavorite = (payload) => ({
 export const fetchFavorite = () => {
   return async (dispatch, getState) => {
     const { sessionId, id } = getState().auth;
-    await getListMedia('favorite', id, sessionId, (responses) => {
-      const [movie, tv] = responses;
-      dispatch(
-        updateFavorite({
-          movie: movie.data.results.map((am) => am.id),
-          tv: tv.data.results.map((am) => am.id),
-        }),
-      );
-    });
+    await getListMedia('favorite', id, sessionId).then(
+      axios.spread((...responses) => {
+        const [movie, tv] = responses;
+        dispatch(
+          updateFavorite({
+            movie: movie.data.results.map((am) => am.id),
+            tv: tv.data.results.map((am) => am.id),
+          }),
+        );
+      }),
+    );
   };
 };
 
 export const toggleFavorite = (id, mediaType, value) => {
   return async (dispatch, getState) => {
-    const { sessionId, ...rest } = getState().auth;
-    await setList('favorite', rest.id, sessionId, mediaType, id, value).then(
+    const { sessionId, id: userId } = getState().auth;
+    await setList('favorite', userId, sessionId, mediaType, id, value).then(
       () => {
-        dispatch(updateFavorite());
+        dispatch(fetchFavorite());
       },
     );
   };
@@ -46,24 +49,26 @@ export const toggleFavorite = (id, mediaType, value) => {
 export const fetchWatchlist = () => {
   return async (dispatch, getState) => {
     const { sessionId, id } = getState().auth;
-    await getListMedia('watchlist', id, sessionId, (responses) => {
-      const [movie, tv] = responses;
-      dispatch(
-        updateWatchlist({
-          movie: movie.data.results.map((am) => am.id),
-          tv: tv.data.results.map((am) => am.id),
-        }),
-      );
-    });
+    await getListMedia('watchlist', id, sessionId).then(
+      axios.spread((...responses) => {
+        const [movie, tv] = responses;
+        dispatch(
+          updateWatchlist({
+            movie: movie.data.results.map((am) => am.id),
+            tv: tv.data.results.map((am) => am.id),
+          }),
+        );
+      }),
+    );
   };
 };
 
 export const toggleWatchlist = (id, mediaType, value) => {
   return async (dispatch, getState) => {
-    const { sessionId, ...rest } = getState().auth;
-    await setList('watchlist', rest.id, sessionId, mediaType, id, value).then(
+    const { sessionId, id: userId } = getState().auth;
+    await setList('watchlist', userId, sessionId, mediaType, id, value).then(
       () => {
-        dispatch(updateWatchlist());
+        dispatch(fetchWatchlist());
       },
     );
   };

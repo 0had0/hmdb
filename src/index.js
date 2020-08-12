@@ -2,6 +2,7 @@ import './index.scss';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import axios from 'axios';
 
 import { BrowserRouter as Router } from 'react-router-dom';
 
@@ -18,16 +19,26 @@ import App from './components/App';
 
 import * as serviceWorker from './serviceWorker';
 
-const API = {
-  URL: process.env.REACT_APP_API_URL,
-  TOKEN: process.env.REACT_APP_API_TOKEN,
-  KEY: process.env.REACT_APP_API_KEY,
-};
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
-const store = createStore(
-  reducers,
-  applyMiddleware(thunk.withExtraArgument(API)),
+axios.interceptors.request.use(
+  (config) => {
+    const configWithKey = config;
+
+    if (config.url.includes('?')) {
+      configWithKey.url = `${config.url}&api_key=${process.env.REACT_APP_API_KEY}`;
+    } else {
+      configWithKey.url = `${config.url}?api_key=${process.env.REACT_APP_API_KEY}`;
+    }
+
+    return configWithKey;
+  },
+  (error) => {
+    return Promise.reject(error);
+  },
 );
+
+const store = createStore(reducers, applyMiddleware(thunk));
 
 ReactDOM.render(
   <React.StrictMode>
