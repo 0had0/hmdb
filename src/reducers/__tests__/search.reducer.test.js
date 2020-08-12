@@ -22,7 +22,7 @@ describe('search reducer', () => {
   it('should set toggle loading on SEARCH_START', () => {
     const testAction = { type: TYPES.SEARCH_START, key: 'movie' };
     const finalState = reducer(initState, testAction);
-    expect(finalState.loading.movie === initState.loading.movie).toBeFalsy();
+    expect(finalState.loading.movie === initState.loading.movie).toBe(false);
   });
 
   it('should overwrite data on SEARCH_SUCCESS', () => {
