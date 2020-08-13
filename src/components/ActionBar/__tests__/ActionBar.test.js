@@ -2,7 +2,7 @@ import React from 'react';
 import { cleanup, render, fireEvent } from '@testing-library/react';
 import configureMockStore from 'redux-mock-store';
 
-import { ActionBar } from '../';
+import { ActionBar } from '..';
 
 const mockStore = configureMockStore([]);
 let store;

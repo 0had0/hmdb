@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.19.2",
     "node-sass": "^4.14.1",
+    "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-infinite-scroller": "^1.2.4",
@@ -26,7 +27,7 @@
     "eject": "react-scripts eject",
     "lint:eslint": "eslint . --ext .js,.jsx",
     "lint:eslint:fix": "eslint . --ext .js,.jsx --fix",
-    "prettify": "prettier --write **/*.{js,jsx,json}"
+    "prettify": "prettier --write **/*.{js,json}"
   },
   "browserslist": {
     "production": [

@@ -55,15 +55,15 @@ describe('User fetch Action', () => {
 
   it('should update favorites lists', () => {
     axios.get.mockClear();
-    //response value
+    // response value
     axios.all.mockResolvedValue([['some movies'], ['some series']]);
-    //contain dispatch so should be called 1 time
+    // contain dispatch so should be called 1 time
     axios.spread.mockReturnValue(mockAxiosSpreadResult);
 
     store.dispatch(fetchFavorite()).then(() => {
-      //have to be called on time
+      // have to be called on time
       expect(mockAxiosSpreadResult).toHaveBeenCalledTimes(1);
-      //should be called with the response value
+      // should be called with the response value
       expect(mockAxiosSpreadResult).toHaveBeenCalledWith([
         ['some movies'],
         ['some series'],

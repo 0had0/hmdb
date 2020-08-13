@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { cleanup } from '@testing-library/react';
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
 import fetch, {
   fetchOverviewStart,
   fetchOverviewSuccess,
   fetchOverviewFailed,
 } from '../media-info';
-import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
