@@ -3,8 +3,6 @@ name: Development Workflow
 on:
   push:
     branches: [develop]
-  pull_request:
-    branches: [develop]
 
 jobs:
   build:
@@ -12,7 +10,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x]
+        node-version: [14.x]
 
     steps:
       - uses: actions/checkout@v2
@@ -20,14 +18,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Install dependencies
-        run: npm install
+      - run: npm install
 
-      - name: eslint fix
-        run: npm run lint:eslint:fix
+      - run: npm run lint:eslint:fix
 
-      - name: Run test
-        run: npm test
+      - run: npm test
 
-      - name: Build
-        run: npm run build
+      - run: npm run build
